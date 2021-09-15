@@ -1,3 +1,6 @@
+# generated documentation
+docs/
+
 # cache
 __pycache__/
 
