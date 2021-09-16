@@ -19,6 +19,9 @@ pytest = "^5.2"
 pdoc = "^7.4.0"
 black = "^21.9b0"
 
+[tool.poetry.scripts]
+ome-hrm = "hrm_omero.cli:main"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
