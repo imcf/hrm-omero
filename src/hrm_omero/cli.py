@@ -51,6 +51,13 @@ def parse_arguments():
         help="verbose messages (repeat for more details)",
     )
 
+    argparser.add_argument(
+        "-c",
+        "--config",
+        default="/etc/hrm.conf",
+        help="the HRM configuration file (default: '/etc/hrm.conf')",
+    )
+
     # required arguments group
     req_args = argparser.add_argument_group(
         "required arguments", "NOTE: MUST be given before any subcommand!"
@@ -141,7 +148,7 @@ def run_task():
     """Parse commandline arguments and initiate the requested tasks."""
     args = parse_arguments()
 
-    hrm_config = hrm.parse_config("/etc/hrm.conf")
+    hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
     port = hrm_config.get("OMERO_PORT", 4064)
 
