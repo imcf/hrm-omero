@@ -43,7 +43,7 @@ def parse_config(filename):
     ...     'SUSER': 'hrm'
     ... }
     """
-    log.info("Trying to parse HRM configuration file [{}]...", filename)
+    log.debug("Trying to parse HRM configuration file [{}]...", filename)
     config = dict()
     with open(filename, "r") as file:
         body = file.read()
