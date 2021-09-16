@@ -10,3 +10,6 @@ cred.py
 
 # old script while porting:
 /ome_hrm.py
+
+# local configuration for manual testing:
+/hrm.conf
