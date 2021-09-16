@@ -1,8 +1,9 @@
 # generated documentation
 docs/
 
-# cache
+# cache, VS code, ...
 __pycache__/
+/.vscode/
 
 # connection details for testing
 cred.py
