@@ -26,7 +26,9 @@ connector][1] that used to be shipped with the HRM itself previously.
 | `omero_to_hrm()`          | `transfer.from_omero()`            |
 | `hrm_to_omero()`          | `transfer.to_omero()`              |
 | `download_thumb()`        | `transfer.fetch_thumbnail()`       |
-
+| `bool_to_exitstatus()`    | `cli.bool_to_exitstatus()`         |
+| `parse_arguments()`       | `cli.parse_arguments()`            |
+| `main()`                  | `cli.run_task()`                   |
 
 [1]: https://github.com/aarpon/hrm/blob/master/bin/ome_hrm.py
 [2]: https://github.com/aarpon/hrm/blob/master/bin/hrm_config.py

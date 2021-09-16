@@ -1,0 +1,167 @@
+"""Command-line interface related functions."""
+
+import argparse
+import sys
+
+from loguru import logger as log
+
+from . import formatting
+from . import hrm
+from . import omero
+from . import transfer
+
+
+def bool_to_exitstatus(value):
+    """Convert a boolean to a POSIX process exit code.
+
+    As boolean values in Python are a subset of int, `True` corresponds to the int value
+    '1', which is the opposite of a successful POSIX return code. Therefore, this
+    function simply inverts the boolean value to turn it into a proper exit code. In
+    case the provided value is not of type `bool` it will be returned unchanged.
+
+    Parameters
+    ----------
+    value : bool or int
+        The value to be converted.
+
+    Returns
+    -------
+    int
+        0 in case `value` is `True`, 1 in case `value` is `False` and `value` itself in
+        case it is not a bool.
+    """
+    if type(value) is bool:
+        return not value
+    else:
+        return value
+
+
+def parse_arguments():
+    """Parse the commandline arguments."""
+    log.debug("Parsing command line arguments...")
+    argparser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    argparser.add_argument(
+        "-v",
+        "--verbose",
+        dest="verbosity",
+        action="count",
+        default=0,
+        help="verbose messages (repeat for more details)",
+    )
+
+    # required arguments group
+    req_args = argparser.add_argument_group(
+        "required arguments", "NOTE: MUST be given before any subcommand!"
+    )
+    req_args.add_argument("-u", "--user", required=True, help="OMERO username")
+    req_args.add_argument("-w", "--password", required=True, help="OMERO password")
+
+    subparsers = argparser.add_subparsers(
+        help=".",
+        dest="action",
+        description="Action to be performed, one of the following:",
+    )
+
+    # checkCredentials parser
+    subparsers.add_parser(
+        "checkCredentials", help="check if login credentials are valid"
+    )
+
+    # retrieveChildren parser
+    parser_subtree = subparsers.add_parser(
+        "retrieveChildren", help="get the children of a given node object (JSON)"
+    )
+    parser_subtree.add_argument(
+        "--id",
+        type=str,
+        required=True,
+        help='ID string of the object to get the children for, e.g. "User:23"',
+    )
+
+    # OMEROtoHRM parser
+    parser_o2h = subparsers.add_parser(
+        "OMEROtoHRM", help="download an image from the OMERO server"
+    )
+    parser_o2h.add_argument(
+        "-i",
+        "--imageid",
+        required=True,
+        help='the OMERO ID of the image to download, e.g. "Image:42"',
+    )
+    parser_o2h.add_argument(
+        "-d",
+        "--dest",
+        type=str,
+        required=True,
+        help="the destination directory where to put the downloaded file",
+    )
+
+    # HRMtoOMERO parser
+    parser_h2o = subparsers.add_parser(
+        "HRMtoOMERO", help="upload an image to the OMERO server"
+    )
+    parser_h2o.add_argument(
+        "-d",
+        "--dset",
+        required=True,
+        dest="dset",
+        help='the ID of the target dataset in OMERO, e.g. "Dataset:23"',
+    )
+    parser_h2o.add_argument(
+        "-f",
+        "--file",
+        type=str,
+        required=True,
+        help="the image file to upload, including the full path",
+    )
+    parser_h2o.add_argument(
+        "-n",
+        "--name",
+        type=str,
+        required=False,
+        help="a label to use for the image in OMERO",
+    )
+    parser_h2o.add_argument(
+        "-a",
+        "--ann",
+        type=str,
+        required=False,
+        help="annotation text to be added to the image in OMERO",
+    )
+
+    try:
+        return argparser.parse_args()
+    except IOError as err:
+        argparser.error(str(err))
+
+
+def run_task():
+    """Parse commandline arguments and initiate the requested tasks."""
+    args = parse_arguments()
+
+    hrm_config = hrm.parse_config("/etc/hrm.conf")
+    host = hrm_config.get("OMERO_HOSTNAME", "localhost")
+    port = hrm_config.get("OMERO_PORT", 4064)
+
+    conn = omero.connect(args.user, args.password, host, port)
+
+    # TODO: implement requesting groups via cmdline option
+
+    if args.action == 'checkCredentials':
+        return omero.check_credentials(conn)
+    elif args.action == 'retrieveChildren':
+        return formatting.print_children_json(conn, args.id)
+    elif args.action == 'OMEROtoHRM':
+        return transfer.from_omero(conn, args.imageid, args.dest)
+    elif args.action == 'HRMtoOMERO':
+        return transfer.to_omero(conn, args.dset, args.file)
+    else:
+        raise Exception('Huh, how could this happen?!')
+
+
+@log.catch
+def main():
+    """Wrapper to call the run_task() function and return its exit code."""
+    sys.exit(bool_to_exitstatus(run_task()))
