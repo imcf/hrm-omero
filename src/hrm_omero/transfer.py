@@ -84,7 +84,7 @@ def from_omero(conn, id_str, dest):
     for (fset_id, tgt) in downloads:
         try:
             conn.c.download(OriginalFileI(fset_id), tgt)
-        except:
+        except:  # pylint: disable-msg=bare-except
             print("ERROR: downloading %s to '%s' failed!" % (fset_id, tgt))
             return False
 
@@ -131,7 +131,7 @@ def fetch_thumbnail(conn, image_id, dest):
         # TODO: os.chown() to fix permissions, see #457!
         print("Thumbnail downloaded to '%s'." % target)
         return True
-    except:
+    except:  # pylint: disable-msg=bare-except
         print("ERROR downloading thumbnail to '%s'." % target)
         return False
 
@@ -199,7 +199,7 @@ def to_omero(conn, id_str, image_file):
     cli.loadplugins()
     # NOTE: cli._client should be replaced with cli.set_client() when switching
     # to support for OMERO 5.1 and later only:
-    cli._client = conn.c
+    cli._client = conn.c  # pylint: disable-msg=protected-access
     import_args = ["import"]
     import_args.extend(["--skip", "upgrade"])
     # import_args.extend(['--debug', 'ALL'])
@@ -215,7 +215,7 @@ def to_omero(conn, id_str, image_file):
     # print("import_args: " + str(import_args))
     try:
         cli.invoke(import_args, strict=True)
-    except Exception as err:
+    except Exception as err:  # pylint: disable-msg=broad-except
         print("OMERO error message: >>>%s<<<" % err)
         print("ERROR: uploading '%s' to %s failed!" % (image_file, id_str))
         # print(import_args)
