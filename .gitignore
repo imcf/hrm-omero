@@ -7,3 +7,6 @@ __pycache__/
 
 # connection details for testing
 cred.py
+
+# old script while porting:
+/ome_hrm.py
