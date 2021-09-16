@@ -26,10 +26,11 @@ def connect(user, passwd, host, port=4064):
     omero.gateway._BlitzGateway
         The OMERO connection object.
     """
-    conn = BlitzGateway(user, passwd, host=host, port=port, secure=True,
-                        useragent="HRM-OMERO.connector")
+    conn = BlitzGateway(
+        user, passwd, host=host, port=port, secure=True, useragent="HRM-OMERO.connector"
+    )
     conn.connect()
-    logging.debug('Created new OMERO connection [user=%s].', user)
+    logging.debug("Created new OMERO connection [user=%s].", user)
     return conn
 
 
@@ -49,7 +50,7 @@ def check_credentials(conn):
     """
     connected = conn.connect()
     if connected:
-        print('Success logging into OMERO with user ID %s' % conn.getUserId())
+        print("Success logging into OMERO with user ID %s" % conn.getUserId())
     else:
-        print('ERROR logging into OMERO.')
+        print("ERROR logging into OMERO.")
     return connected
