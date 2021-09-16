@@ -1,5 +1,7 @@
 """Transfer related functions."""
 
+import os
+import re
 
 def from_omero(conn, id_str, dest):
     """Download the corresponding original file(s) from an image ID.
