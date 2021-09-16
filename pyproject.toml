@@ -18,6 +18,7 @@ loguru = "^0.5.3"
 pytest = "^5.2"
 pdoc = "^7.4.0"
 black = "^21.9b0"
+pylint = "^2.11.0"
 
 [tool.poetry.scripts]
 ome-hrm = "hrm_omero.cli:main"
