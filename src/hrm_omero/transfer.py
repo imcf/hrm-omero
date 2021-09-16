@@ -3,6 +3,9 @@
 import os
 import re
 
+from . import hrm
+
+
 def from_omero(conn, id_str, dest):
     """Download the corresponding original file(s) from an image ID.
 
@@ -89,7 +92,7 @@ def from_omero(conn, id_str, dest):
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:
-    download_thumb(conn, image_id, downloads[0][1])
+    fetch_thumbnail(conn, image_id, downloads[0][1])
     return True
 
 
@@ -175,7 +178,7 @@ def to_omero(conn, id_str, image_file):
     # extract the image basename without suffix:
     # TODO: is it [0-9a-f] or really [0-9a-z] as in the original PHP code?
     basename = re.sub(r"(_[0-9a-f]{13}_hrm)\..*", r"\1", image_file)
-    comment = gen_parameter_summary(basename + ".parameters.txt")
+    comment = hrm.job_parameter_summary(basename + ".parameters.txt")
     #### annotations = []
     #### # TODO: the list of suffixes should not be hardcoded here!
     #### for suffix in ['.hgsb', '.log.txt', '.parameters.txt']:
