@@ -1,6 +1,6 @@
 """Functions related to direct interaction with OMERO."""
 
-import logging
+from loguru import logger as log
 from omero.gateway import BlitzGateway
 
 
@@ -30,7 +30,7 @@ def connect(user, passwd, host, port=4064):
         user, passwd, host=host, port=port, secure=True, useragent="HRM-OMERO.connector"
     )
     conn.connect()
-    logging.debug("Created new OMERO connection [user=%s].", user)
+    log.debug("Created new OMERO connection [user={}].", user)
     return conn
 
 

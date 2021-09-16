@@ -1,7 +1,8 @@
 """Helper functions to interact with the HRM."""
 
 import shlex
-import logging
+
+from loguru import logger as log
 
 
 def parse_config(filename):
@@ -42,6 +43,7 @@ def parse_config(filename):
     ...     'SUSER': 'hrm'
     ... }
     """
+    log.info("Trying to parse HRM configuration file [{}]...", filename)
     config = dict()
     with open(filename, "r") as file:
         body = file.read()
@@ -67,12 +69,12 @@ def parse_config(filename):
                 "(expected '=', found '%s')." % (filename, lexer.lineno, equals)
             )
         except Exception as err:  # pylint: disable-msg=broad-except
-            logging.warning("Error parsing config: %s", err)
+            log.warning("Error parsing config: {}", err)
         value = lexer.get_token()
         value = value.replace('"', "")  # remove double quotes
         value = value.replace("'", "")  # remove single quotes
         config[key] = value
-    logging.debug("Successfully parsed [%s].", filename)
+    log.info("Successfully parsed [{}].", filename)
     return config
 
 
@@ -93,7 +95,7 @@ def check_config(config):
     for entry in required:
         if entry not in config:
             raise SyntaxError('Missing "%s" in the HRM config file.' % entry)
-    logging.debug("HRM config file passed all checks.")
+    log.debug("HRM config file passed all checks.")
 
 
 def job_parameter_summary(fname):
