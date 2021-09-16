@@ -36,7 +36,7 @@ def bool_to_exitstatus(value):
         return value
 
 
-def parse_arguments():
+def parse_arguments(args):
     """Parse the commandline arguments."""
     log.debug("Parsing command line arguments...")
     argparser = argparse.ArgumentParser(
@@ -139,14 +139,14 @@ def parse_arguments():
     )
 
     try:
-        return argparser.parse_args()
+        return argparser.parse_args(args)
     except IOError as err:
         argparser.error(str(err))
 
 
-def run_task():
+def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
-    args = parse_arguments()
+    args = parse_arguments(args)
 
     hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
@@ -169,6 +169,8 @@ def run_task():
 
 
 @log.catch
-def main():
+def main(args=None):
     """Wrapper to call the run_task() function and return its exit code."""
-    sys.exit(bool_to_exitstatus(run_task()))
+    if not args:
+        args = sys.argv[1:]
+    sys.exit(bool_to_exitstatus(run_task(args)))
