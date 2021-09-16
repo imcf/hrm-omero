@@ -1,5 +1,7 @@
 """Functions related to OMERO's tree view."""
 
+from loguru import logger as log
+
 
 def gen_obj_dict(obj, id_pfx=""):
     """Create a dict from an OMERO object.
@@ -63,6 +65,7 @@ def gen_children(conn, id_str):
 
     children = []
     _, gid, obj_type, oid = id_str.split(":")
+    log.debug("gid={} | obj_type={} | oid={}", gid, obj_type, oid)
     conn.SERVICE_OPTS.setOmeroGroup(gid)
     obj = conn.getObject(obj_type, oid)
     # we need different child-wrappers, depending on the object type:
