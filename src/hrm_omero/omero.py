@@ -30,7 +30,8 @@ def connect(user, passwd, host, port=4064):
         user, passwd, host=host, port=port, secure=True, useragent="HRM-OMERO.connector"
     )
     conn.connect()
-    log.debug("Created new OMERO connection [user={}].", user)
+    group = conn.getGroupFromContext()
+    log.debug("Created new OMERO connection [user={}, group={}].", user, group.getId())
     return conn
 
 
