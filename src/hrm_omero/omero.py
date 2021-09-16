@@ -23,7 +23,7 @@ def connect(user, passwd, host, port=4064):
 
     Returns
     -------
-    omero.gateway._BlitzGateway
+    omero.gateway.BlitzGateway
         The OMERO connection object.
     """
     conn = BlitzGateway(
