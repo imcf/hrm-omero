@@ -84,7 +84,7 @@ def parse_arguments(args):
         "--id",
         type=str,
         required=True,
-        help='ID string of the object to get the children for, e.g. "User:23"',
+        help='ID of the parent object, e.g. "ROOT", "G:4:Experimenter:7',
     )
 
     # OMEROtoHRM parser
@@ -95,7 +95,7 @@ def parse_arguments(args):
         "-i",
         "--imageid",
         required=True,
-        help='the OMERO ID of the image to download, e.g. "Image:42"',
+        help='the OMERO ID of the image to download, e.g. "G:4:Image:42"',
     )
     parser_o2h.add_argument(
         "-d",
@@ -114,7 +114,7 @@ def parse_arguments(args):
         "--dset",
         required=True,
         dest="dset",
-        help='the ID of the target dataset in OMERO, e.g. "Dataset:23"',
+        help='the ID of the target dataset in OMERO, e.g. "G:7:Dataset:23"',
     )
     parser_h2o.add_argument(
         "-f",
