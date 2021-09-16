@@ -1,7 +1,7 @@
 """Functions related to OMERO's tree view."""
 
 
-def gen_obj_dict(obj, id_pfx=''):
+def gen_obj_dict(obj, id_pfx=""):
     """Create a dict from an OMERO object.
 
     Parameters
@@ -26,19 +26,19 @@ def gen_obj_dict(obj, id_pfx=''):
         ```
     """
     obj_dict = dict()
-    obj_dict['label'] = obj.getName()
-    obj_dict['class'] = obj.OMERO_CLASS
-    if obj.OMERO_CLASS == 'Experimenter':
-        obj_dict['owner'] = obj.getId()
-        obj_dict['label'] = obj.getFullName()
-    elif obj.OMERO_CLASS == 'ExperimenterGroup':
+    obj_dict["label"] = obj.getName()
+    obj_dict["class"] = obj.OMERO_CLASS
+    if obj.OMERO_CLASS == "Experimenter":
+        obj_dict["owner"] = obj.getId()
+        obj_dict["label"] = obj.getFullName()
+    elif obj.OMERO_CLASS == "ExperimenterGroup":
         # for some reason getOwner() et al. return nothing on a group, so we
         # simply put it to None for group objects:
-        obj_dict['owner'] = None
+        obj_dict["owner"] = None
     else:
-        obj_dict['owner'] = obj.getOwnerOmeName()
-    obj_dict['id'] = id_pfx + "%s:%s" % (obj.OMERO_CLASS, obj.getId())
-    obj_dict['children'] = []
+        obj_dict["owner"] = obj.getOwnerOmeName()
+    obj_dict["id"] = id_pfx + "%s:%s" % (obj.OMERO_CLASS, obj.getId())
+    obj_dict["children"] = []
     return obj_dict
 
 
@@ -127,13 +127,12 @@ def gen_group_tree(conn, group=None):
     group_dict = gen_obj_dict(group)
     # add the user's own tree first:
     user = conn.getUser()
-    user_dict = gen_obj_dict(user, 'G:' + gid + ':')
-    user_dict['load_on_demand'] = True
-    group_dict['children'].append(user_dict)
+    user_dict = gen_obj_dict(user, "G:" + gid + ":")
+    user_dict["load_on_demand"] = True
+    group_dict["children"].append(user_dict)
     # then add the trees for other group members
     for user in conn.listColleagues():
-        user_dict = gen_obj_dict(user, 'G:' + gid + ':')
-        user_dict['load_on_demand'] = True
-        group_dict['children'].append(user_dict)
+        user_dict = gen_obj_dict(user, "G:" + gid + ":")
+        user_dict["load_on_demand"] = True
+        group_dict["children"].append(user_dict)
     return group_dict
-

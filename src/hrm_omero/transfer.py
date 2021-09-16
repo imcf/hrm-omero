@@ -30,7 +30,7 @@ def from_omero(conn, id_str, dest):
         True in case the download was successful, False otherwise.
     """
     # FIXME: group switching required!!
-    _, gid, obj_type, image_id = id_str.split(':')
+    _, gid, obj_type, image_id = id_str.split(":")
     if not image_id:
         print("Couldn't parse ID '%s'. Expecting [GID]:[Type]:[Image_ID]" % id_str)
         return False
@@ -38,12 +38,13 @@ def from_omero(conn, id_str, dest):
     # Provided that the tree displays only groups that the current user has access to,
     # cross-group query (introduced in OMERO 4.4) is a generic way to get the image.
     if not gid:
-        gid = '-1'
+        gid = "-1"
     conn.SERVICE_OPTS.setOmeroGroup(gid)
     # check if dest is a directory, rewrite it otherwise:
     if not os.path.isdir(dest):
         dest = os.path.dirname(dest)
     from omero_model_OriginalFileI import OriginalFileI
+
     # use image objects and getFileset() methods to determine original files,
     # see the following OME forum thread for some more details:
     # https://www.openmicroscopy.org/community/viewtopic.php?f=6&t=7563
@@ -157,22 +158,22 @@ def to_omero(conn, id_str, image_file):
         True in case of success, False otherwise.
     """
 
-    if image_file.lower().endswith(('.h5', '.hdf5')):
+    if image_file.lower().endswith((".h5", ".hdf5")):
         print("ERROR: HDF5 files are not supported by OMERO!")
         return False
     # TODO I: group switching required!!
-    _, gid, obj_type, dset_id = id_str.split(':')
+    _, gid, obj_type, dset_id = id_str.split(":")
     # we have to create the annotations *before* we actually upload the image
     # data itself and link them to the image during the upload - the other way
     # round is not possible right now as the CLI wrapper (see below) doesn't
     # expose the ID of the newly created object in OMERO (confirmed by J-M and
     # Sebastien on the 2015 OME Meeting):
-    namespace = 'deconvolved.hrm'
+    namespace = "deconvolved.hrm"
     #### mime = 'text/plain'
     # extract the image basename without suffix:
     # TODO: is it [0-9a-f] or really [0-9a-z] as in the original PHP code?
-    basename = re.sub(r'(_[0-9a-f]{13}_hrm)\..*', r'\1', image_file)
-    comment = gen_parameter_summary(basename + '.parameters.txt')
+    basename = re.sub(r"(_[0-9a-f]{13}_hrm)\..*", r"\1", image_file)
+    comment = gen_parameter_summary(basename + ".parameters.txt")
     #### annotations = []
     #### # TODO: the list of suffixes should not be hardcoded here!
     #### for suffix in ['.hgsb', '.log.txt', '.parameters.txt']:
@@ -188,20 +189,21 @@ def to_omero(conn, id_str, image_file):
     # thread: https://forum.image.sc/t/automated-uploader-to-omero-in-python/38290
     # https://gitlab.com/openmicroscopy/incubator/omero-python-importer/-/blob/master/import.py)
     from omero.cli import CLI
+
     cli = CLI()
     cli.loadplugins()
     # NOTE: cli._client should be replaced with cli.set_client() when switching
     # to support for OMERO 5.1 and later only:
     cli._client = conn.c
     import_args = ["import"]
-    import_args.extend(['--skip', 'upgrade'])
+    import_args.extend(["--skip", "upgrade"])
     # import_args.extend(['--debug', 'ALL'])
     # import_args.extend(['--file', '/tmp/hrm-omero-java-stdout'])
     # import_args.extend(['--errs', '/tmp/hrm-omero-java-stderr'])
-    import_args.extend(['-d', dset_id])
+    import_args.extend(["-d", dset_id])
     if comment is not None:
-        import_args.extend(['--annotation_ns', namespace])
-        import_args.extend(['--annotation_text', comment])
+        import_args.extend(["--annotation_ns", namespace])
+        import_args.extend(["--annotation_text", comment])
     #### for ann_id in annotations:
     ####     import_args.extend(['--annotation_link', str(ann_id)])
     import_args.append(image_file)
@@ -209,8 +211,8 @@ def to_omero(conn, id_str, image_file):
     try:
         cli.invoke(import_args, strict=True)
     except Exception as err:
-        print('OMERO error message: >>>%s<<<' % err)
-        print('ERROR: uploading "%s" to %s failed!' % (image_file, id_str))
+        print("OMERO error message: >>>%s<<<" % err)
+        print("ERROR: uploading '%s' to %s failed!" % (image_file, id_str))
         # print(import_args)
         return False
     return True
