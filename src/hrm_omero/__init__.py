@@ -1,3 +1,6 @@
-"""The HRM-OMERO connector."""
+"""OMERO connector for the Huygens Remote Manager (HRM).
 
-__version__ = '0.1.0'
+.. include:: ../../README.md
+"""
+
+__version__ = "0.1.0"
