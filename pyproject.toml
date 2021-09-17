@@ -11,7 +11,7 @@ keywords = ["hrm", "huygens", "omero", "openmicroscopy", "ome", "deconvolution"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-omero-py = "^5.10.0"
+omero-py = "^5.9.0"
 loguru = "^0.5.3"
 
 [tool.poetry.dev-dependencies]
