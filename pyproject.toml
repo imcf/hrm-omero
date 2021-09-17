@@ -5,7 +5,7 @@ authors = ["Niko Ehrenfeuchter <nikolaus.ehrenfeuchter@unibas.ch>"]
 description = "A connector between the Huygens Remote Manager (HRM) and OMERO."
 license = "GPLv3"
 readme = "README.md"
-homepage = "https://github.com/imcf/hrm-omero"
+homepage = "https://pypi.org/project/hrm-omero/"
 repository = "https://github.com/imcf/hrm-omero"
 keywords = ["hrm", "huygens", "omero", "openmicroscopy", "ome", "deconvolution"]
 
