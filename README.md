@@ -56,6 +56,17 @@ mv "ome_hrm.py" "__old__ome_hrm.py"
 ln -s "/opt/venvs/hrm-omero/bin/ome-hrm" "ome_hrm.py"
 ```
 
+## Debugging
+
+By default the connector will be rather silent as otherwise the log files will be
+cluttered up quite a bit on a production system. However, it is possible to increase the
+log level by specifying `-v`, `-vv` and so on.
+
+Currently it is not yet possible to ajust the log level that is being used when operated
+through the HRM web interface (which is the default). To do so, have a look in the
+`hrm_omero.cli.run_task()` function. Log messages produced by the connector when called
+by HRM will usually end up in the web server's error log (as they go to `stderr`).
+
 ## Example Usage
 
 Store you username and password in variables:

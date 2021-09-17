@@ -10,6 +10,9 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 - trees for different groups
   - requesting groups through a commandline option
-- proper logging, separate logfile for the connector
-- redirect logging of CLI
+- logging
+  - proper logging (loguru) [DONE]
+  - separate logfile for the connector
+  - adjust log verbosity through a parameter [DONE]
+  - adjust log verbosity through the configuration file
 - offer download of OME-TIFFs?

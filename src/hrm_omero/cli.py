@@ -164,6 +164,13 @@ def run_task(args):
         else:  # no verbosity flag has been provided
             log_level = "WARNING"
         log.add(sys.stderr, level=log_level)
+
+    # uncomment the lines below and adjust to manually set the log level until this is
+    # possible through the HRM configuration file
+    # log_level = "DEBUG"
+    # log.remove()
+    # log.add(sys.stderr, level=log_level)
+
     log.info("Logging verbosity requested: {} ({})", args.verbosity, log_level)
 
     hrm_config = hrm.parse_config(args.config)
