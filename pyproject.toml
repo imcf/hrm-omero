@@ -13,6 +13,7 @@ keywords = ["hrm", "huygens", "omero", "openmicroscopy", "ome", "deconvolution"]
 python = "^3.8"
 omero-py = "^5.9.0"
 loguru = "^0.5.3"
+beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
