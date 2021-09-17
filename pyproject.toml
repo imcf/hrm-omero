@@ -10,7 +10,7 @@ repository = "https://github.com/imcf/hrm-omero"
 keywords = ["hrm", "huygens", "omero", "openmicroscopy", "ome", "deconvolution"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.6.2"
 omero-py = "^5.9.0"
 loguru = "^0.5.3"
 beautifulsoup4 = "^4.10.0"
