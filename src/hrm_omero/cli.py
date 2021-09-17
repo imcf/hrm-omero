@@ -5,6 +5,7 @@ import sys
 
 from loguru import logger as log
 
+from .__init__ import __version__
 from . import formatting
 from . import hrm
 from . import omero
@@ -49,6 +50,12 @@ def parse_arguments(args):
         action="count",
         default=0,
         help="verbose messages (repeat for more details)",
+    )
+
+    argparser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
     )
 
     argparser.add_argument(
