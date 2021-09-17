@@ -143,6 +143,6 @@ ome-hrm \
 ```
 
 [1]: https://huygens-rm.org/
-[2]: https://www.openmicroscopy.org/
+[2]: https://www.openmicroscopy.org/omero/
 [3]: https://github.com/pyenv/pyenv
 [co6]: https://wiki.centos.org/About/Product
