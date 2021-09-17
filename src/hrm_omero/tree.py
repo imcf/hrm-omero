@@ -1,5 +1,7 @@
 """Functions related to OMERO's tree view."""
 
+# pylint: disable-msg=consider-using-f-string
+
 from loguru import logger as log
 
 

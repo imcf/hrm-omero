@@ -1,5 +1,8 @@
 """Helper functions to interact with the HRM."""
 
+# pylint: disable-msg=consider-using-f-string
+# pylint: disable-msg=import-outside-toplevel
+
 import shlex
 
 from loguru import logger as log

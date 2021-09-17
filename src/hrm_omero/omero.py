@@ -1,5 +1,7 @@
 """Functions related to direct interaction with OMERO."""
 
+# pylint: disable-msg=consider-using-f-string
+
 from loguru import logger as log
 from omero.gateway import BlitzGateway
 
