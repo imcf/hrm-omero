@@ -9,6 +9,12 @@ the HRM web interface.
 
 ## Installation
 
+### Distributions that include Python 3.6 or newer (e.g. Ubuntu 20.04)
+
+```bash
+pip install hrm-omero
+```
+
 ### CentOS 6
 
 [CentOS 6][co6] is EOL since 2020-11-30, so you should really consider upgrading to a newer
@@ -44,7 +50,7 @@ pyenv install 3.6.15  # takes a bit (compiling...)
 
 # now you can install the connector into this virtual environment - please note that the
 # installation takes quite a while (~15min) as it needs to build the ZeroC Ice bindings
-/opt/venvs/hrm-omero/bin/pip install hrm_omero-0.1.0-py3-none-any.whl
+/opt/venvs/hrm-omero/bin/pip install hrm-omero
 
 # from now on you can simply call the connector using its full path, there is no need
 # to pre-activate the virtual environment - you could even drop your pyenv completely:
