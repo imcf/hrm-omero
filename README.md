@@ -65,7 +65,7 @@ read OMEROUSER
 read OMEROPW
 ```
 
-### Verify Credentials
+### Verifying Credentials
 
 ```bash
 ome-hrm \
@@ -74,7 +74,7 @@ ome-hrm \
     checkCredentials
 ```
 
-### Fetch OMERO tree information
+### Fetching OMERO tree information
 
 Set the `--id` parameter according to what part of the tree should be retrieved:
 
@@ -116,7 +116,7 @@ For example this could be the output when requesting `"G:4:Dataset:65432"`:
 ]
 ```
 
-### Download an image from OMERO
+### Downloading an image from OMERO
 
 This will fetch the second image from the example tree above and store it in `/tmp/`:
 
@@ -129,7 +129,7 @@ ome-hrm \
     --dest /tmp/
 ```
 
-### Upload an image from the local file system to OMERO
+### Uploading an image from the local file system to OMERO
 
 The command below will import a local image file into the example dataset from above:
 
