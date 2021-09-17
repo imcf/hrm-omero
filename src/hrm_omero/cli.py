@@ -38,7 +38,7 @@ def bool_to_exitstatus(value):
 
 def parse_arguments(args):
     """Parse the commandline arguments."""
-    log.debug("Parsing command line arguments...")
+    # log.debug("Parsing command line arguments...")
     argparser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -147,6 +147,24 @@ def parse_arguments(args):
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
     args = parse_arguments(args)
+
+    # one of the downsides of loguru is that the level of an existing logger can't be
+    # changed - so to adjust verbosity we actually need to remove the default logger and
+    # re-add it with the new level (unless maximum verbosity was requested anyway...)
+    # see https://github.com/Delgan/loguru/issues/138 for more information
+    log_level = "TRACE"
+    if args.verbosity < 4:  # -vvvv (4) will result in "TRACE", nothing to be done then
+        log.remove()
+        if args.verbosity == 3:  # -vvv will be "DEBUG"
+            log_level = "DEBUG"
+        elif args.verbosity == 2:  # -vv will be "INFO"
+            log_level = "INFO"
+        elif args.verbosity == 1:  # -v will be "SUCCESS"
+            log_level = "SUCCESS"
+        else:  # no verbosity flag has been provided
+            log_level = "WARNING"
+        log.add(sys.stderr, level=log_level)
+    log.info("Logging verbosity requested: {} ({})", args.verbosity, log_level)
 
     hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
