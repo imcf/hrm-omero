@@ -4,7 +4,8 @@
 # generated documentation
 docs/
 
-# cache, VS code, ...
+# pyenv-stuff, cache, VS code, ...
+.python-version
 __pycache__/
 /.vscode/
 
