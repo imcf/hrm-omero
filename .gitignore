@@ -8,6 +8,7 @@ docs/
 .python-version
 __pycache__/
 /.vscode/
+*.code-workspace
 
 # connection details for testing
 cred.py
