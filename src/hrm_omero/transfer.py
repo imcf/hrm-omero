@@ -3,6 +3,8 @@
 import os
 import re
 
+from loguru import logger as log
+
 from . import hrm
 
 
@@ -221,8 +223,12 @@ def to_omero(conn, id_str, image_file):
     try:
         cli.invoke(import_args, strict=True)
     except Exception as err:  # pylint: disable-msg=broad-except
-        print("OMERO error message: >>>%s<<<" % err)
-        print("ERROR: uploading '%s' to %s failed!" % (image_file, id_str))
         # print(import_args)
+        msg = f"ERROR: uploading '{image_file}' to {id_str} failed!"
+        print(msg)
+        log.error(msg)
+        msg = f"OMERO error message: >>>{err}<<<"
+        print(msg)
+        log.error(msg)
         return False
     return True
