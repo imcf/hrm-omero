@@ -201,7 +201,12 @@ def to_omero(conn, id_str, image_file):
     # to support for OMERO 5.1 and later only:
     cli._client = conn.c  # pylint: disable-msg=protected-access
     import_args = ["import"]
+
+    # disable the upgrade check as it is causing an SSL handshake error and it doesn't
+    # make sense in our scenario, see the following forum thread for details:
+    # https://forum.image.sc/t/unable-to-use-cli-importer/26424
     import_args.extend(["--skip", "upgrade"])
+
     # import_args.extend(['--debug', 'ALL'])
     # import_args.extend(['--file', '/tmp/hrm-omero-java-stdout'])
     # import_args.extend(['--errs', '/tmp/hrm-omero-java-stderr'])
