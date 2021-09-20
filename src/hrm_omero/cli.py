@@ -199,7 +199,8 @@ def run_task(args):
     try:
         conn.connect()
         group = conn.getGroupFromContext()
-        log.info(f"New OMERO connection [user={args.user}, group={group.getId()}].")
+        log.info(f"New OMERO connection [user={args.user}].")
+        log.debug(f"The user's default group is {group.getId()} ({group.getName()}).")
 
         if args.action == "checkCredentials":
             return omero.check_credentials(conn)
@@ -216,7 +217,7 @@ def run_task(args):
         raise Exception("Huh, how could this happen?!")
     finally:
         conn.close()
-        log.info(f"Closed OMERO connection [user={args.user}, group={group.getId()}].")
+        log.info(f"Closed OMERO connection [user={args.user}].")
 
 
 @log.catch
