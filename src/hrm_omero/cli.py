@@ -178,7 +178,7 @@ def run_task(args):
     # log.remove()
     # log.add(sys.stderr, level=log_level)
 
-    log.info("Logging verbosity requested: {} ({})", args.verbosity, log_level)
+    log.success("Logging verbosity requested: {} ({})", args.verbosity, log_level)
 
     hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
