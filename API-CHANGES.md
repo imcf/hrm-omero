@@ -1,6 +1,6 @@
 # API Changes
 
-This document contains the API changes compared to the ["integrated" HRM-OMERO
+The tables below describe the API changes compared to the ["integrated" HRM-OMERO
 connector][1] that used to be shipped with the HRM itself previously.
 
 ## [`hrm_config`][2]
