@@ -14,6 +14,9 @@ poetry install
 
 ## Generating Documentation
 
+The project is using [pdoc][d2] for generating API documentation. To update or (re-)
+generate the HTML documentation use this `poetry` command:
+
 ```bash
 poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 ```
@@ -29,3 +32,4 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
   - adjust log verbosity through the configuration file
 - offer download of OME-TIFFs?
 [d1]: https://python-poetry.org/
+[d2]: https://pdoc.dev/
