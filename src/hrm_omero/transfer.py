@@ -36,7 +36,6 @@ def from_omero(conn, id_str, dest):
     bool
         True in case the download was successful, False otherwise.
     """
-    # FIXME: group switching required!!
     _, gid, obj_type, image_id = id_str.split(":")
     if obj_type != "Image":
         raise ValueError("An '--imageid' ID of the form 'G:7:Image:98765' is required!")
