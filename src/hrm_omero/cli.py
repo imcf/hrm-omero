@@ -203,14 +203,17 @@ def run_task(args):
 
         if args.action == "checkCredentials":
             return omero.check_credentials(conn)
-        elif args.action == "retrieveChildren":
+
+        if args.action == "retrieveChildren":
             return formatting.print_children_json(conn, args.id)
-        elif args.action == "OMEROtoHRM":
+
+        if args.action == "OMEROtoHRM":
             return transfer.from_omero(conn, args.imageid, args.dest)
-        elif args.action == "HRMtoOMERO":
+
+        if args.action == "HRMtoOMERO":
             return transfer.to_omero(conn, args.dset, args.file)
-        else:
-            raise Exception("Huh, how could this happen?!")
+
+        raise Exception("Huh, how could this happen?!")
     finally:
         conn.close()
         log.info(f"Closed OMERO connection [user={args.user}, group={group.getId()}].")
