@@ -3,6 +3,7 @@
 import argparse
 import sys
 
+from omero.gateway import BlitzGateway
 from loguru import logger as log
 
 from .__init__ import __version__
@@ -184,11 +185,22 @@ def run_task(args):
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
     port = hrm_config.get("OMERO_PORT", 4064)
 
-    conn = omero.connect(args.user, args.password, host, port)
+    conn = BlitzGateway(
+        username=args.user,
+        passwd=args.password,
+        host=host,
+        port=port,
+        secure=True,
+        useragent="HRM-OMERO.connector",
+    )
 
     # TODO: implement requesting groups via cmdline option
 
     try:
+        conn.connect()
+        group = conn.getGroupFromContext()
+        log.info(f"New OMERO connection [user={args.user}, group={group.getId()}].")
+
         if args.action == "checkCredentials":
             return omero.check_credentials(conn)
         elif args.action == "retrieveChildren":
@@ -201,6 +213,7 @@ def run_task(args):
             raise Exception("Huh, how could this happen?!")
     finally:
         conn.close()
+        log.info(f"Closed OMERO connection [user={args.user}, group={group.getId()}].")
 
 
 @log.catch

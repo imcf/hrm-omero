@@ -1,7 +1,10 @@
 [tool.poetry]
 name = "hrm-omero"
-version = "0.3.1"
-authors = ["Niko Ehrenfeuchter <nikolaus.ehrenfeuchter@unibas.ch>"]
+version = "0.3.2"
+authors = [
+    "Niko Ehrenfeuchter <nikolaus.ehrenfeuchter@unibas.ch>",
+    "Felix Meyenhofer <felix.meyenhofer@unifr.ch>",
+]
 description = "A connector between the Huygens Remote Manager (HRM) and OMERO."
 license = "GPLv3"
 readme = "README.md"

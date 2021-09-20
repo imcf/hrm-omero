@@ -28,6 +28,7 @@ def connect(user, passwd, host, port=4064):
     omero.gateway.BlitzGateway
         The OMERO connection object.
     """
+    log.warning("'connect()' is DEPRECATED, will be removed in an upcoming release!")
     conn = BlitzGateway(
         user, passwd, host=host, port=port, secure=True, useragent="HRM-OMERO.connector"
     )
