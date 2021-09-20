@@ -38,6 +38,9 @@ def from_omero(conn, id_str, dest):
     """
     # FIXME: group switching required!!
     _, gid, obj_type, image_id = id_str.split(":")
+    if obj_type != "Image":
+        raise ValueError("An '--imageid' ID of the form 'G:7:Image:98765' is required!")
+
     if not image_id:
         print("Couldn't parse ID '%s'. Expecting [GID]:[Type]:[Image_ID]" % id_str)
         return False
@@ -170,6 +173,9 @@ def to_omero(conn, id_str, image_file):
         return False
     # TODO I: group switching required!!
     _, gid, obj_type, dset_id = id_str.split(":")
+    if obj_type != "Dataset":
+        raise ValueError("A '--dset' ID of the form 'G:7:Dataset:12345' is required!")
+
     # we have to create the annotations *before* we actually upload the image
     # data itself and link them to the image during the upload - the other way
     # round is not possible right now as the CLI wrapper (see below) doesn't
