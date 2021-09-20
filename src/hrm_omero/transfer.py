@@ -223,12 +223,14 @@ def to_omero(conn, id_str, image_file):
     try:
         cli.invoke(import_args, strict=True)
     except Exception as err:  # pylint: disable-msg=broad-except
-        # print(import_args)
         msg = f"ERROR: uploading '{image_file}' to {id_str} failed!"
         print(msg)
         log.error(msg)
         msg = f"OMERO error message: >>>{err}<<<"
         print(msg)
         log.error(msg)
+        msg = f"import_args: {import_args}"
+        print(msg)
+        log.warning(msg)
         return False
     return True
