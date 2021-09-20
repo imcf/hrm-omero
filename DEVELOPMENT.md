@@ -23,13 +23,15 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 ## ToDo list
 
-- trees for different groups
-  - requesting groups through a commandline option
-- logging
-  - proper logging (loguru) [DONE]
-  - separate logfile for the connector
-  - adjust log verbosity through a parameter [DONE]
-  - adjust log verbosity through the configuration file
-- offer download of OME-TIFFs?
+- [ ] trees for different groups
+  - [ ] requesting groups through a commandline option
+- [ ] logging
+  - [x] proper logging ([loguru][d3])
+  - [ ] separate logfile for the connector
+  - [x] adjust log verbosity through a parameter
+  - [ ] adjust log verbosity through the configuration file
+- [ ] offer download of OME-TIFFs?
+
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
+[d3]: https://github.com/Delgan/loguru
