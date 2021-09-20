@@ -219,7 +219,7 @@ def to_omero(conn, id_str, image_file):
     #### for ann_id in annotations:
     ####     import_args.extend(['--annotation_link', str(ann_id)])
     import_args.append(image_file)
-    # print("import_args: " + str(import_args))
+    log.debug(f"import_args: {import_args}")
     try:
         cli.invoke(import_args, strict=True)
     except Exception as err:  # pylint: disable-msg=broad-except
