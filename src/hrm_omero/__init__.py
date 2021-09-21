@@ -4,6 +4,8 @@
 
 .. include:: ../../DEVELOPMENT.md
 
+.. include:: ../../CHANGELOG.md
+
 .. include:: ../../API-CHANGES.md
 """
 
