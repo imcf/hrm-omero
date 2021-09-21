@@ -70,8 +70,12 @@ def test_job_parameter_summary():
     """Test the parameter summary generator with a valid file from 'resources'."""
     infile = "resources/images/processed/deconvolved_01.tif.parameters.txt"
     summary = hrm.job_parameter_summary(infile)
-    # simply check one specific line, we're picking the one with the N/A (line 7)
-    assert summary.splitlines()[7] == "Numerical aperture [Ch: 0]: 2.345"
+    # print(summary)
+    lines = summary.splitlines()
+    # check a line that should contain the converted "μm" unit:
+    assert lines[2].startswith("X pixel size (μm)")
+    # check another line, we're picking the one with the N/A (line 7)
+    assert lines[7] == "Numerical aperture [Ch: 0]: 2.345"
 
 
 def test_job_parameter_summary__file_not_found():
