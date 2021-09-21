@@ -137,8 +137,8 @@ def fetch_thumbnail(conn, image_id, dest):
         print(msg)
         log.success(msg)
         return True
-    except:  # pylint: disable-msg=bare-except
-        msg = f"ERROR downloading thumbnail to '{target}'."
+    except Exception as err:  # pylint: disable-msg=broad-except
+        msg = f"ERROR downloading thumbnail to '{target}': {err}"
         print(msg)
         log.error(msg)
         return False
