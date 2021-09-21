@@ -125,10 +125,13 @@ def gen_group_tree(conn, group=None):
         with the current user as the first entry.
     """
     if group is not None:
+        log.trace(f"Setting group context to {str(group.getId())}...")
         conn.SERVICE_OPTS.setOmeroGroup(group.getId())
     else:
+        log.trace("Getting group from current context...")
         group = conn.getGroupFromContext()
     gid = str(group.getId())
+    log.debug(f"Generating tree for group {gid}...")
     group_dict = gen_obj_dict(group)
     # add the user's own tree first:
     user = conn.getUser()
