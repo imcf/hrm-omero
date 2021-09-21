@@ -29,7 +29,8 @@ def print_children_json(conn, id_str):
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
     id_str : str
-        The OMERO object ID string (e.g. `G:23:Image:42`)
+        The OMERO object ID string, e.g. `G:23:Image:42` or `ROOT` (to generate the
+        base tree).
 
     Returns
     -------
