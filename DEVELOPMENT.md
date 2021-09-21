@@ -33,7 +33,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [ ] allow debug logging of the "omero import" call
   - [ ] requested through a command line argument
   - [ ] through the configuration file
-- [ ] offer download of OME-TIFFs?
+- [x] (REJECTED) offer download of OME-TIFFs
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/

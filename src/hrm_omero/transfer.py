@@ -72,8 +72,10 @@ def from_omero(conn, id_str, dest):
     # original file is not available. However, it was possible to upload with
     # the "archive" option, we should check if such archived files are
     # retrieved with the above query.
-    # TODO II (issue #398): in case no archived file is available, we could
-    # fall back to downloading the OME-TIFF instead.
+
+    # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
+    # data) as an alternative has been discarded for the moment - see upstream HRM
+    # ticket #398 (http://hrm.svi.nl:8080/redmine/issues/398)
     downloads = []
     # assemble a list of items to download, check if any files already exist:
     for fset_file in fset.listFiles():
