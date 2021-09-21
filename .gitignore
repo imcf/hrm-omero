@@ -9,6 +9,8 @@ docs/
 __pycache__/
 /.vscode/
 *.code-workspace
+/.coverage
+/htmlcov/
 
 # connection details for testing
 cred.py
