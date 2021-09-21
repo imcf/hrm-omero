@@ -184,6 +184,7 @@ def run_task(args):
     hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
     port = hrm_config.get("OMERO_PORT", 4064)
+    omero_logfile = hrm_config.get("OMERO_DEBUG_LOG", "")
 
     conn = BlitzGateway(
         username=args.user,
@@ -212,7 +213,7 @@ def run_task(args):
             return transfer.from_omero(conn, args.imageid, args.dest)
 
         if args.action == "HRMtoOMERO":
-            return transfer.to_omero(conn, args.dset, args.file)
+            return transfer.to_omero(conn, args.dset, args.file, omero_logfile)
 
         raise Exception("Huh, how could this happen?!")
     finally:

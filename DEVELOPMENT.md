@@ -43,9 +43,9 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
   - [ ] separate logfile for the connector
   - [x] adjust log verbosity through a parameter
   - [ ] adjust log verbosity through the configuration file
-- [ ] allow debug logging of the "omero import" call
-  - [ ] requested through a command line argument
-  - [ ] through the configuration file
+- [x] allow debug logging of the "omero import" call
+  - [x] (REJECTED) requested through a command line argument
+  - [x] through the configuration file
 - [x] (REJECTED) offer download of OME-TIFFs
 
 [d1]: https://python-poetry.org/

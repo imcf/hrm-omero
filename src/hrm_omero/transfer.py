@@ -144,7 +144,7 @@ def fetch_thumbnail(conn, image_id, dest):
         return False
 
 
-def to_omero(conn, id_str, image_file):
+def to_omero(conn, id_str, image_file, omero_logfile=""):
     """Upload an image into a specific dataset in OMERO.
 
     In case we know from the suffix that a given  format is not supported by OMERO, the
@@ -164,6 +164,12 @@ def to_omero(conn, id_str, image_file):
         The ID of the target dataset in OMERO (e.g. `G:7:Dataset:23`).
     image_file : str
         The local image file including the full path.
+    omero_logfile : str, optional
+        The prefix of files to be used to capture OMERO's `import` call stdout and
+        stderr messages. If the parameter is non-empty the `--debug ALL` option will be
+        added to the `omero` call with the output being placed in files with the given
+        name with suffixes `-stdout` and `-stderr` being added respectively. If the
+        parameter is omitted or empty, debug messages will be disabled.
 
     Returns
     -------
@@ -220,9 +226,14 @@ def to_omero(conn, id_str, image_file):
     # https://forum.image.sc/t/unable-to-use-cli-importer/26424
     import_args.extend(["--skip", "upgrade"])
 
-    # import_args.extend(['--debug', 'ALL'])
-    # import_args.extend(['--file', '/tmp/hrm-omero-java-stdout'])
-    # import_args.extend(['--errs', '/tmp/hrm-omero-java-stderr'])
+    if omero_logfile:
+        outfile = f"{omero_logfile}-stdout"
+        errfile = f"{omero_logfile}-stderr"
+        log.warning(f"Messages from import will go to [{outfile}] and [{errfile}].")
+        import_args.extend(["--debug", "ALL"])
+        import_args.extend(["--file", outfile])
+        import_args.extend(["--errs", errfile])
+
     import_args.extend(["-d", dset_id])
     if comment is not None:
         import_args.extend(["--annotation_ns", namespace])

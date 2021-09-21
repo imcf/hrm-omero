@@ -4,6 +4,8 @@
 
 ### New
 
+* Debug logging for the OMERO *import call* can now be requested be setting the
+  configuration option `OMERO_DEBUG_LOG` in the HRM config file.
 * Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
 
 ### Changes
