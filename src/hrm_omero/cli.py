@@ -195,8 +195,6 @@ def run_task(args):
         useragent="HRM-OMERO.connector",
     )
 
-    # TODO: implement requesting groups via cmdline option
-
     try:
         conn.connect()
         group = conn.getGroupFromContext()
