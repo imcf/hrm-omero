@@ -2,6 +2,7 @@
 
 import os
 import re
+from io import StringIO
 
 from loguru import logger as log
 
@@ -124,12 +125,11 @@ def fetch_thumbnail(conn, image_id, dest):
     """
     try:
         import Image
-        import StringIO
     except ImportError:
         return False
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
-    thumbnail = Image.open(StringIO.StringIO(image_data))
+    thumbnail = Image.open(StringIO(image_data))
     base_dir, fname = os.path.split(dest)
     target = "/hrm_previews/" + fname + ".preview_xy.jpg"
     try:
