@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hrm-omero"
-version = "0.3.2"
+version = "0.3.2-dev0"
 authors = [
     "Niko Ehrenfeuchter <nikolaus.ehrenfeuchter@unibas.ch>",
     "Felix Meyenhofer <felix.meyenhofer@unifr.ch>",
