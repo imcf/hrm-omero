@@ -131,19 +131,10 @@ def job_parameter_summary(fname):
         The formatted string containing the parameter summary.
     """
     log.debug(f"Trying to create a job parameter summary from [{fname}]...")
+    from bs4 import BeautifulSoup
     try:
-        from bs4 import BeautifulSoup
-    except ImportError:
-        try:
-            from BeautifulSoup import BeautifulSoup
-        except ImportError:
-            return (
-                "This file was imported via the HRM-OMERO connector. For a parameter "
-                "summary, the 'BeautifulSoup' package for Python is required at import "
-                "time on the HRM system."
-            )
-    try:
-        soup = BeautifulSoup(open(fname, "r"))
+        with open(fname, "r", encoding="utf-8") as soupfile:
+            soup = BeautifulSoup(soupfile)
     except IOError as err:
         log.error(f"Unable to open parameter summary file [{fname}]: {err}")
         return None
