@@ -127,6 +127,7 @@ def fetch_thumbnail(conn, image_id, dest):
         import Image
     except ImportError:
         return False
+    log.info(f"Trying to fetch thumbnail for OMERO image [{image_id}]...")
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
     thumbnail = Image.open(StringIO(image_data))
@@ -135,10 +136,14 @@ def fetch_thumbnail(conn, image_id, dest):
     try:
         thumbnail.save(base_dir + target)
         # TODO: os.chown() to fix permissions, see #457!
-        print("Thumbnail downloaded to '%s'." % target)
+        msg = f"Thumbnail downloaded to '{target}'."
+        print(msg)
+        log.success(msg)
         return True
     except:  # pylint: disable-msg=bare-except
-        print("ERROR downloading thumbnail to '%s'." % target)
+        msg = f"ERROR downloading thumbnail to '{target}'."
+        print(msg)
+        log.error(msg)
         return False
 
 
