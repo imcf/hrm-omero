@@ -148,11 +148,10 @@ def job_parameter_summary(fname):
         # and the table body:
         for row in rows[2:]:
             cols = row.findAll("td")
-            summary += "%s [Ch: %s]: %s\n" % (
-                cols[0].text.replace("&mu;m", "µm"),
-                cols[1].text,
-                cols[3].text,
-            )
+            param_name = cols[0].text.replace("&mu;m", "µm")
+            channel = cols[1].text
+            param_value = cols[3].text
+            summary += f"{param_name} [Ch: {channel}]: {param_value}\n"
         summary += "\n"
     log.success(f"Processed {len(rows)} table rows.")
     return summary
