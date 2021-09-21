@@ -21,6 +21,8 @@ CONF_SEMICOLON = 'FOO="one" ; BAR="two"'
 
 CONF_NOEQUALS = "KEY_WITHOUT_VALUE"
 
+CONF_COMMENT = 'TRIPLE="reloaded"  # whatever that means'
+
 
 def test_parse_config__resources_file():
     """Test the config parser with the supplied HRM config file from 'resources'."""
@@ -42,6 +44,13 @@ def test_parse_config__semicolon(mock_file):
     config = hrm.parse_config(mock_file)
     assert config["FOO"] == "one"
     assert config["BAR"] == "two"
+
+
+@patch("builtins.open", new_callable=mock_open, read_data=CONF_COMMENT)
+def test_parse_config__comment(mock_file):
+    """Test the config parser with a line containing a comment after an assignment."""
+    config = hrm.parse_config(mock_file)
+    assert config["TRIPLE"] == "reloaded"
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_NOEQUALS)
