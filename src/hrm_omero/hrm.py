@@ -134,7 +134,7 @@ def job_parameter_summary(fname):
     from bs4 import BeautifulSoup
     try:
         with open(fname, "r", encoding="utf-8") as soupfile:
-            soup = BeautifulSoup(soupfile)
+            soup = BeautifulSoup(soupfile, features="html.parser")
     except IOError as err:
         log.error(f"Unable to open parameter summary file [{fname}]: {err}")
         return None
