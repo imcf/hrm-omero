@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hrm-omero"
-version = "0.3.2-dev0"
+version = "0.3.2-dev1"
 authors = [
     "Niko Ehrenfeuchter <nikolaus.ehrenfeuchter@unibas.ch>",
     "Felix Meyenhofer <felix.meyenhofer@unifr.ch>",
@@ -18,6 +18,7 @@ python = "^3.6.2"
 omero-py = "^5.9.0"
 loguru = "^0.5.3"
 beautifulsoup4 = "^4.10.0"
+Pillow = "^8.3.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -5,6 +5,7 @@ import re
 from io import StringIO
 
 from loguru import logger as log
+from PIL import Image
 
 from . import hrm
 
@@ -106,8 +107,8 @@ def from_omero(conn, id_str, dest):
 def fetch_thumbnail(conn, image_id, dest):
     """Download the thumbnail of a given image from OMERO.
 
-    In case PIL (Python Imaging Library) is installed, download the thumbnail of a given
-    OMERO image and place it as preview in the corresponding HRM directory.
+    OMERO provides thumbnails for stored images, this function downloads the thumbnail
+    image and places it as preview in the corresponding HRM directory.
 
     Parameters
     ----------
@@ -123,10 +124,6 @@ def fetch_thumbnail(conn, image_id, dest):
     bool
         True in case the download was successful, False otherwise.
     """
-    try:
-        import Image
-    except ImportError:
-        return False
     log.info(f"Trying to fetch thumbnail for OMERO image [{image_id}]...")
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
