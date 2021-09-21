@@ -132,6 +132,7 @@ def gen_group_tree(conn, group=None):
         group = conn.getGroupFromContext()
     gid = str(group.getId())
     log.debug(f"Generating tree for group {gid}...")
+    conn.setGroupForSession(gid)
     group_dict = gen_obj_dict(group)
     # add the user's own tree first:
     user = conn.getUser()
