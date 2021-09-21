@@ -10,7 +10,7 @@ def gen_obj_dict(obj, id_pfx=""):
 
     Parameters
     ----------
-    obj : FIXME
+    obj : omero.gateway._*Wrapper
         The OMERO object to process.
     id_pfx : str, optional
         A string prefix that will be added to the `id` value, by default ''.
