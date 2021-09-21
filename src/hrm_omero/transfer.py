@@ -172,10 +172,12 @@ def to_omero(conn, id_str, image_file):
     if image_file.lower().endswith((".h5", ".hdf5")):
         print("ERROR: HDF5 files are not supported by OMERO!")
         return False
-    # TODO I: group switching required!!
     _, gid, obj_type, dset_id = id_str.split(":")
     if obj_type != "Dataset":
         raise ValueError("A '--dset' ID of the form 'G:7:Dataset:12345' is required!")
+
+    # set the group for this import session:
+    conn.setGroupForSession(gid)
 
     # we have to create the annotations *before* we actually upload the image
     # data itself and link them to the image during the upload - the other way
