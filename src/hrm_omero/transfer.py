@@ -2,7 +2,7 @@
 
 import os
 import re
-from io import StringIO
+from io import BytesIO
 
 from loguru import logger as log
 from PIL import Image
@@ -127,7 +127,7 @@ def fetch_thumbnail(conn, image_id, dest):
     log.info(f"Trying to fetch thumbnail for OMERO image [{image_id}]...")
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
-    thumbnail = Image.open(StringIO(image_data))
+    thumbnail = Image.open(BytesIO(image_data))
     base_dir, fname = os.path.split(dest)
     target = "/hrm_previews/" + fname + ".preview_xy.jpg"
     try:
