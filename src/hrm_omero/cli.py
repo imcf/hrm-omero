@@ -172,6 +172,10 @@ def run_task(args):
         else:  # no verbosity flag has been provided
             log_level = "WARNING"
         log.add(sys.stderr, level=log_level)
+    # FIXME: requesting "TRACE" only works when adding the two lines below:
+    log.remove()
+    log.add(sys.stderr, level=log_level)
+
     log.success(f"Logging verbosity requested: {args.verbosity} ({log_level})")
 
     hrm_config = hrm.parse_config(args.config)
