@@ -35,6 +35,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 ## ToDo list
 
+- [ ] use "key-value pairs" for the HRM job parameter summaries
 - [ ] trees for different groups
   - [ ] requesting groups through a commandline option
 - [ ] logging
