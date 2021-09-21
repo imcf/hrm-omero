@@ -130,6 +130,7 @@ def job_parameter_summary(fname):
     str
         The formatted string containing the parameter summary.
     """
+    log.debug(f"Trying to create a job parameter summary from [{fname}]...")
     try:
         from bs4 import BeautifulSoup
     except ImportError:
@@ -143,9 +144,11 @@ def job_parameter_summary(fname):
             )
     try:
         soup = BeautifulSoup(open(fname, "r"))
-    except IOError:
+    except IOError as err:
+        log.error(f"Unable to open parameter summary file [{fname}]: {err}")
         return None
     summary = ""
+    rows = []
     for table in soup.findAll("table"):
         rows = table.findAll("tr")
         # the table header:
@@ -160,4 +163,5 @@ def job_parameter_summary(fname):
                 cols[3].text,
             )
         summary += "\n"
+    log.success(f"Processed {len(rows)} table rows.")
     return summary
