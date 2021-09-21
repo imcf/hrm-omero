@@ -172,19 +172,18 @@ def run_task(args):
         else:  # no verbosity flag has been provided
             log_level = "WARNING"
         log.add(sys.stderr, level=log_level)
-
-    # uncomment the lines below and adjust to manually set the log level until this is
-    # possible through the HRM configuration file
-    # log_level = "DEBUG"
-    # log.remove()
-    # log.add(sys.stderr, level=log_level)
-
-    log.success("Logging verbosity requested: {} ({})", args.verbosity, log_level)
+    log.success(f"Logging verbosity requested: {args.verbosity} ({log_level})")
 
     hrm_config = hrm.parse_config(args.config)
     host = hrm_config.get("OMERO_HOSTNAME", "localhost")
     port = hrm_config.get("OMERO_PORT", 4064)
     omero_logfile = hrm_config.get("OMERO_DEBUG_LOG", "")
+
+    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL", "")
+    if log_level:
+        log.remove()
+        log.add(sys.stderr, level=log_level)
+        log.success(f"Log level set from config file: {log_level}")
 
     conn = BlitzGateway(
         username=args.user,

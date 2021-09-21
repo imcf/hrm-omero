@@ -4,6 +4,8 @@
 
 ### New
 
+* Log level of the HRM-OMERO connector itself can now be set through the configuration
+  option `OMERO_CONNECTOR_LOGLEVEL` in the HRM config file.
 * Debug logging for the OMERO *import call* can now be requested be setting the
   configuration option `OMERO_DEBUG_LOG` in the HRM config file.
 * Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
