@@ -77,7 +77,7 @@ def test_check_config__valid(mock_file):
 
 def test_job_parameter_summary():
     """Test the parameter summary generator with a valid file from 'resources'."""
-    infile = "resources/images/processed/deconvolved_01.tif.parameters.txt"
+    infile = "tests/resources/parameter-summaries/valid-summary.txt"
     summary = hrm.job_parameter_summary(infile)
     # print(summary)
     lines = summary.splitlines()
