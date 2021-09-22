@@ -213,9 +213,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
 
     cli = CLI()
     cli.loadplugins()
-    # NOTE: cli._client should be replaced with cli.set_client() when switching
-    # to support for OMERO 5.1 and later only:
-    cli._client = conn.c  # pylint: disable-msg=protected-access
+    cli.set_client(conn.c)
     import_args = ["import"]
 
     # disable the upgrade check as it is causing an SSL handshake error and it doesn't
