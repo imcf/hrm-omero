@@ -75,7 +75,7 @@ def test_check_config__valid(mock_file):
     assert hrm.check_config(config) is None
 
 
-def test_job_parameter_summary():
+def test_job_parameter_summary__valid():
     """Test the parameter summary generator with a valid file from 'resources'."""
     infile = "tests/resources/parameter-summaries/valid-summary.txt"
     summary = hrm.job_parameter_summary(infile)
