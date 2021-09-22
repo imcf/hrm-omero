@@ -1,6 +1,5 @@
 """Helper functions to interact with the HRM."""
 
-# pylint: disable-msg=consider-using-f-string
 # pylint: disable-msg=import-outside-toplevel
 
 import shlex
@@ -46,7 +45,7 @@ def parse_config(filename):
     ...     'SUSER': 'hrm'
     ... }
     """
-    log.debug("Trying to parse HRM configuration file [{}]...", filename)
+    log.debug(f"Trying to parse HRM configuration file [{filename}]...")
     config = dict()
     with open(filename, "r") as file:
         body = file.read()
@@ -68,11 +67,11 @@ def parse_config(filename):
             assert equals == "="
         except AssertionError:
             raise SyntaxError(  # pylint: disable-msg=raise-missing-from
-                "Can't parse %s, invalid syntax in line %s "
-                "(expected '=', found '%s')." % (filename, lexer.lineno, equals)
+                f"Can't parse {filename}, invalid syntax in line {lexer.lineno} "
+                f"(expected '=', found '{equals}')."
             )
         except Exception as err:  # pylint: disable-msg=broad-except
-            log.warning("Error parsing config: {}", err)
+            log.warning(f"Error parsing config: {err}")
         value = lexer.get_token()
         value = value.replace('"', "")  # remove double quotes
         value = value.replace("'", "")  # remove single quotes
@@ -97,7 +96,7 @@ def check_config(config):
     required = ["OMERO_PKG", "OMERO_HOSTNAME"]
     for entry in required:
         if entry not in config:
-            raise SyntaxError('Missing "%s" in the HRM config file.' % entry)
+            raise SyntaxError(f"Missing '{entry}'' in the HRM config file.")
     log.debug("HRM config file passed all checks.")
 
 
