@@ -67,7 +67,7 @@ def parse_config(filename):
             equals = lexer.get_token()
             assert equals == "="
         except AssertionError:
-            raise SyntaxError(   # pylint: disable-msg=raise-missing-from
+            raise SyntaxError(  # pylint: disable-msg=raise-missing-from
                 "Can't parse %s, invalid syntax in line %s "
                 "(expected '=', found '%s')." % (filename, lexer.lineno, equals)
             )
