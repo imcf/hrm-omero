@@ -72,12 +72,6 @@ def from_omero(conn, id_str, dest):
         print("ERROR: no original file(s) for image %s found!" % image_id)
         return False
 
-    # TODO I (issue #438): in case the query fails, this means most likely that
-    # a file was uploaded in an older version of OMERO and therefore the
-    # original file is not available. However, it was possible to upload with
-    # the "archive" option, we should check if such archived files are
-    # retrieved with the above query.
-
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
     # data) as an alternative has been discarded for the moment - see upstream HRM
     # ticket #398 (http://hrm.svi.nl:8080/redmine/issues/398)
