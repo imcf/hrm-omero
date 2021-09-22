@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.2
+## 0.4.0
 
 ### New
 
@@ -8,6 +8,8 @@
   option `OMERO_CONNECTOR_LOGLEVEL` in the HRM config file.
 * Debug logging for the OMERO *import call* can now be requested be setting the
   configuration option `OMERO_DEBUG_LOG` in the HRM config file.
+* `hrm_omero.hrm.parse_summary()` has been added to provide a function for parsing the
+  parameter summary from an HRM job into a (nested) dict.
 * Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
 
 ### Changes
