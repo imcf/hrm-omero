@@ -51,6 +51,9 @@ def from_omero(conn, id_str, dest):
     if not gid:
         gid = "-1"
     conn.SERVICE_OPTS.setOmeroGroup(gid)
+    # another way for switching the group was suggested in HRM upstream ticket #539:
+    # conn.setGroupForSession(gid)
+
     # check if dest is a directory, rewrite it otherwise:
     if not os.path.isdir(dest):
         dest = os.path.dirname(dest)
