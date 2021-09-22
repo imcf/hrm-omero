@@ -1,0 +1,31 @@
+<div></div>
+<div id="scaling"></div><!-- scaling -->
+<div id="jobParameters"><br /><b><u>Image parameters summary</u></b><br />
+    <br />
+    Parameter values that were <b>missing</b> from your settings are highlighted in <b>green</b>.<br />
+    Alternative values found in the image metadata were used instead. Please examine<br />
+    their <b>validity</b>.<br />
+    <br />
+    <table>
+        <tr>
+            <td class="header" colspan="4">Image Parameters</td>
+        </tr>
+    </table>
+    <div id="separator"></div><!-- separator -->
+    <br />
+    <table>
+        <tr>
+            <td class="header" colspan="4">Image Parameters</td>
+        </tr>
+    </table>
+    <div id="separator"></div><!-- separator -->
+</div><!-- jobParameters -->
+<div id="jobParameters"><br />
+    <b><u>Restoration parameters summary</u></b><br />
+    <br />
+    <table>
+        <tr>
+            <td class="header" colspan="4">Restoration Parameters</td>
+        </tr>
+    </table>
+</div><!-- jobParameters -->
