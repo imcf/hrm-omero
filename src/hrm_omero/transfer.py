@@ -176,9 +176,11 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         True in case of success, False otherwise.
     """
 
+    # TODO: revisit this, as e.g. BDV .h5 files are supported for now!
     if image_file.lower().endswith((".h5", ".hdf5")):
         print("ERROR: HDF5 files are not supported by OMERO!")
         return False
+
     _, gid, obj_type, dset_id = id_str.split(":")
     if obj_type != "Dataset":
         raise ValueError("A '--dset' ID of the form 'G:7:Dataset:12345' is required!")
