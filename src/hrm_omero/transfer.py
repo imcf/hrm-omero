@@ -192,7 +192,8 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     namespace = "deconvolved.hrm"
     #### mime = 'text/plain'
     # extract the image basename without suffix:
-    # TODO: is it [0-9a-f] or really [0-9a-z] as in the original PHP code?
+    # NOTE: HRM job IDs are generated via PHP's `uniqid()` call that is giving a
+    # 13-digit hexadecimal string (8 digits UNIX time and 5 digits microsconds)
     basename = re.sub(r"(_[0-9a-f]{13}_hrm)\..*", r"\1", image_file)
     comment = hrm.job_parameter_summary(basename + ".parameters.txt")
     #### annotations = []
