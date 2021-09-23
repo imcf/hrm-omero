@@ -216,9 +216,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     cli.set_client(conn.c)
     import_args = ["import"]
 
-    # disable the upgrade check as it is causing an SSL handshake error and it doesn't
-    # make sense in our scenario, see the following forum thread for details:
-    # https://forum.image.sc/t/unable-to-use-cli-importer/26424
+    # disable upgrade checks (https://forum.image.sc/t/unable-to-use-cli-importer/26424)
     import_args.extend(["--skip", "upgrade"])
 
     if omero_logfile:
