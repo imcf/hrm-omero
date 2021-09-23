@@ -222,12 +222,9 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     import_args.extend(["--skip", "upgrade"])
 
     if omero_logfile:
-        outfile = f"{omero_logfile}-stdout"
-        errfile = f"{omero_logfile}-stderr"
-        log.warning(f"Messages from import will go to [{outfile}] and [{errfile}].")
+        log.warning(f"Messages (stderr) from import will go to [{omero_logfile}].")
         import_args.extend(["--debug", "ALL"])
-        import_args.extend(["--file", outfile])
-        import_args.extend(["--errs", errfile])
+        import_args.extend(["--errs", omero_logfile])
 
     import_args.extend(["-d", dset_id])
     if comment is not None:
