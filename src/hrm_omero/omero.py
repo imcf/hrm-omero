@@ -2,6 +2,7 @@
 
 # pylint: disable-msg=consider-using-f-string
 
+import yaml
 from loguru import logger as log
 from omero.gateway import BlitzGateway
 
@@ -58,3 +59,34 @@ def check_credentials(conn):
     else:
         print("ERROR logging into OMERO.")
     return connected
+
+
+def extract_image_id(fname):
+    """Parse the YAML returned by an 'omero import' call and extract the image ID.
+
+    Parameters
+    ----------
+    fname : str
+        The path to the `yaml` file to parse.
+
+    Returns
+    -------
+    int or None
+        The OMERO ID of the newly imported image, e.g. `1568386` or `None` in case
+        parsing the file failed for any reason.
+    """
+    try:
+        with open(fname, "r", encoding="utf-8") as stream:
+            parsed = yaml.safe_load(stream)
+        if len(parsed[0]['Image']) != 1:
+            msg = f"Unexpected YAML retrieved from OMERO, unable to parse:\n{parsed}"
+            print(msg)
+            raise SyntaxError(msg)
+        image_id = parsed[0]['Image'][0]
+    except Exception as err:  # pylint: disable-msg=broad-except
+        msg = f"Error parsing imported image ID from YAML output: {err}"
+        print(msg)
+        log.error(msg)
+        return None
+
+    return image_id

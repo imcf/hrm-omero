@@ -2,12 +2,14 @@
 
 import os
 import re
+import tempfile
 from io import BytesIO
 
 from loguru import logger as log
 from PIL import Image
 
 from . import hrm
+from .omero import extract_image_id
 
 
 def from_omero(conn, id_str, dest):
@@ -226,6 +228,14 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         import_args.extend(["--errs", omero_logfile])
 
     import_args.extend(["-d", dset_id])
+
+    # capture stdout and request YAML format to parse the output later on:
+    tempdir = tempfile.TemporaryDirectory(prefix="hrm-omero__")
+    cap_stdout = f"{tempdir.name}/omero-import-stdout"
+    log.debug(f"Capturing stdout of the 'omero' call into [{cap_stdout}]...")
+    import_args.extend(["--file", cap_stdout])
+    import_args.extend(["--output", "yaml"])
+
     if comment is not None:
         import_args.extend(["--annotation_ns", namespace])
         import_args.extend(["--annotation_text", comment])
@@ -235,6 +245,8 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     log.debug(f"import_args: {import_args}")
     try:
         cli.invoke(import_args, strict=True)
+        imported_id = extract_image_id(cap_stdout)
+        log.success(f"Imported OMERO image ID: {imported_id}")
     except Exception as err:  # pylint: disable-msg=broad-except
         msg = f"ERROR: uploading '{image_file}' to {id_str} failed!"
         print(msg)
@@ -246,4 +258,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         print(msg)
         log.warning(msg)
         return False
+    finally:
+        tempdir.cleanup()
+
     return True
