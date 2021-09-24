@@ -71,7 +71,7 @@ def parse_config(filename):
                 f"Can't parse {filename}, invalid syntax in line {lexer.lineno} "
                 f"(expected '=', found '{equals}')."
             )
-        except Exception as err:  # pylint: disable-msg=broad-except
+        except Exception as err:  # pragma: no cover # pylint: disable-msg=broad-except
             log.warning(f"Error parsing config: {err}")
         value = lexer.get_token()
         value = value.replace('"', "")  # remove double quotes
