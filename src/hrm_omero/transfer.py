@@ -164,10 +164,9 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     image_file : str
         The local image file including the full path.
     omero_logfile : str, optional
-        The prefix of files to be used to capture OMERO's `import` call stdout and
-        stderr messages. If the parameter is non-empty the `--debug ALL` option will be
-        added to the `omero` call with the output being placed in files with the given
-        name with suffixes `-stdout` and `-stderr` being added respectively. If the
+        The prefix of files to be used to capture OMERO's `import` call stderr messages.
+        If the parameter is non-empty the `--debug ALL` option will be added to the
+        `omero` call with the output being placed in the specified file. If the
         parameter is omitted or empty, debug messages will be disabled.
 
     Returns
