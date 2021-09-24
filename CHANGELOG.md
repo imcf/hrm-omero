@@ -10,6 +10,8 @@
   configuration option `OMERO_DEBUG_LOG` in the HRM config file.
 * `hrm_omero.hrm.parse_summary()` has been added to provide a function for parsing the
   parameter summary from an HRM job into a (nested) dict.
+* `hrm.parse_job_basename()` has been added to identify the base name of all files that
+  belong to the set of results from a certain HRM job.
 * Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
 
 ### Changes

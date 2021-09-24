@@ -1,5 +1,6 @@
 """Helper functions to interact with the HRM."""
 
+import re
 import shlex
 
 from bs4 import BeautifulSoup
@@ -127,6 +128,38 @@ def job_parameter_summary(fname):
     log.debug(f"Job parameter summary:\n---\n{summary}---")
     log.success("Generated parameter summary.")
     return summary
+
+
+def parse_job_basename(fname):
+    """Parse the basename from an HRM job result file name.
+
+    HRM job IDs are generated via PHP's `uniqid()` call that is giving a 13-digit
+    hexadecimal string (8 digits UNIX time and 5 digits microsconds). The HRM labels its
+    result files by appending an underscore (`_`) followed by this ID and an `_hrm`
+    suffix. This function tries to match this section and remove everything *after* it
+    from the name.
+
+    Its intention is to safely remove the suffix from an image file name while taking no
+    assumptions about how the suffix looks like (could e.g. be `.ics`, `.ome.tif` or
+    similar).
+
+    Parameters
+    ----------
+    fname : str
+        The input string, usually the name of an HRM result file (but any string is
+        accepted).
+
+    Returns
+    -------
+    str
+        The input string (`fname`) where everything *after* an HRM-like job label (e.g.
+        `_abcdef0123456_hrm` or `_f435a27b9c85e_hrm`) is removed. In case the input
+        string does *not* contain a matching section it is returned
+    """
+    log.trace(fname)
+    basename = re.sub(r"(_[0-9a-f]{13}_hrm)\..*", r"\1", fname)
+    log.trace(basename)
+    return basename
 
 
 def parse_summary(fname):
