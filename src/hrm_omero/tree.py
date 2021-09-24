@@ -1,7 +1,5 @@
 """Functions related to OMERO's tree view."""
 
-# pylint: disable-msg=consider-using-f-string
-
 from loguru import logger as log
 
 
@@ -41,7 +39,7 @@ def gen_obj_dict(obj, id_pfx=""):
         obj_dict["owner"] = None
     else:
         obj_dict["owner"] = obj.getOwnerOmeName()
-    obj_dict["id"] = id_pfx + "%s:%s" % (obj.OMERO_CLASS, obj.getId())
+    obj_dict["id"] = id_pfx + f"{obj.OMERO_CLASS}:{obj.getId()}"
     obj_dict["children"] = []
     return obj_dict
 

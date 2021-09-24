@@ -44,7 +44,9 @@ def from_omero(conn, id_str, dest):
         raise ValueError("An '--imageid' ID of the form 'G:7:Image:98765' is required!")
 
     if not image_id:
-        print("Couldn't parse ID '%s'. Expecting [GID]:[Type]:[Image_ID]" % id_str)
+        msg = f"Couldn't parse ID '{id_str}'. Expecting [GID]:[Type]:[Image_ID]"
+        print(msg)
+        log.error(msg)
         return False
 
     # Provided that the tree displays only groups that the current user has access to,
@@ -65,12 +67,16 @@ def from_omero(conn, id_str, dest):
     # https://www.openmicroscopy.org/community/viewtopic.php?f=6&t=7563
     image_obj = conn.getObject("Image", image_id)
     if not image_obj:
-        print("ERROR: can't find image with ID %s!" % image_id)
+        msg = f"ERROR: can't find image with ID {image_id}!"
+        print(msg)
+        log.error(msg)
         return False
 
     fset = image_obj.getFileset()
     if not fset:
-        print("ERROR: no original file(s) for image %s found!" % image_id)
+        msg = f"ERROR: no original file(s) for image {image_id} found!"
+        print(msg)
+        log.error(msg)
         return False
 
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
@@ -81,7 +87,9 @@ def from_omero(conn, id_str, dest):
     for fset_file in fset.listFiles():
         tgt = os.path.join(dest, fset_file.getName())
         if os.path.exists(tgt):
-            print("ERROR: target file '%s' already existing!" % tgt)
+            msg = f"ERROR: target file '{tgt}' already existing!"
+            print(msg)
+            log.error(msg)
             return False
 
         fset_id = fset_file.getId()
@@ -91,10 +99,12 @@ def from_omero(conn, id_str, dest):
         try:
             conn.c.download(OriginalFileI(fset_id), tgt)
         except:  # pylint: disable-msg=bare-except
-            print("ERROR: downloading %s to '%s' failed!" % (fset_id, tgt))
+            msg = f"ERROR: downloading {fset_id} to '{tgt}' failed!"
+            print(msg)
+            log.error(msg)
             return False
 
-        print("ID %s downloaded as '%s'" % (fset_id, os.path.basename(tgt)))
+        print(f"ID {fset_id} downloaded as '{os.path.basename(tgt)}'")
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:

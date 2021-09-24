@@ -1,7 +1,5 @@
 """Functions related to direct interaction with OMERO."""
 
-# pylint: disable-msg=consider-using-f-string
-
 import yaml
 from loguru import logger as log
 import omero.gateway
@@ -55,7 +53,7 @@ def check_credentials(conn):
     """
     connected = conn.connect()
     if connected:
-        print("Success logging into OMERO with user ID %s" % conn.getUserId())
+        print(f"Success logging into OMERO with user ID {conn.getUserId()}")
     else:
         print("ERROR logging into OMERO.")
     return connected
