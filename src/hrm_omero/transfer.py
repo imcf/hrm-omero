@@ -9,7 +9,7 @@ from loguru import logger as log
 from PIL import Image
 
 from . import hrm
-from .omero import extract_image_id
+from .omero import extract_image_id, add_annotation_keyvalue
 
 
 def from_omero(conn, id_str, dest):
@@ -200,13 +200,8 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     # round is not possible right now as the CLI wrapper (see below) doesn't
     # expose the ID of the newly created object in OMERO (confirmed by J-M and
     # Sebastien on the 2015 OME Meeting):
-    namespace = "deconvolved.hrm"
+    #### namespace = "deconvolved.hrm"
     #### mime = 'text/plain'
-    # extract the image basename without suffix:
-    # NOTE: HRM job IDs are generated via PHP's `uniqid()` call that is giving a
-    # 13-digit hexadecimal string (8 digits UNIX time and 5 digits microsconds)
-    basename = re.sub(r"(_[0-9a-f]{13}_hrm)\..*", r"\1", image_file)
-    comment = hrm.job_parameter_summary(basename + ".parameters.txt")
     #### annotations = []
     #### # TODO: the list of suffixes should not be hardcoded here!
     #### for suffix in ['.hgsb', '.log.txt', '.parameters.txt']:
@@ -245,9 +240,6 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     import_args.extend(["--file", cap_stdout])
     import_args.extend(["--output", "yaml"])
 
-    if comment is not None:
-        import_args.extend(["--annotation_ns", namespace])
-        import_args.extend(["--annotation_text", comment])
     #### for ann_id in annotations:
     ####     import_args.extend(['--annotation_link', str(ann_id)])
     import_args.append(image_file)
@@ -269,5 +261,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         return False
     finally:
         tempdir.cleanup()
+
+    add_annotation_keyvalue(conn, gid, hrm.parse_summary(image_file), imported_id)
 
     return True
