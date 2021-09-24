@@ -4,7 +4,7 @@
 
 import yaml
 from loguru import logger as log
-from omero.gateway import BlitzGateway
+import omero.gateway
 
 
 def connect(user, passwd, host, port=4064):
@@ -30,7 +30,7 @@ def connect(user, passwd, host, port=4064):
         The OMERO connection object.
     """
     log.warning("'connect()' is DEPRECATED, will be removed in an upcoming release!")
-    conn = BlitzGateway(
+    conn = omero.gateway.BlitzGateway(
         user, passwd, host=host, port=port, secure=True, useragent="HRM-OMERO.connector"
     )
     conn.connect()

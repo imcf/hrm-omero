@@ -3,7 +3,8 @@
 import argparse
 import sys
 
-from omero.gateway import BlitzGateway
+import omero.gateway
+
 from loguru import logger as log
 
 from .__init__ import __version__
@@ -189,7 +190,7 @@ def run_task(args):
         log.add(sys.stderr, level=log_level)
         log.success(f"Log level set from config file: {log_level}")
 
-    conn = BlitzGateway(
+    conn = omero.gateway.BlitzGateway(
         username=args.user,
         passwd=args.password,
         host=host,
