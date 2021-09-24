@@ -1,9 +1,8 @@
 """Helper functions to interact with the HRM."""
 
-# pylint: disable-msg=import-outside-toplevel
-
 import shlex
 
+from bs4 import BeautifulSoup
 from loguru import logger as log
 
 
@@ -189,7 +188,6 @@ def parse_summary(fname):
     ... }
     """
     log.debug(f"Trying to parse job parameter summary file [{fname}]...")
-    from bs4 import BeautifulSoup
 
     try:
         with open(fname, "r", encoding="utf-8") as soupfile:
