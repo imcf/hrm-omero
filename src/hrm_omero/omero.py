@@ -90,3 +90,58 @@ def extract_image_id(fname):
         return None
 
     return image_id
+
+
+def add_annotation_keyvalue(conn, gid, annotation, obj_id, obj_type="Image"):
+    """Add a key-value "map" annotation to an OMERO object.
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        The OMERO connection object.
+    gid : int
+        The OMERO group ID of the target image.
+    annotation : dict(dict)
+        The map annotation as returned by `hrm_omero.hrm.parse_summary()`.
+    obj_id : int
+        The ID of the OMERO target object for the annotation.
+    obj_type : str, optional
+        The type of the OMERO object, by default "Image".
+
+    Returns
+    -------
+    bool
+        True in case of success, False otherwise.
+
+    Raises
+    ------
+    RuntimeError
+        Raised in case re-establishing the OMERO connection fails.
+    """
+    if obj_id is None:
+        log.warning(f"No object ID given, not adding annotation >>>{annotation}<<<")
+        return False
+
+    # the connection might be closed (e.g. after importing an image), so reconnect:
+    conn.connect()
+    if not conn._connected:  # pylint: disable-msg=protected-access
+        raise RuntimeError("Failed to (re-)establish connection to OMERO!")
+
+    conn.setGroupForSession(gid)
+    target_obj = conn.getObject(obj_type, obj_id)
+    if target_obj is None:
+        log.warning(f"Unable to identify target object {obj_id} in OMERO!")
+        return False
+
+    for section in annotation:
+        namespace = f"Huygens Remote Manager - {section}"
+        map_ann = omero.gateway.MapAnnotationWrapper(conn)
+        map_ann.setValue(annotation[section].items())
+        map_ann.setNs(namespace)
+        map_ann.save()
+        target_obj.linkAnnotation(map_ann)
+        log.debug(f"Added key-value annotation using namespace [{namespace}].")
+
+    log.success(f"Successfully added annotation to {obj_type}:{obj_id}.")
+
+    return True
