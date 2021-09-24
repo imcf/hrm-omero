@@ -1,14 +1,20 @@
 """Tests for the `hrm_omero.hrm.parse_summary()` function."""
 
+import os.path
+
 import pytest
 
 from hrm_omero import hrm
 
+BASE_DIR = os.path.join("tests", "resources", "parameter-summaries")
+FNAME_VALID = os.path.join(BASE_DIR, "valid-summary.txt")
+FNAME_INVALID_HEADERS = os.path.join(BASE_DIR, "invalid-summary-duplicate-headers.txt")
+FNAME_INVALID_PARAMS = os.path.join(BASE_DIR, "invalid-summary-duplicate-params.txt")
+
 
 def test_with_valid_file():
     """Test the parameter summary generator with a valid file from 'resources'."""
-    infile = "tests/resources/parameter-summaries/valid-summary.txt"
-    summary = hrm.parse_summary(infile)
+    summary = hrm.parse_summary(FNAME_VALID)
     # check if we're having an entry containing the converted "μm" unit:
     assert "X pixel size (μm)" in summary["Image Parameters"]
     # check the N/A value for channel 0:
@@ -17,12 +23,13 @@ def test_with_valid_file():
 
 def test_with_invalid_file():
     """Test the summary parser with invalid data containing header duplicates."""
-    infile = "tests/resources/parameter-summaries/invalid-summary-duplicate-headers.txt"
+    # test with duplicate headers
     with pytest.raises(KeyError):
-        hrm.parse_summary(infile)
-    infile = "tests/resources/parameter-summaries/invalid-summary-duplicate-params.txt"
+        hrm.parse_summary(FNAME_INVALID_HEADERS)
+
+    # test with duplicate parameters
     with pytest.raises(KeyError):
-        hrm.parse_summary(infile)
+        hrm.parse_summary(FNAME_INVALID_PARAMS)
 
 
 def test_with_non_existing_file():
