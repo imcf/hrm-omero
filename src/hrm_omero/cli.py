@@ -10,7 +10,7 @@ from loguru import logger as log
 from .__init__ import __version__
 from . import formatting
 from . import hrm
-from . import omero
+from . import omero as dotomero
 from . import transfer
 
 
@@ -206,7 +206,7 @@ def run_task(args):
         log.debug(f"The user's default group is {group.getId()} ({group.getName()}).")
 
         if args.action == "checkCredentials":
-            return omero.check_credentials(conn)
+            return dotomero.check_credentials(conn)
 
         if args.action == "retrieveChildren":
             return formatting.print_children_json(conn, args.id)
