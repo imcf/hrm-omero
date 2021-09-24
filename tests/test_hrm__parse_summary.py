@@ -13,7 +13,7 @@ FNAME_INVALID_PARAMS = os.path.join(BASE_DIR, "invalid-summary-duplicate-params.
 
 
 def test_with_valid_file():
-    """Test the parameter summary generator with a valid file from 'resources'."""
+    """Test the summary parser with a valid file from 'resources'."""
     summary = hrm.parse_summary(FNAME_VALID)
     # check if we're having an entry containing the converted "μm" unit:
     assert "X pixel size (μm)" in summary["Image Parameters"]
@@ -33,7 +33,7 @@ def test_with_invalid_file():
 
 
 def test_with_non_existing_file():
-    """Test the parameter summary generator with a non-existing file."""
+    """Test the summary parser with a non-existing file."""
     infile = 't/h/i/s/_/s/h/o/u/l/d/_/n/o/t/_/e/x/i/s/t'
     summary = hrm.parse_summary(infile)
     assert summary is None
