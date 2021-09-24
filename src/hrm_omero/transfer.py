@@ -1,7 +1,6 @@
 """Transfer related functions."""
 
 import os
-import re
 import tempfile
 from io import BytesIO
 
