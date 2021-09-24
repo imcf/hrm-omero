@@ -196,7 +196,7 @@ def run_task(args):
         host=host,
         port=port,
         secure=True,
-        useragent="HRM-OMERO.connector",
+        useragent="hrm-omero.py",
     )
 
     try:
