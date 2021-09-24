@@ -1,5 +1,6 @@
 """Helper functions to interact with the HRM."""
 
+import os.path
 import re
 import shlex
 
@@ -184,7 +185,10 @@ def parse_summary(fname):
     Parameters
     ----------
     fname : str
-        The filename of the job's HTML parameter summary.
+        The filename of the job's HTML parameter summary or (e.g.) the resulting image
+        file. In case `fname` doesn't end in the common parameter summary suffix (for
+        example if the image file name was provided), the function tries to derive the
+        name of summary file and use that one for parsing.
 
     Returns
     -------
@@ -220,6 +224,16 @@ def parse_summary(fname):
     ...     },
     ... }
     """
+    # In case `fname` doesn't end with the common suffix for job summary files check if
+    # it is the actual *image* filename of an HRM job and try to use the corresponding
+    # parameter summary file instead:
+    suffix = ".parameters.txt"
+    if not fname.endswith(suffix):
+        candidate = parse_job_basename(fname) + ".parameters.txt"
+        if os.path.exists(candidate):
+            log.debug(f"Found [{candidate}], will use it instead of [{fname}].")
+            fname = candidate
+
     log.debug(f"Trying to parse job parameter summary file [{fname}]...")
 
     try:
