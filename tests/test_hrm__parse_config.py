@@ -5,23 +5,7 @@ import pytest
 
 from hrm_omero import hrm
 
-CONF_SHORT = """
-# OMERO_HOSTNAME="omero"
-OMERO_HOSTNAME="omero.mynetwork.xy"
-# OMERO_HOSTNAME="localhost"
-OMERO_PORT="4064"
-"""
-
-CONF_LONG = CONF_SHORT + """
-# OMERO_PKG specifies the path where the "OMERO.server" package is installed
-OMERO_PKG="/opt/OMERO/OMERO.server"
-"""
-
-CONF_SEMICOLON = 'FOO="one" ; BAR="two"'
-
-CONF_NOEQUALS = "KEY_WITHOUT_VALUE"
-
-CONF_COMMENT = 'TRIPLE="reloaded"  # whatever that means'
+from .data import CONF_SHORT, CONF_LONG, CONF_SEMICOLON, CONF_NOEQUALS, CONF_COMMENT
 
 
 def test_with_example_file():

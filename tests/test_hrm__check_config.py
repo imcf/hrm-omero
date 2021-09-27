@@ -5,17 +5,7 @@ import pytest
 
 from hrm_omero import hrm
 
-CONF_SHORT = """
-# OMERO_HOSTNAME="omero"
-OMERO_HOSTNAME="omero.mynetwork.xy"
-# OMERO_HOSTNAME="localhost"
-OMERO_PORT="4064"
-"""
-
-CONF_LONG = CONF_SHORT + """
-# OMERO_PKG specifies the path where the "OMERO.server" package is installed
-OMERO_PKG="/opt/OMERO/OMERO.server"
-"""
+from .data import CONF_SHORT, CONF_LONG
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_SHORT)

@@ -1,16 +1,15 @@
 """Tests for the `hrm_omero.hrm.parse_summary()` function."""
 
-import os.path
-
 import pytest
 
 from hrm_omero import hrm
 
-BASE_DIR = os.path.join("tests", "resources", "parameter-summaries")
-FNAME_VALID = os.path.join(BASE_DIR, "valid-summary.txt")
-FNAME_VALID_IMAGE = os.path.join(BASE_DIR, "dummy_0123456789abc_hrm.png")
-FNAME_INVALID_HEADERS = os.path.join(BASE_DIR, "invalid-summary-duplicate-headers.txt")
-FNAME_INVALID_PARAMS = os.path.join(BASE_DIR, "invalid-summary-duplicate-params.txt")
+from .data import (
+    FNAME_VALID,
+    FNAME_VALID_IMAGE,
+    FNAME_INVALID_HEADERS,
+    FNAME_INVALID_PARAMS,
+)
 
 
 def test_with_valid_file():
