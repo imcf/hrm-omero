@@ -4,6 +4,11 @@
 
 ### New
 
+* An environment variable `OMERO_PASSWORD` can (and should!) now be used to supply the
+  sensitive part of the user credentials that are necessary to connect to OMERO. This
+  avoids having the password as plain-text in the system's process list (e.g. when
+  calling `ps fu -e` or similar) and also prevents it from showing up in an annotated
+  stack trace in case an uncaught exception is raised.
 * Log level of the HRM-OMERO connector itself can now be set through the configuration
   option `OMERO_CONNECTOR_LOGLEVEL` in the HRM config file.
 * Debug logging for the OMERO *import call* can now be requested be setting the

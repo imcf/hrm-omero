@@ -1,6 +1,7 @@
 """Command-line interface related functions."""
 
 import argparse
+import os
 import sys
 
 import omero.gateway
@@ -67,12 +68,26 @@ def parse_arguments(args):
         help="the HRM configuration file (default: '/etc/hrm.conf')",
     )
 
+    # deprecated arguments group
+    dep_args = argparser.add_argument_group(
+        "DEPRECATED arguments",
+        "See the documentation for instructions on how to adapt your call!",
+    )
+    dep_args.add_argument(
+        "-w",
+        "--password",
+        required=False,
+        help=(
+            "OMERO password  ******** DEPRECATED ********"
+            "Use the environment variable 'OMERO_PASSWORD' instead!"
+        ),
+    )
+
     # required arguments group
     req_args = argparser.add_argument_group(
         "required arguments", "NOTE: MUST be given before any subcommand!"
     )
     req_args.add_argument("-u", "--user", required=True, help="OMERO username")
-    req_args.add_argument("-w", "--password", required=True, help="OMERO password")
 
     subparsers = argparser.add_subparsers(
         help=".",
@@ -190,9 +205,31 @@ def run_task(args):
         log.add(sys.stderr, level=log_level)
         log.success(f"Log level set from config file: {log_level}")
 
+    # NOTE: reading the OMERO password from an environment variable instead of an
+    # argument supplied on the command line improves handling of this sensitive data as
+    # the value is *NOT* immediately revealed to anyone with shell access by simply
+    # looking at the process list (which is an absolute standard procedure to do). Since
+    # it is not passed to any other functions here (except the call to `BlitzGateway`)
+    # this also prevents it from being shown in an annotated stack trace in case an
+    # uncaught exception is coming through.
+    # However, this doesn't provide super-high security as it will still be possible for
+    # an admin to inspect the environment of a running process. Nevertheless going
+    # beyond this seems a bit pointless here as an admin could also modify the code that
+    # is actually calling the connector to get hold of user credentials.
+    passwd = os.environ.get("OMERO_PASSWORD")
+    # while being deprecated an explicitly specified password still has priority:
+    if args.password:
+        log.warning("Using the '--password' parameter is deprecated!")
+        passwd = args.password
+    if not passwd:
+        msg = "ERROR: no password given to connect to OMERO!"
+        print(msg)
+        log.error(msg)
+        sys.exit(1)
+
     conn = omero.gateway.BlitzGateway(
         username=args.user,
-        passwd=args.password,
+        passwd=passwd,
         host=host,
         port=port,
         secure=True,
