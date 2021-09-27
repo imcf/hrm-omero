@@ -22,6 +22,14 @@ def test_valid_short(mock_file):
     assert config["OMERO_HOSTNAME"] == "omero.mynetwork.xy"
 
 
+@patch("builtins.open", new_callable=mock_open, read_data=CONF_LONG)
+def test_valid_long(mock_file):
+    """Test the config parser with a valid long configuration."""
+    config = hrm.parse_config(mock_file)
+    assert "OMERO_HOSTNAME" in config
+    assert "OMERO_PKG" in config
+
+
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_SEMICOLON)
 def test_valid_with_semicolon(mock_file):
     """Test the config parser with a single line containing two settings."""
