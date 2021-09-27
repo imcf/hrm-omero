@@ -45,6 +45,6 @@ def test_with_invalid_file():
 
 def test_with_non_existing_file():
     """Test the summary parser with a non-existing file."""
-    infile = 't/h/i/s/_/s/h/o/u/l/d/_/n/o/t/_/e/x/i/s/t'
+    infile = "t/h/i/s/_/s/h/o/u/l/d/_/n/o/t/_/e/x/i/s/t"
     summary = hrm.parse_summary(infile)
     assert summary is None
