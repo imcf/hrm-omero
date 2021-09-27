@@ -174,21 +174,16 @@ def run_task(args):
 
     # one of the downsides of loguru is that the level of an existing logger can't be
     # changed - so to adjust verbosity we actually need to remove the default logger and
-    # re-add it with the new level (unless maximum verbosity was requested anyway...)
-    # see https://github.com/Delgan/loguru/issues/138 for more information
-    log_level = "TRACE"
-    if args.verbosity < 4:  # -vvvv (4) will result in "TRACE", nothing to be done then
-        log.remove()
-        if args.verbosity == 3:  # -vvv will be "DEBUG"
-            log_level = "DEBUG"
-        elif args.verbosity == 2:  # -vv will be "INFO"
-            log_level = "INFO"
-        elif args.verbosity == 1:  # -v will be "SUCCESS"
-            log_level = "SUCCESS"
-        else:  # no verbosity flag has been provided
-            log_level = "WARNING"
-        log.add(sys.stderr, level=log_level)
-    # FIXME: requesting "TRACE" only works when adding the two lines below:
+    # re-add it with the new level (see https://github.com/Delgan/loguru/issues/138)
+    log_level = "WARNING"  # no verbosity flag has been provided -> use "WARNING"
+    if args.verbosity > 3:  # -vvvv (4) and more will result in "TRACE"
+        log_level = "TRACE"
+    if args.verbosity == 3:  # -vvv will be "DEBUG"
+        log_level = "DEBUG"
+    elif args.verbosity == 2:  # -vv will be "INFO"
+        log_level = "INFO"
+    elif args.verbosity == 1:  # -v will be "SUCCESS"
+        log_level = "SUCCESS"
     log.remove()
     log.add(sys.stderr, level=log_level)
 
