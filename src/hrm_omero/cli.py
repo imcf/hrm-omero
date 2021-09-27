@@ -225,7 +225,7 @@ def run_task(args):
         msg = "ERROR: no password given to connect to OMERO!"
         print(msg)
         log.error(msg)
-        sys.exit(1)
+        return False
 
     conn = omero.gateway.BlitzGateway(
         username=args.user,
