@@ -168,6 +168,32 @@ def parse_arguments(args):
         argparser.error(str(err))
 
 
+def verbosity_to_loglevel(verbosity):
+    """Map the verbosity count to a named log level for `loguru`.
+
+    Parameters
+    ----------
+    verbosity : int
+        Verbosity count as returned e.g. by the following argparse code:
+        `argparser.add_argument("-v", dest="verbosity", action="count", default=0)`
+
+    Returns
+    -------
+    str
+        A log level name that can be used with `loguru.logger.add()`.
+    """
+    log_level = "WARNING"  # no verbosity flag has been provided -> use "WARNING"
+    if verbosity > 3:  # -vvvv (4) and more will result in "TRACE"
+        log_level = "TRACE"
+    if verbosity == 3:  # -vvv will be "DEBUG"
+        log_level = "DEBUG"
+    elif verbosity == 2:  # -vv will be "INFO"
+        log_level = "INFO"
+    elif verbosity == 1:  # -v will be "SUCCESS"
+        log_level = "SUCCESS"
+    return log_level
+
+
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
     args = parse_arguments(args)
@@ -175,15 +201,7 @@ def run_task(args):
     # one of the downsides of loguru is that the level of an existing logger can't be
     # changed - so to adjust verbosity we actually need to remove the default logger and
     # re-add it with the new level (see https://github.com/Delgan/loguru/issues/138)
-    log_level = "WARNING"  # no verbosity flag has been provided -> use "WARNING"
-    if args.verbosity > 3:  # -vvvv (4) and more will result in "TRACE"
-        log_level = "TRACE"
-    if args.verbosity == 3:  # -vvv will be "DEBUG"
-        log_level = "DEBUG"
-    elif args.verbosity == 2:  # -vv will be "INFO"
-        log_level = "INFO"
-    elif args.verbosity == 1:  # -v will be "SUCCESS"
-        log_level = "SUCCESS"
+    log_level = verbosity_to_loglevel(args.verbosity)
     log.remove()
     log.add(sys.stderr, level=log_level)
 
