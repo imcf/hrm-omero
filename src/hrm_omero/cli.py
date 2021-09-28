@@ -69,6 +69,13 @@ def parse_arguments(args):
         help="the HRM configuration file (default: '/etc/hrm.conf')",
     )
 
+    argparser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help="print requested action and parameters without actually performing it",
+    )
+
     # deprecated arguments group
     dep_args = argparser.add_argument_group(
         "DEPRECATED arguments",
@@ -239,6 +246,32 @@ def run_task(args):
         printlog("ERROR", "ERROR: no password given to connect to OMERO!")
         return False
 
+    if args.action == "checkCredentials":
+        perform_action = dotomero.check_credentials
+        kwargs = {}
+
+    elif args.action == "retrieveChildren":
+        perform_action = formatting.print_children_json
+        kwargs = {"id_str": args.id}
+
+    elif args.action == "OMEROtoHRM":
+        perform_action = transfer.from_omero
+        kwargs = {
+            "id_str": args.imageid,
+            "dest": args.dest,
+        }
+
+    elif args.action == "HRMtoOMERO":
+        perform_action = transfer.to_omero
+        kwargs = {
+            "id_str": args.dset,
+            "image_file": args.file,
+            "omero_logfile": omero_logfile,
+        }
+
+    else:
+        raise Exception("Huh, how could this happen?!")
+
     conn = omero.gateway.BlitzGateway(
         username=args.user,
         passwd=passwd,
@@ -249,24 +282,20 @@ def run_task(args):
     )
 
     try:
+        if args.dry_run:
+            printlog("INFO", "*** dry-run, only showing action and parameters ***")
+            printlog("INFO", f"function: {perform_action.__qualname__}")
+            printlog("INFO", f"arguments: {kwargs}")
+
+            return True
+
         conn.connect()
         group = conn.getGroupFromContext()
         log.info(f"New OMERO connection [user={args.user}].")
         log.debug(f"The user's default group is {group.getId()} ({group.getName()}).")
 
-        if args.action == "checkCredentials":
-            return dotomero.check_credentials(conn)
+        return perform_action(conn, **kwargs)
 
-        if args.action == "retrieveChildren":
-            return formatting.print_children_json(conn, args.id)
-
-        if args.action == "OMEROtoHRM":
-            return transfer.from_omero(conn, args.imageid, args.dest)
-
-        if args.action == "HRMtoOMERO":
-            return transfer.to_omero(conn, args.dset, args.file, omero_logfile)
-
-        raise Exception("Huh, how could this happen?!")
     finally:
         conn.close()
         log.info(f"Closed OMERO connection [user={args.user}].")
