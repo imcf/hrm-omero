@@ -13,6 +13,7 @@ from . import formatting
 from . import hrm
 from . import omero as dotomero
 from . import transfer
+from .misc import printlog
 
 
 def bool_to_exitstatus(value):
@@ -232,12 +233,10 @@ def run_task(args):
     passwd = os.environ.get("OMERO_PASSWORD")
     # while being deprecated an explicitly specified password still has priority:
     if args.password:
-        log.warning("Using the '--password' parameter is deprecated!")
         passwd = args.password
+        printlog("WARNING", "Using the '--password' parameter is deprecated!")
     if not passwd:
-        msg = "ERROR: no password given to connect to OMERO!"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", "ERROR: no password given to connect to OMERO!")
         return False
 
     conn = omero.gateway.BlitzGateway(

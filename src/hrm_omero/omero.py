@@ -4,6 +4,8 @@ import yaml
 from loguru import logger as log
 import omero.gateway
 
+from .misc import printlog
+
 
 def connect(user, passwd, host, port=4064):
     """Establish the connection to an OMERO server.
@@ -53,9 +55,9 @@ def check_credentials(conn):
     """
     connected = conn.connect()
     if connected:
-        print(f"Success logging into OMERO with user ID {conn.getUserId()}")
+        printlog("SUCCESS", f"Connected to OMERO [user ID: {conn.getUserId()}].")
     else:
-        print("ERROR logging into OMERO.")
+        printlog("WARNING", "ERROR logging into OMERO.")
     return connected
 
 
@@ -78,13 +80,11 @@ def extract_image_id(fname):
             parsed = yaml.safe_load(stream)
         if len(parsed[0]['Image']) != 1:
             msg = f"Unexpected YAML retrieved from OMERO, unable to parse:\n{parsed}"
-            print(msg)
+            printlog("ERROR", msg)
             raise SyntaxError(msg)
         image_id = parsed[0]['Image'][0]
     except Exception as err:  # pylint: disable-msg=broad-except
-        msg = f"Error parsing imported image ID from YAML output: {err}"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", f"Error parsing imported image ID from YAML output: {err}")
         return None
 
     return image_id

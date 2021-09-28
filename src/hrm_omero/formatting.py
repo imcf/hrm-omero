@@ -3,6 +3,7 @@
 import json
 
 from . import tree
+from .misc import printlog
 
 
 def tree_to_json(obj_tree):
@@ -40,7 +41,7 @@ def print_children_json(conn, id_str):
     try:
         children = tree.gen_children(conn, id_str)
     except:  # pylint: disable-msg=bare-except
-        print("ERROR generating OMERO tree / node!")
+        printlog("ERROR", "ERROR generating OMERO tree / node!")
         return False
     print(tree_to_json(children))
     return True

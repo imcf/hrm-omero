@@ -9,6 +9,7 @@ from PIL import Image
 
 from . import hrm
 from .omero import extract_image_id, add_annotation_keyvalue
+from .misc import printlog
 
 
 def from_omero(conn, id_str, dest):
@@ -44,9 +45,7 @@ def from_omero(conn, id_str, dest):
         raise ValueError("An '--imageid' ID of the form 'G:7:Image:98765' is required!")
 
     if not image_id:
-        msg = f"Couldn't parse ID '{id_str}'. Expecting [GID]:[Type]:[Image_ID]"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", f"Malformed ID '{id_str}'. Expecting `G:[gid]:[type]:[iid]`")
         return False
 
     # Provided that the tree displays only groups that the current user has access to,
@@ -67,16 +66,12 @@ def from_omero(conn, id_str, dest):
     # https://www.openmicroscopy.org/community/viewtopic.php?f=6&t=7563
     image_obj = conn.getObject("Image", image_id)
     if not image_obj:
-        msg = f"ERROR: can't find image with ID {image_id}!"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", f"ERROR: can't find image with ID {image_id}!")
         return False
 
     fset = image_obj.getFileset()
     if not fset:
-        msg = f"ERROR: no original file(s) for image {image_id} found!"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", f"ERROR: no original file(s) for image {image_id} found!")
         return False
 
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
@@ -87,9 +82,7 @@ def from_omero(conn, id_str, dest):
     for fset_file in fset.listFiles():
         tgt = os.path.join(dest, fset_file.getName())
         if os.path.exists(tgt):
-            msg = f"ERROR: target file '{tgt}' already existing!"
-            print(msg)
-            log.error(msg)
+            printlog("ERROR", f"ERROR: target file '{tgt}' already existing!")
             return False
 
         fset_id = fset_file.getId()
@@ -99,12 +92,10 @@ def from_omero(conn, id_str, dest):
         try:
             conn.c.download(OriginalFileI(fset_id), tgt)
         except:  # pylint: disable-msg=bare-except
-            msg = f"ERROR: downloading {fset_id} to '{tgt}' failed!"
-            print(msg)
-            log.error(msg)
+            printlog("ERROR", f"ERROR: downloading {fset_id} to '{tgt}' failed!")
             return False
 
-        print(f"ID {fset_id} downloaded as '{os.path.basename(tgt)}'")
+        printlog("SUCCESS", f"ID {fset_id} downloaded as '{os.path.basename(tgt)}'")
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:
@@ -141,14 +132,10 @@ def fetch_thumbnail(conn, image_id, dest):
     try:
         thumbnail.save(base_dir + target)
         # TODO: os.chown() to fix permissions, see #457!
-        msg = f"Thumbnail downloaded to '{target}'."
-        print(msg)
-        log.success(msg)
+        printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
         return True
     except Exception as err:  # pylint: disable-msg=broad-except
-        msg = f"ERROR downloading thumbnail to '{target}': {err}"
-        print(msg)
-        log.error(msg)
+        printlog("ERROR", f"ERROR downloading thumbnail to '{target}': {err}")
         return False
 
 
@@ -194,7 +181,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     # TODO: revisit this, as e.g. BDV .h5 files are supported for now!
     if image_file.lower().endswith((".h5", ".hdf5")):
         msg = f"ERROR importing [{image_file}]: HDF5 format not supported by OMERO!"
-        print(msg)
+        printlog("ERROR", msg)
         raise TypeError(msg)
 
     _, gid, obj_type, dset_id = id_str.split(":")
@@ -258,15 +245,9 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         imported_id = extract_image_id(cap_stdout)
         log.success(f"Imported OMERO image ID: {imported_id}")
     except Exception as err:  # pylint: disable-msg=broad-except
-        msg = f"ERROR: uploading '{image_file}' to {id_str} failed!"
-        print(msg)
-        log.error(msg)
-        msg = f"OMERO error message: >>>{err}<<<"
-        print(msg)
-        log.error(msg)
-        msg = f"import_args: {import_args}"
-        print(msg)
-        log.warning(msg)
+        printlog("ERROR", f"ERROR: uploading '{image_file}' to {id_str} failed!")
+        printlog("ERROR", f"OMERO error message: >>>{err}<<<")
+        printlog("WARNING", f"import_args: {import_args}")
         return False
     finally:
         tempdir.cleanup()
