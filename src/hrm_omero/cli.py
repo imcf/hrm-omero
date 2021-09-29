@@ -221,10 +221,7 @@ def verbosity_to_loglevel(verbosity):
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
     argparser = arguments_parser()
-    try:
-        args = argparser.parse_args(args)
-    except IOError as err:
-        argparser.error(str(err))
+    args = argparser.parse_args(args)
 
     # one of the downsides of loguru is that the level of an existing logger can't be
     # changed - so to adjust verbosity we actually need to remove the default logger and
