@@ -42,7 +42,26 @@ def bool_to_exitstatus(value):
 
 
 def parse_arguments(args):
-    """Parse the commandline arguments."""
+    """Parse the commandline arguments.
+
+    DEPRECATED function, use `arguments_parser()` instead!
+    """
+    log.warning("'parse_arguments()' is deprecated and will be removed!")
+    argparser = arguments_parser()
+    try:
+        return argparser.parse_args(args)
+    except IOError as err:
+        argparser.error(str(err))
+
+
+def arguments_parser():
+    """Set up the commandline arguments parser.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        The parser instance ready to be run using its `parse_args()` method.
+    """
     # log.debug("Parsing command line arguments...")
     argparser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -170,10 +189,7 @@ def parse_arguments(args):
         help="annotation text to be added to the image in OMERO",
     )
 
-    try:
-        return argparser.parse_args(args)
-    except IOError as err:
-        argparser.error(str(err))
+    return argparser
 
 
 def verbosity_to_loglevel(verbosity):
@@ -204,7 +220,11 @@ def verbosity_to_loglevel(verbosity):
 
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
-    args = parse_arguments(args)
+    argparser = arguments_parser()
+    try:
+        args = argparser.parse_args(args)
+    except IOError as err:
+        argparser.error(str(err))
 
     # one of the downsides of loguru is that the level of an existing logger can't be
     # changed - so to adjust verbosity we actually need to remove the default logger and

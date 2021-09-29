@@ -28,8 +28,9 @@
   properly supported.
 * HRM job parameter summaries are now being added as OMERO ["Map Annotations"][c4]
   instead of simply being a comment string.
-* The function `hrm_omero.omero.connect()` is now deprecated and will be removed in a
-  subsequent release.
+* The following functions are now *deprecated* and will be removed in a future release.
+  * `hrm_omero.omero.connect()`
+  * `hrm_omero.cli.parse_arguments()`
 * Functions `hrm_omero.transfer.to_omero()` and `hrm_omero.transfer.from_omero()` are
   now raising a `ValueError` in case the provided `id_str` is malformed.
 * Various improvements on log messages.
