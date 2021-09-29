@@ -71,10 +71,14 @@ By default the connector will be rather silent as otherwise the log files will b
 cluttered up quite a bit on a production system. However, it is possible to increase the
 log level by specifying `-v`, `-vv` and so on.
 
-Currently it is not yet possible to ajust the log level that is being used when operated
-through the HRM web interface (which is the default). To do so, have a look in the
-`hrm_omero.cli.run_task()` function. Log messages produced by the connector when called
-by HRM will usually end up in the web server's error log (as they go to `stderr`).
+Since this is not useful when being operated through the HRM web interface (which is
+the default) it's also possible to set the verbosity level by adjusting the
+`OMERO_CONNECTOR_LOGLEVEL` in `/etc/hrm.conf`.
+
+Valid settings are `"SUCCESS"`, `"INFO"`, `"DEBUG"` and `"TRACE"`. If the option is
+commented out in the configuration file, the level will be set to `WARNING`. Log
+messages produced by the connector when called by HRM will usually end up in the web
+server's error log (as they go to `stderr`).
 
 ## Example Usage
 
