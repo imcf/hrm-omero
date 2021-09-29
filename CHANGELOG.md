@@ -31,6 +31,8 @@
   properly supported.
 * HRM job parameter summaries are now being added as OMERO ["Map Annotations"][c4]
   instead of simply being a comment string.
+* The command line parameter `--password` (or `-w`) is now *deprecated* in favor of
+  using the environment variable described above.
 * The following functions are now *deprecated* and will be removed in a future release.
   * `hrm_omero.omero.connect()`
   * `hrm_omero.cli.parse_arguments()`
