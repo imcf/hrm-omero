@@ -3,6 +3,13 @@
 import os.path
 
 
+### stdout help messages ###
+
+# a regular expression matching stdout/stderr if --help is called or an invalid
+# combination of parameters is given:
+RE_HELP = r"usage: [a-z_-]+ \[-h\] \[-v\] \[--version\] \[-c CONFIG\] \[--dry-run\]"
+
+
 ### HRM configuration file data mocks ###
 
 CONF_SHORT = """
