@@ -45,21 +45,24 @@ eval "$(pyenv init -)"
 # ask pyenv to install Python 3.6.15 (will end up in "~/.pyenv/versions/3.6.15/")
 pyenv install 3.6.15  # takes a bit (compiling...)
 
+# define the target path for the virtual environment:
+$HRM_OMERO_VENV="/opt/venvs/hrm-omero"
+
 # create a bare, stand-alone Python 3.6 virtual environment
-~/.pyenv/versions/3.6.15/bin/python -m venv --copies /opt/venvs/hrm-omero
+~/.pyenv/versions/3.6.15/bin/python -m venv --copies $HRM_OMERO_VENV
 
 # now you can install the connector into this virtual environment - please note that the
 # installation takes quite a while (~15min) as it needs to build the ZeroC Ice bindings
-/opt/venvs/hrm-omero/bin/pip install hrm-omero
+$HRM_OMERO_VENV/bin/pip install hrm-omero
 
 # from now on you can simply call the connector using its full path, there is no need
 # to pre-activate the virtual environment - you could even drop your pyenv completely:
-/opt/venvs/hrm-omero/bin/ome-hrm --help
+$HRM_OMERO_VENV/bin/ome-hrm --help
 
 # this is even usable as a drop-in replacement for the legacy `ome_hrm.py` script:
 cd $PATH_TO_YOUR_HRM_INSTALLATION/bin
 mv "ome_hrm.py" "__old__ome_hrm.py"
-ln -s "/opt/venvs/hrm-omero/bin/ome-hrm" "ome_hrm.py"
+ln -s "$HRM_OMERO_VENV/bin/ome-hrm" "ome_hrm.py"
 ```
 
 ## Debugging
