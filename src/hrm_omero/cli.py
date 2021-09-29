@@ -270,7 +270,8 @@ def run_task(args):
         }
 
     else:
-        raise Exception("Huh, how could this happen?!")
+        printlog("ERROR", "No valid action specified that should be performed!")
+        return False
 
     conn = omero.gateway.BlitzGateway(
         username=args.user,
