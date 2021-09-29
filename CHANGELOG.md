@@ -20,6 +20,9 @@
 * `hrm_omero.omero.add_annotation_keyvalue()` can be used to add so-called [Map
   Annotations][c4] (key-value pairs) to objects in OMERO.
 * `hrm_omero.misc.printlog()` can be used to push a message to the log and stdout.
+* The CLI has a new optional parameter `--dry-run` that prevents any action from being
+  performed, instead the name of the function and the corresponding parameters that
+  would be called are printed to stdout.
 * Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
 
 ### Changes
