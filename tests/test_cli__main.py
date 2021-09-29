@@ -1,4 +1,4 @@
-"""Tests for the 'cli.main()' and 'cli.run_task() function."""
+"""Tests for the 'cli.main()' function."""
 
 import re
 
