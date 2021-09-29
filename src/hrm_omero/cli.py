@@ -256,7 +256,7 @@ def run_task(args):
     # is actually calling the connector to get hold of user credentials.
     passwd = os.environ.get("OMERO_PASSWORD")
     # while being deprecated an explicitly specified password still has priority:
-    if args.password:
+    if args.password:  # pragma: no cover
         passwd = args.password
         printlog("WARNING", "Using the '--password' parameter is deprecated!")
     if not passwd:
