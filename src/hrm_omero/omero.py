@@ -10,6 +10,9 @@ from .misc import printlog
 def connect(user, passwd, host, port=4064):
     """Establish the connection to an OMERO server.
 
+    DEPRECATED function, rather use BlitzGateway's `connect()` in a context manager or
+    in a try/finally block to ensure the connection is properly `close()`d in any case!
+
     NOTE: this does NOT check credentials - it only talks to the OMERO server to create
     the connection object. To verify a login, use `check_credentials()`.
 
@@ -45,7 +48,7 @@ def check_credentials(conn):
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
-        The connection object as returned by `connect()`.
+        The OMERO connection object.
 
     Returns
     -------
