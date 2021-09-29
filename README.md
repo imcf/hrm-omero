@@ -82,19 +82,19 @@ server's error log (as they go to `stderr`).
 
 ## Example Usage
 
-Store you username and password in variables:
+Store username and password in variables, export the OMERO_PASSWORD variable:
 
 ```bash
-read OMEROUSER
-read OMEROPW
+read OMERO_USER
+read -s OMERO_PASSWORD
+export OMERO_PASSWORD   # use 'set --export OMERO_PASSWORD $OMERO_PASSWORD' for fish
 ```
 
 ### Verifying Credentials
 
 ```bash
 ome-hrm \
-    --user $OMEROUSER \
-    --password $OMEROPW \
+    --user $OMERO_USER \
     checkCredentials
 ```
 
@@ -113,8 +113,7 @@ Then run the actual command to fetch the information, the result will be a JSON 
 
 ```bash
 ome-hrm \
-    --user $OMEROUSER \
-    --password $OMEROPW \
+    --user $OMERO_USER \
     retrieveChildren \
     --id "$OMERO_ID"
 ```
@@ -146,8 +145,7 @@ This will fetch the second image from the example tree above and store it in `/t
 
 ```bash
 ome-hrm \
-    --user $OMEROUSER \
-    --password $OMEROPW \
+    --user $OMERO_USER \
     OMEROtoHRM \
     --imageid "G:4:Image:1566150" \
     --dest /tmp/
@@ -159,8 +157,7 @@ The command below will import a local image file into the example dataset from a
 
 ```bash
 ome-hrm \
-    --user $OMEROUSER \
-    --password $OMEROPW \
+    --user $OMERO_USER \
     HRMtoOMERO \
     --dset "G:4:Dataset:65432" \
     --file test-image.tif
