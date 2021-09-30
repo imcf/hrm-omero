@@ -52,9 +52,9 @@ def from_omero(conn, id_str, dest):
     # cross-group query (introduced in OMERO 4.4) is a generic way to get the image.
     if not gid:
         gid = "-1"
-    conn.SERVICE_OPTS.setOmeroGroup(gid)
-    # another way for switching the group was suggested in HRM upstream ticket #539:
-    # conn.setGroupForSession(gid)
+    # conn.SERVICE_OPTS.setOmeroGroup(gid)
+    # the new way for switching the group was suggested in HRM upstream ticket #539:
+    conn.setGroupForSession(gid)
 
     # check if dest is a directory, rewrite it otherwise:
     if not os.path.isdir(dest):
