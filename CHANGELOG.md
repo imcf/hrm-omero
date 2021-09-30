@@ -19,6 +19,10 @@
   files that belong to the set of results from a certain HRM job.
 * `hrm_omero.omero.add_annotation_keyvalue()` can be used to add so-called [Map
   Annotations][c4] (key-value pairs) to objects in OMERO.
+* A decorator `hrm_omero.decorators.connect_and_set_group()` is now available that can
+  be used with functions that require a valid connection plus an OMERO object identifier
+  pair (submitted on the command line as "`G:4:Image:12345`" or similar, passed on to
+  the decorated function as `obj_type` and `obj_id`).
 * `hrm_omero.misc.printlog()` can be used to push a message to the log and stdout.
 * The CLI has a new optional parameter `--dry-run` that prevents any action from being
   performed, instead the name of the function and the corresponding parameters that

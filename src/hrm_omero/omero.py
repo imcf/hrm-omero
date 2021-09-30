@@ -4,6 +4,7 @@ import yaml
 from loguru import logger as log
 import omero.gateway
 
+from .decorators import connect_and_set_group
 from .misc import printlog
 
 
@@ -93,21 +94,20 @@ def extract_image_id(fname):
     return image_id
 
 
-def add_annotation_keyvalue(conn, gid, annotation, obj_id, obj_type="Image"):
+@connect_and_set_group
+def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
     """Add a key-value "map" annotation to an OMERO object.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    gid : int
-        The OMERO group ID of the target image.
+    obj_type : str
+        A valid OMERO object type, e.g. `Image` or `Dataset`.
+    obj_id : str or int
+        An OMERO object id, e.g. `1573559`.
     annotation : dict(dict)
         The map annotation as returned by `hrm_omero.hrm.parse_summary()`.
-    obj_id : int
-        The ID of the OMERO target object for the annotation.
-    obj_type : str, optional
-        The type of the OMERO object, by default "Image".
 
     Returns
     -------
@@ -119,16 +119,6 @@ def add_annotation_keyvalue(conn, gid, annotation, obj_id, obj_type="Image"):
     RuntimeError
         Raised in case re-establishing the OMERO connection fails.
     """
-    if obj_id is None:
-        log.warning(f"No object ID given, not adding annotation >>>{annotation}<<<")
-        return False
-
-    # the connection might be closed (e.g. after importing an image), so reconnect:
-    conn.connect()
-    if not conn._connected:  # pylint: disable-msg=protected-access
-        raise RuntimeError("Failed to (re-)establish connection to OMERO!")
-
-    conn.setGroupForSession(gid)
     target_obj = conn.getObject(obj_type, obj_id)
     if target_obj is None:
         log.warning(f"Unable to identify target object {obj_id} in OMERO!")

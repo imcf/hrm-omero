@@ -254,6 +254,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     finally:
         tempdir.cleanup()
 
-    add_annotation_keyvalue(conn, gid, hrm.parse_summary(image_file), imported_id)
+    target_id = f"G:{gid}:Image:{imported_id}"
+    add_annotation_keyvalue(conn, target_id, hrm.parse_summary(image_file))
 
     return True
