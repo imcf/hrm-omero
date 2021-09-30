@@ -81,11 +81,11 @@ def extract_image_id(fname):
     try:
         with open(fname, "r", encoding="utf-8") as stream:
             parsed = yaml.safe_load(stream)
-        if len(parsed[0]['Image']) != 1:
+        if len(parsed[0]["Image"]) != 1:
             msg = f"Unexpected YAML retrieved from OMERO, unable to parse:\n{parsed}"
             printlog("ERROR", msg)
             raise SyntaxError(msg)
-        image_id = parsed[0]['Image'][0]
+        image_id = parsed[0]["Image"][0]
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"Error parsing imported image ID from YAML output: {err}")
         return None
