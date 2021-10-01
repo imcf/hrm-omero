@@ -24,6 +24,7 @@
   pair (submitted on the command line as "`G:4:Image:12345`" or similar, passed on to
   the decorated function as `obj_type` and `obj_id`).
 * `hrm_omero.misc.printlog()` can be used to push a message to the log and stdout.
+* `hrm_omero.misc.parse_id_str()` validates the ID of a targeted OMERO object.
 * The CLI has a new optional parameter `--dry-run` that prevents any action from being
   performed, instead the name of the function and the corresponding parameters that
   would be called are printed to stdout.

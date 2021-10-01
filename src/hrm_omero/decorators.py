@@ -3,6 +3,8 @@
 import functools
 from loguru import logger as log
 
+from .misc import parse_id_str
+
 
 def connect_and_set_group(func):
     """Decorator ensuring the connection is established and the group context is set.
@@ -55,25 +57,7 @@ def connect_and_set_group(func):
             raise RuntimeError("Failed to (re-)establish connection to OMERO!")
         log.success("Successfully (re-)connected to OMERO!")
 
-        # validate id_str:
-        try:
-            group_type, group_id, obj_type, obj_id = id_str.split(":")
-            int(group_id)  # raises a TypeError if cast to int fails
-            int(obj_id)  # raises a TypeError if cast to int fails
-            if group_type != "G":
-                raise ValueError
-            if obj_type not in [
-                "Image",
-                "Dataset",
-                "Project",
-                "ExperimenterGroup",
-            ]:
-                raise ValueError
-        except (ValueError, TypeError):
-            # pylint: disable-msg=raise-missing-from
-            raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[iid]`!")
-
-        log.trace(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
+        group_id, obj_type, obj_id = parse_id_str(id_str)
 
         # set the OMERO group for the current connection session:
         conn.setGroupForSession(group_id)
