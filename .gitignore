@@ -14,6 +14,7 @@ __pycache__/
 
 # connection details for testing
 cred.py
+/omero_test_settings.py
 
 # old script while porting:
 /ome_hrm.py

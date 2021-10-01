@@ -31,6 +31,19 @@ Testing is done through [pytest][d4] and can be triggered by running this comman
 ```bash
 poetry run pytest
 ```
+
+By default only *local* tests will be performed, all tests that require the connection
+to an actual OMERO instance are disabled. To activate them you need to pass the
+`--online` flag to the pytest call and a corresponding file `omero_test_settings.py`
+needs to be present in the repository root that contains the settings on how to connect
+to your OMERO, plus the information on what to test. See `tests/resources/settings/` for
+an example file, copy it to the repository root and make your adjustments there. Then
+run this command:
+
+```bash
+poetry run pytest --online
+```
+
 ## Generating Documentation
 
 The project is using [pdoc][d2] for generating API documentation. To update or (re-)
@@ -59,3 +72,4 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
 [d3]: https://github.com/Delgan/loguru
+[d4]: https://pytest.org/
