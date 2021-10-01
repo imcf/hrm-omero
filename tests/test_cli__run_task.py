@@ -1,5 +1,7 @@
 """Tests for the 'cli.run_task() function."""
 
+import pytest
+
 from hrm_omero import cli
 
 
@@ -63,7 +65,7 @@ def test_dry_run_retrieve_children(capsys, monkeypatch):
 
     args = BASE_ARGS.copy()
     args.append("--dry-run")
-    # TODO: order is important, write a failing test where 'action' is the last arg!
+    # NOTE: the parameter order is important, see test_wrong_parameter_order() below!
     args.append("retrieveChildren")
     args.append("--id")
     args.append("ROOT")
@@ -120,3 +122,25 @@ def test_dry_run_to_omero(capsys, monkeypatch):
     assert "function: to_omero" in captured.out
     assert "{'id_str': 'G:7:Dataset:23', 'image_file': '/tmp/foo'," in captured.out
     assert ret is True
+
+
+def test_wrong_parameter_order(capsys, monkeypatch):
+    """Test run_task() with a wrong order of the otherwise correct parameters.
+
+    Expected behavior is FIXME
+    """
+    monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
+
+    args = BASE_ARGS.copy()
+    args.append("--dry-run")
+    # the order is important here, trying to supply the action ("retrieveChildren") as the
+    # last parameter will result in an error (as the "--id" parameter belongs to the
+    # sub-parser that is only selected when the corresponding action keyword is found)
+    args.append("--id")
+    args.append("ROOT")
+    args.append("retrieveChildren")
+    with pytest.raises(SystemExit):
+        cli.run_task(args)
+    captured = capsys.readouterr()
+    print(captured.err)
+    assert "error: argument action: invalid choice" in captured.err
