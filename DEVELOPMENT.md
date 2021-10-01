@@ -24,6 +24,13 @@ pip install \
     hrm-omero==0.3.2.dev0
 ```
 
+## Testing
+
+Testing is done through [pytest][d4] and can be triggered by running this command:
+
+```bash
+poetry run pytest
+```
 ## Generating Documentation
 
 The project is using [pdoc][d2] for generating API documentation. To update or (re-)
