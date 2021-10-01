@@ -39,3 +39,6 @@ addopts = "-rs -vv --cov=hrm_omero --cov-report html"
 markers = [
     "online: enables tests requiring connection to a real OMERO instance",
 ]
+filterwarnings = [
+    "ignore:the imp module is deprecated in favour of importlib:DeprecationWarning",
+]
