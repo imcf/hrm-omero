@@ -20,7 +20,7 @@ class OmeroId():
         self.parse_id_str(id_str)
 
     def parse_id_str(self, id_str):
-        """Parse and validate an ID string of the form `G:[gid]:[type]:[iid]`
+        """Parse and validate an ID string of the form `G:[gid]:[type]:[oid]`
 
         The method will parse the given string and set the object's `group`, `obj_type`
         and `obj_id` values accordingly. In case for `id_str` the special value `ROOT`
@@ -62,7 +62,7 @@ class OmeroId():
                 raise ValueError
         except (ValueError, TypeError):
             # pylint: disable-msg=raise-missing-from
-            raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[iid]`!")
+            raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[oid]`!")
 
         log.trace(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
         self.group = group_id
