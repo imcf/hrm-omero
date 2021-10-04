@@ -65,7 +65,7 @@ class OmeroId():
             # pylint: disable-msg=raise-missing-from
             raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[oid]`!")
 
-        log.trace(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
+        log.debug(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
         self.group = group_id
         self.obj_type = obj_type
         self.obj_id = obj_id
