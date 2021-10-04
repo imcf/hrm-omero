@@ -303,7 +303,8 @@ def run_task(args):
         if args.dry_run:
             printlog("INFO", "*** dry-run, only showing action and parameters ***")
             printlog("INFO", f"function: {perform_action.__qualname__}")
-            printlog("INFO", f"arguments: {kwargs}")
+            for key, value in kwargs.items():
+                printlog("INFO", f"{key}: [{str(value)}]")
 
             return True
 

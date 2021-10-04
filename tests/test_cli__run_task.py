@@ -74,7 +74,7 @@ def test_dry_run_retrieve_children(capsys, monkeypatch):
     print(captured.out)
     assert "dry-run, only showing action and parameters" in captured.out
     assert "function: print_children_json" in captured.out
-    assert "{'id_str': 'ROOT'}" in captured.out
+    assert "omero_id: [G:-1:BaseTree:-1]" in captured.out
     assert ret is True
 
 
@@ -97,7 +97,8 @@ def test_dry_run_from_omero(capsys, monkeypatch):
     print(captured.out)
     assert "dry-run, only showing action and parameters" in captured.out
     assert "function: from_omero" in captured.out
-    assert "{'id_str': 'G:7:Image:42', 'dest': '/tmp/foo'}" in captured.out
+    assert "id_str: [G:7:Image:42]" in captured.out
+    assert "dest: [/tmp/foo]" in captured.out
     assert ret is True
 
 
@@ -120,7 +121,8 @@ def test_dry_run_to_omero(capsys, monkeypatch):
     print(captured.out)
     assert "dry-run, only showing action and parameters" in captured.out
     assert "function: to_omero" in captured.out
-    assert "{'id_str': 'G:7:Dataset:23', 'image_file': '/tmp/foo'," in captured.out
+    assert "id_str: [G:7:Dataset:23]" in captured.out
+    assert "image_file: [/tmp/foo]" in captured.out
     assert ret is True
 
 
