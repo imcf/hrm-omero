@@ -68,6 +68,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
   - [x] through the configuration file
 - [x] (REJECTED) offer download of OME-TIFFs
 - [x] don't use a command line parameter for the OMERO password
+- [ ] add command line action to create new projects and datasets in OMERO
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
