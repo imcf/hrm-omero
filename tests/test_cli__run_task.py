@@ -135,8 +135,8 @@ def test_wrong_parameter_order(capsys, monkeypatch):
 
     args = BASE_ARGS.copy()
     args.append("--dry-run")
-    # the order is important here, trying to supply the action ("retrieveChildren") as the
-    # last parameter will result in an error (as the "--id" parameter belongs to the
+    # the order is important here, trying to supply the action ("retrieveChildren") as
+    # the last parameter will result in an error (as the "--id" parameter belongs to the
     # sub-parser that is only selected when the corresponding action keyword is found)
     args.append("--id")
     args.append("ROOT")
