@@ -92,9 +92,8 @@ def printlog(level, message):
     log.log(level, message)
 
 
-def parse_id_str(id_str):
+def parse_id_str(id_str):  # pragma: no cover
     """Legacy wrapper to `hrm_omero.misc.OmeroId`."""
-    # pragma: no cover
     log.warning(f"DEPRECATED call to {__name__}!")
     omero_id = OmeroId(id_str)
     return omero_id.group, omero_id.obj_type, omero_id.obj_id
