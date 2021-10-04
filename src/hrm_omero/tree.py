@@ -44,16 +44,15 @@ def gen_obj_dict(obj, id_pfx=""):
     return obj_dict
 
 
-def gen_children(conn, id_str):
+def gen_children(conn, omero_id):
     """Get the children for a given node.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The OMERO object ID string, e.g. `G:23:Image:42` or `ROOT` (to generate the
-        base tree).
+    omero_id : hrm_omero.misc.OmeroId
+        An object denoting an OMERO target.
 
     Returns
     -------
@@ -61,12 +60,15 @@ def gen_children(conn, id_str):
         A list with children nodes (of type `dict`), having the `load_on_demand`
         property set to `True` required by the jqTree JavaScript library.
     """
-    if id_str == "ROOT":
+    if omero_id.obj_type == "BaseTree":
         return gen_base_tree(conn)
 
+    gid = omero_id.group
+    obj_type = omero_id.obj_type
+    oid = omero_id.obj_id
+    log.debug(f"gid={gid} | obj_type={obj_type} | oid={oid}")
+
     children = []
-    _, gid, obj_type, oid = id_str.split(":")
-    log.debug("gid={} | obj_type={} | oid={}", gid, obj_type, oid)
     conn.SERVICE_OPTS.setOmeroGroup(gid)
     obj = conn.getObject(obj_type, oid)
     # we need different child-wrappers, depending on the object type:

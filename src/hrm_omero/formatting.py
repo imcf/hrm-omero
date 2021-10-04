@@ -22,16 +22,15 @@ def tree_to_json(obj_tree):
     return json.dumps(obj_tree, sort_keys=True, indent=4, separators=(",", ": "))
 
 
-def print_children_json(conn, id_str):
+def print_children_json(conn, omero_id):
     """Print the child nodes of the given ID in JSON format.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The OMERO object ID string, e.g. `G:23:Image:42` or `ROOT` (to generate the
-        base tree).
+    omero_id : hrm_omero.misc.OmeroId
+        An object denoting an OMERO target.
 
     Returns
     -------
@@ -39,7 +38,7 @@ def print_children_json(conn, id_str):
         True in case printing the nodes was successful, False otherwise.
     """
     try:
-        children = tree.gen_children(conn, id_str)
+        children = tree.gen_children(conn, omero_id)
     except:  # pylint: disable-msg=bare-except
         printlog("ERROR", "ERROR generating OMERO tree / node!")
         return False

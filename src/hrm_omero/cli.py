@@ -13,7 +13,7 @@ from . import formatting
 from . import hrm
 from . import omero as dotomero
 from . import transfer
-from .misc import printlog
+from .misc import printlog, OmeroId
 
 
 def bool_to_exitstatus(value):
@@ -269,7 +269,7 @@ def run_task(args):
 
     elif args.action == "retrieveChildren":
         perform_action = formatting.print_children_json
-        kwargs = {"id_str": args.id}
+        kwargs = {"omero_id": OmeroId(args.id)}
 
     elif args.action == "OMEROtoHRM":
         perform_action = transfer.from_omero
