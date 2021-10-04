@@ -17,4 +17,21 @@ SETTINGS = {
             "expected_name": "2014-02-28-dapi-phalloidin-atub_0123456789abc_hrm.png",
         },
     ],
+    "retrieveChildren": [
+        {
+            "omero_id": "G:2354:Project:8404",
+            "json_result": """
+                [
+                    {
+                        "children": [],
+                        "class": "Dataset",
+                        "id": "G:2354:Dataset:2284",
+                        "label": "HRM-OMERO test dataset",
+                        "load_on_demand": true,
+                        "owner": "hrm-omero-testuser"
+                    }
+                ]
+            """,
+        }
+    ],
 }
