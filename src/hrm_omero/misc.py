@@ -93,43 +93,8 @@ def printlog(level, message):
 
 
 def parse_id_str(id_str):
-    """Parse and validate an ID string of the form `G:[gid]:[type]:[iid]`
-
-    Parameters
-    ----------
-    id_str : str
-        The ID of an OMERO object, e.g.
-        * `G:23:Image:42`
-        * `G:4:Dataset:765487`
-
-    Returns
-    -------
-    group_id, obj_type, obj_id
-        A triplet of `str` denoting the group ID, object type and object ID.
-
-    Raises
-    ------
-    ValueError
-        Raised in case a malformed `id_str` was given.
-    """
+    """Legacy wrapper to `hrm_omero.misc.OmeroId`."""
+    # pragma: no cover
     log.warning(f"DEPRECATED call to {__name__}!")
-    try:
-        group_type, group_id, obj_type, obj_id = id_str.split(":")
-        int(group_id)  # raises a TypeError if cast to int fails
-        int(obj_id)  # raises a TypeError if cast to int fails
-        if group_type != "G":
-            raise ValueError
-        if obj_type not in [
-            "Image",
-            "Dataset",
-            "Project",
-            "ExperimenterGroup",
-        ]:
-            raise ValueError
-    except (ValueError, TypeError):
-        # pylint: disable-msg=raise-missing-from
-        raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[iid]`!")
-
-    log.trace(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
-
-    return group_id, obj_type, obj_id
+    omero_id = OmeroId(id_str)
+    return omero_id.group, omero_id.obj_type, omero_id.obj_id
