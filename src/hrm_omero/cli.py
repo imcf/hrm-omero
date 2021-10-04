@@ -35,10 +35,10 @@ def bool_to_exitstatus(value):
         0 in case `value` is `True`, 1 in case `value` is `False` and `value` itself in
         case it is not a bool.
     """
-    if type(value) is bool:
+    if isinstance(value, bool):
         return not value
-    else:
-        return value
+
+    return value
 
 
 def parse_arguments(args):  # pragma: no cover
