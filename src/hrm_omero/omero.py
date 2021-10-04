@@ -136,3 +136,35 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
     log.success(f"Successfully added annotation to {obj_type}:{obj_id}.")
 
     return True
+
+
+@connect_and_set_group
+def new_project(conn, id_str, proj_name):
+    """Create a new Project in OMERO.
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        The OMERO connection object.
+    id_str : str
+        The ID of an OMERO object, e.g. `G:4:Experimenter:23`
+    proj_name : str
+        The name of the project to be created.
+    """
+    raise NotImplementedError("Creating Projects is not yet implemented.")
+
+
+@connect_and_set_group
+def new_dataset(conn, id_str, ds_name):
+    """Create a new Project in OMERO.
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        The OMERO connection object.
+    id_str : str
+        The ID of an OMERO object, e.g. `G:4:Project:123`
+    ds_name : str
+        The name of the dataset to be created.
+    """
+    raise NotImplementedError("Creating Datasets is not yet implemented.")
