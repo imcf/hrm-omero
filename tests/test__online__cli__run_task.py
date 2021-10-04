@@ -5,6 +5,7 @@ location where pytest is started from. Look in `tests/resources/settings/` for a
 example file.
 """
 
+import json
 from unittest.mock import patch, mock_open
 import pytest
 
@@ -82,6 +83,66 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     assert '"owner":' in captured.out
     assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
     assert ret is True
+
+
+@pytest.mark.online
+@patch("builtins.open", new_callable=mock_open, read_data=CONF)
+def test_retrieve_children_many(mock_file, capsys, monkeypatch):
+    """Test "retrieveChildren" requesting various items as defined in test settings.
+
+    Expected behavior is to print the defined OMERO trees, they are required to match
+    the `json_result` attribute from the corresponding test settings dict.
+
+    Example
+    -------
+    >>> SETTINGS = {
+    ...     "retrieveChildren": [
+    ...         {
+    ...             "omero_id": "G:2354:Experimenter:9",
+    ...             "json_result": '''
+    ...                 [
+    ...                     {
+    ...                         "children": [],
+    ...                         "class": "Project",
+    ...                         "id": "G:2354:Project:8404",
+    ...                         "label": "HRM Demo Data",
+    ...                         "load_on_demand": true,
+    ...                         "owner": "hrm-omero-testuser"
+    ...                     }
+    ...                 ]
+    ...             '''
+    ...         }
+    ...     ]
+    ... }
+    """
+    assert mock_file  # we don't need the mock file for an actual call...
+
+    # if no password is given, the $OMERO_PASSWORD environment variable will be used:
+    if "password" in SETTINGS:
+        monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+
+    for current_config in SETTINGS["retrieveChildren"]:
+        omero_id = current_config["omero_id"]
+
+        args = BASE_ARGS.copy()
+        args.append("--user")
+        args.append(USERNAME)
+        args.append("retrieveChildren")
+        args.append("--id")
+        args.append(omero_id)
+
+        ret = cli.run_task(args)
+
+        captured = capsys.readouterr()
+
+        # to compare the expected and the actual received results we are de-serializing
+        # both JSON strings (to get rid of whitespace differences) and then just compare
+        # the re-serialized strings with each other
+        expected = json.loads(current_config["json_result"])
+        received = json.loads(captured.out)
+        assert json.dumps(received) == json.dumps(expected)
+
+        assert ret is True
 
 
 # TODO: test invalid username / password
