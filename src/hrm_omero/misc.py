@@ -57,6 +57,7 @@ class OmeroId():
                 "Image",
                 "Dataset",
                 "Project",
+                "Experimenter",
                 "ExperimenterGroup",
             ]:
                 raise ValueError
