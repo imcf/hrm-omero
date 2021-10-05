@@ -142,6 +142,7 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
 
         captured = capsys.readouterr()
 
+        print(captured.out)
         # to compare the expected and the actual received results we are de-serializing
         # both JSON strings (to get rid of whitespace differences) and then just compare
         # the re-serialized strings with each other
