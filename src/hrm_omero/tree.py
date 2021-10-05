@@ -27,7 +27,7 @@ def gen_obj_dict(obj, id_pfx=""):
             }
         ```
     """
-    obj_dict = dict()
+    obj_dict = {}
     obj_dict["label"] = obj.getName()
     obj_dict["class"] = obj.OMERO_CLASS
     if obj.OMERO_CLASS == "Experimenter":
