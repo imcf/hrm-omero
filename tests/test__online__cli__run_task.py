@@ -48,13 +48,13 @@ def test_valid_login(mock_file, capsys, monkeypatch):
     args.append("checkCredentials")
 
     ret = cli.run_task(args)
+    assert ret is True
 
     captured = capsys.readouterr()
     assert "Connected to OMERO" in captured.out
     assert f"New OMERO connection [user={USERNAME}]" in captured.err
     assert "The user's default group is" in captured.err
     assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
-    assert ret is True
 
 
 @pytest.mark.online
@@ -80,6 +80,7 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     args.append("ROOT")
 
     ret = cli.run_task(args)
+    assert ret is True
 
     captured = capsys.readouterr()
     # TODO: evaluate printed JSON properly, for now we're just checking a few things:
@@ -87,7 +88,6 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     assert 'ExperimenterGroup:' in captured.out
     assert '"owner":' in captured.out
     assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
-    assert ret is True
 
 
 @pytest.mark.online
@@ -139,6 +139,7 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
         args.append(omero_id)
 
         ret = cli.run_task(args)
+        assert ret is True
 
         captured = capsys.readouterr()
 
@@ -149,8 +150,6 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
         expected = json.loads(current_config["json_result"])
         received = json.loads(captured.out)
         assert json.dumps(received) == json.dumps(expected)
-
-        assert ret is True
 
 
 # TODO: test invalid username / password
