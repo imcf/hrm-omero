@@ -60,6 +60,30 @@ def test_valid_login(mock_file, capsys, monkeypatch):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
+def test_invalid_password(mock_file, capsys, monkeypatch):
+    """Test the "checkCredentials" action with an invalid password.
+
+    Expected behavior is to return False and print an error message to stdout.
+    """
+    assert mock_file  # we don't need the mock file for an actual call...
+
+    monkeypatch.setenv("OMERO_PASSWORD", "nobody-will-ever-use-this-pw-in-omero-really")
+
+    args = BASE_ARGS.copy()
+    args.append("--user")
+    args.append(USERNAME)
+    args.append("checkCredentials")
+
+    ret = cli.run_task(args)
+    assert ret is False
+
+    captured = capsys.readouterr()
+    print(captured.err)
+    assert "ERROR logging into OMERO" in captured.out
+
+
+@pytest.mark.online
+@patch("builtins.open", new_callable=mock_open, read_data=CONF)
 def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     """Test the "retrieveChildren" action requesting the `ROOT` tree.
 
