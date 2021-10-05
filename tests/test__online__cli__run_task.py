@@ -9,6 +9,7 @@ import json
 from unittest.mock import patch, mock_open
 import os
 import pytest
+import sys
 
 from hrm_omero import cli
 
@@ -168,7 +169,9 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
 
         captured = capsys.readouterr()
 
-        print(captured.out)
+        # don't write to stdout, it will pollute the follow-up iterations:
+        print(captured.out, file=sys.stderr)
+
         # to compare the expected and the actual received results we are de-serializing
         # both JSON strings (to get rid of whitespace differences) and then just compare
         # the re-serialized strings with each other
