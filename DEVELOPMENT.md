@@ -44,6 +44,12 @@ run this command:
 poetry run pytest --online
 ```
 
+### Prepare an OMERO instance for tests
+
+See the example script in `resources/scripts/prepare-omero-for-testing.sh` on how to set
+up an OMERO instance so it can be used with the `--online` tests. Note that currently
+the settings file will still need to be adjusted for *user* and *object IDs*!
+
 ## Generating Documentation
 
 The project is using [pdoc][d2] for generating API documentation. To update or (re-)
