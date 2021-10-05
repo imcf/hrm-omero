@@ -66,7 +66,7 @@ def gen_children(conn, omero_id):
     gid = omero_id.group
     obj_type = omero_id.obj_type
     oid = omero_id.obj_id
-    log.debug(f"gid={gid} | obj_type={obj_type} | oid={oid}")
+    log.debug(f"generating children for: gid={gid} | obj_type={obj_type} | oid={oid}")
 
     children = []
     conn.SERVICE_OPTS.setOmeroGroup(gid)
