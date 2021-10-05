@@ -309,11 +309,7 @@ def run_task(args):
             return True
 
         conn.connect()
-        # FIXME: the call below fails with an Ice.ConnectionLostException in case the
-        # password is wrong or something else failed:
-        group = conn.getGroupFromContext()
         log.info(f"New OMERO connection [user={args.user}].")
-        log.debug(f"The user's default group is {group.getId()} ({group.getName()}).")
 
         return perform_action(conn, **kwargs)
 

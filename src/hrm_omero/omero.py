@@ -3,6 +3,7 @@
 import yaml
 from loguru import logger as log
 import omero.gateway
+from Ice import ConnectionLostException  # pylint: disable-msg=no-name-in-module
 
 from .decorators import connect_and_set_group
 from .misc import printlog
@@ -62,6 +63,14 @@ def check_credentials(conn):
         printlog("SUCCESS", f"Connected to OMERO [user ID: {conn.getUserId()}].")
     else:
         printlog("WARNING", "ERROR logging into OMERO.")
+
+    try:
+        group = conn.getGroupFromContext()
+        log.debug(f"User's default group is {group.getId()} ({group.getName()}).")
+    except ConnectionLostException:
+        log.warning("Getting group context failed, password might be wrong!")
+        return False
+
     return connected
 
 
