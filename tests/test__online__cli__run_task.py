@@ -7,6 +7,7 @@ example file.
 
 import json
 from unittest.mock import patch, mock_open
+import os
 import pytest
 
 from hrm_omero import cli
@@ -38,6 +39,8 @@ def test_valid_login(mock_file, capsys, monkeypatch):
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
     if "password" in SETTINGS:
         monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    elif "OMERO_PASSWORD" not in os.environ:
+        pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
@@ -66,6 +69,8 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
     if "password" in SETTINGS:
         monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    elif "OMERO_PASSWORD" not in os.environ:
+        pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
@@ -120,6 +125,8 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
     if "password" in SETTINGS:
         monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    elif "OMERO_PASSWORD" not in os.environ:
+        pytest.skip("password for OMERO is required (via settings or environment)")
 
     for current_config in SETTINGS["retrieveChildren"]:
         omero_id = current_config["omero_id"]
