@@ -31,7 +31,7 @@ setup that won't affect anything else on the system.
 
 ```bash
 # install the build-time requirements for Python 3.6 and Java 1.8 for Bio-Formats
-sudo yum install openssl-devel readline-devel gcc-c++ java-1.8.0-openjdk
+sudo yum install openssl-devel bzip2-devel readline-devel gcc-c++ java-1.8.0-openjdk
 
 # get pyenv and put it into your home directory or wherever you prefer it to be
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
