@@ -8,8 +8,9 @@ example file.
 import json
 from unittest.mock import patch, mock_open
 import os
-import pytest
 import sys
+
+import pytest
 
 from hrm_omero import cli
 
@@ -111,7 +112,7 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
     captured = capsys.readouterr()
     # TODO: evaluate printed JSON properly, for now we're just checking a few things:
     assert 'children": [' in captured.out
-    assert 'ExperimenterGroup:' in captured.out
+    assert "ExperimenterGroup:" in captured.out
     assert '"owner":' in captured.out
     assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
 
