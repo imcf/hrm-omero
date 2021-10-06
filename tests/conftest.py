@@ -1,12 +1,27 @@
 """Module-wide fixtures for testing hrm-omero."""
 
+import json
 import logging
 import os
-import pytest
-from _pytest.logging import caplog as _caplog
+import sys
 
 import omero.gateway
+import pytest
+from _pytest.logging import caplog as _caplog
 from loguru import logger
+
+
+### common functions used herein
+
+
+def stderr(message):
+    """Simple wrapper to print to stderr.
+
+    This is required as several tests need to capture stdout (as this is integral
+    behavior of the underlying code to push stuff there) and therefore using the
+    standard `print()` call would make those tests fail as output will be polluted.
+    """
+    print(message, file=sys.stderr)
 
 
 ### pytest setup ###
@@ -53,6 +68,52 @@ def caplog(_caplog):
     handler_id = logger.add(PropagateHandler(), format="{message} {extra}")
     yield _caplog
     logger.remove(handler_id)
+
+
+### commonly used functions, provided as a fixture
+
+
+@pytest.fixture
+def json_is_equal():
+    """Fixture comparing two objects for equality after JSON serialization.
+
+    Provides a function that takes two arguments of any (serializable) type. In case
+    any of the arguments is of type `str` it will first be deserialized (assuming the
+    content is JSON). Eventually the serialized version of both arguments will be tested
+    for equality.
+    """
+
+    def json_is_equal_inner(expected, received):
+        """Test JSON representation of two objects for equality.
+
+        Parameters
+        ----------
+        expected : any
+            The "expected" object, must be JSON-serializable.
+        received : any
+            The "received" object, must be JSON-serializable.
+
+        Returns
+        -------
+        bool
+            True in case the JSON representation of both arguments is identical, False
+            otherwise.
+        """
+        if isinstance(expected, str):
+            stderr(f"EXPECTED RAW\n---\n{expected}\n---")
+            expected = json.loads(expected)
+        serialized_exp = json.dumps(expected, indent=4)
+
+        if isinstance(received, str):
+            stderr(f"RECEIVED RAW\n---\n{received}\n---")
+            received = json.loads(received)
+        serialized_rec = json.dumps(received, indent=4)
+
+        stderr(f"EXPECTED\n---\n{serialized_exp}\n---")
+        stderr(f"RECEIVED\n---\n{serialized_rec}\n---")
+        return serialized_rec == serialized_exp
+
+    return json_is_equal_inner
 
 
 ### OMERO connection related fixtures
