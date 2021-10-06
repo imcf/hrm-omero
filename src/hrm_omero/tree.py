@@ -58,7 +58,8 @@ def gen_children(conn, omero_id):
     -------
     list
         A list with children nodes (of type `dict`), having the `load_on_demand`
-        property set to `True` required by the jqTree JavaScript library.
+        property set to `True` required by the jqTree JavaScript library (except for
+        nodes of type `Dataset` as they are the last / lowest level).
     """
     if omero_id.obj_type == "BaseTree":
         return gen_base_tree(conn)
