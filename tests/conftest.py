@@ -11,8 +11,12 @@ from loguru import logger
 
 def pytest_addoption(parser):
     """Add a command line option '--online' to pytest."""
-    parser.addoption('--online', action='store_true', default=False,
-                     help="enable online tests communicating to a real OMERO instance")
+    parser.addoption(
+        "--online",
+        action="store_true",
+        default=False,
+        help="enable online tests communicating to a real OMERO instance",
+    )
 
 
 def pytest_collection_modifyitems(config, items):
