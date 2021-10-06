@@ -38,6 +38,9 @@
   properly supported.
 * HRM job parameter summaries are now being added as OMERO ["Map Annotations"][c4]
   instead of simply being a comment string.
+* *Datasets* in OMERO that are not associated to a *Project* will no longer be ignored
+  but rather be shown on the same level than the user's projects, just as OMERO.web and
+  OMERO.insight are doing it.
 * The command line parameter `--password` (or `-w`) is now *deprecated* in favor of
   using the environment variable described above.
 * The following functions are now *deprecated* and will be removed in a future release.

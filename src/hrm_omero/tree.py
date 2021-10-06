@@ -74,7 +74,15 @@ def gen_children(conn, omero_id):
     obj = conn.getObject(obj_type, oid)
     # we need different child-wrappers, depending on the object type:
     if obj_type == "Experimenter":
-        children_wrapper = conn.listProjects(oid)
+        children_wrapper = []
+        for proj in conn.listProjects(oid):
+            children_wrapper.append(proj)
+        # OMERO.web is showing "orphaned" datasets (i.e. that do NOT belong to a
+        # certain project) at the top level, next to the projects - so we are going to
+        # add them to the tree at the same hierarchy level:
+        for dataset in conn.listOrphans("Dataset", eid=oid):
+            children_wrapper.append(dataset)
+
     elif obj_type == "ExperimenterGroup":
         log.warning(
             f"{__name__} has been called with omero_id='{str(omero_id)}', but "
