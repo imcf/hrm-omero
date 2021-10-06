@@ -85,7 +85,7 @@ def gen_children(conn, omero_id):
     else:
         children_wrapper = obj.listChildren()
 
-    # now recurse into children:
+    # now process children:
     for child in children_wrapper:
         children.append(gen_obj_dict(child, "G:" + gid + ":"))
 
