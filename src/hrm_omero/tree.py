@@ -144,7 +144,7 @@ def gen_group_tree(conn, group=None):
         with the current user as the first entry.
     """
     if group is None:
-        log.trace("Getting group from current context...")
+        log.debug("Getting group from current context...")
         group = conn.getGroupFromContext()
 
     gid = str(group.getId())
