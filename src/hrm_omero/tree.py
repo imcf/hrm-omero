@@ -76,7 +76,12 @@ def gen_children(conn, omero_id):
     if obj_type == "Experimenter":
         children_wrapper = conn.listProjects(oid)
     elif obj_type == "ExperimenterGroup":
-        children_wrapper = None  # FIXME
+        log.warning(
+            f"{__name__} has been called with omero_id='{str(omero_id)}', but "
+            "'ExperimenterGroup' trees should be generated via `gen_group_tree()`!",
+        )
+        return []
+
     else:
         children_wrapper = obj.listChildren()
 
