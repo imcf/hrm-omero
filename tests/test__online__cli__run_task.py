@@ -4,10 +4,8 @@ The tests here also require a file `omero_test_settings.py` to be found at the l
 where pytest is started from. Look in `tests/resources/settings/` for an example file.
 """
 
-import json
 from unittest.mock import patch, mock_open
 import os
-import sys
 
 import pytest
 
@@ -118,7 +116,7 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_many(mock_file, capsys, monkeypatch):
+def test_retrieve_children_many(mock_file, capsys, monkeypatch, json_is_equal):
     """Test "retrieveChildren" requesting various items as defined in test settings.
 
     Expected behavior is to print the defined OMERO trees, they are required to match
@@ -169,15 +167,7 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch):
 
         captured = capsys.readouterr()
 
-        # don't write to stdout, it will pollute the follow-up iterations:
-        print(captured.out, file=sys.stderr)
-
-        # to compare the expected and the actual received results we are de-serializing
-        # both JSON strings (to get rid of whitespace differences) and then just compare
-        # the re-serialized strings with each other
-        expected = json.loads(current_config["json_result"])
-        received = json.loads(captured.out)
-        assert json.dumps(received) == json.dumps(expected)
+        assert json_is_equal(current_config["json_result"], captured.out)
 
 
 # TODO: test invalid username / password
