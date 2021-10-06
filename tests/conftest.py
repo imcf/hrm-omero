@@ -8,6 +8,7 @@ from loguru import logger
 
 ### pytest setup ###
 
+
 def pytest_addoption(parser):
     """Add a command line option '--online' to pytest."""
     parser.addoption('--online', action='store_true', default=False,
@@ -27,6 +28,7 @@ def pytest_collection_modifyitems(config, items):
 
 ### caplog special loguru setup ###
 
+
 @pytest.fixture
 def caplog(_caplog):
     """Fixture adding a sink that propagates Loguru messages to the builtin logging.
@@ -34,8 +36,10 @@ def caplog(_caplog):
     This ensures that pytest will be able to capture log messages via the "normal"
     `caplog` fixture that are actually logged through Loguru.
     """
+
     class PropagateHandler(logging.Handler):
         """Helper class to propagate emitted messages to the `logging` module."""
+
         def emit(self, record):
             logging.getLogger(record.name).handle(record)
 

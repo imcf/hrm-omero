@@ -78,13 +78,16 @@ def gen_children(conn, omero_id):
         children_wrapper = None  # FIXME
     else:
         children_wrapper = obj.listChildren()
+
     # now recurse into children:
     for child in children_wrapper:
         children.append(gen_obj_dict(child, "G:" + gid + ":"))
+
     # set the on-demand flag unless the children are the last level:
     if not obj_type == "Dataset":
         for child in children:
             child["load_on_demand"] = True
+
     return children
 
 
