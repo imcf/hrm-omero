@@ -2,10 +2,12 @@
 
 SETTINGS = {
     "hostname": "omero.example.xy",  # the OMERO server IP address or hostname
-    "username": "testuser",  # a valid username on the OMERO server
-    # the password can be specified here - if the entry is not present / commented out
-    # the tests require the environment variable $OMERO_PASSWORD to be set and exported
-    "password": "testpass",
+    "port": None,  # the port to connect to the OMERO server
+    "username": "hrm-test-01",  # a valid username on the OMERO server
+    # "password": "w41dFee",  # the corresponding password for the OMERO user
+    # "username": "hrm-test-02",  # a valid username on the OMERO server
+    # "password": "H011aaaa",  # the corresponding password for the OMERO user
+    "default_group": "9",
     "OMEROtoHRM": [
         # a list of dicts containing IDs of images in OMERO and their file name
         {
@@ -19,19 +21,42 @@ SETTINGS = {
     ],
     "retrieveChildren": [
         {
-            "omero_id": "G:2354:Project:8404",
+            "omero_id": "G:9:Experimenter:5809",
+            "json_result": """
+                [
+                    {
+                        "children": [],
+                        "class": "Project",
+                        "id": "G:9:Project:12205",
+                        "label": "Proj01",
+                        "load_on_demand": true,
+                        "owner": "hrm-test-01"
+                    },
+                    {
+                        "children": [],
+                        "class": "Dataset",
+                        "id": "G:9:Dataset:47057",
+                        "label": "NoProj--Dset01",
+                        "load_on_demand": true,
+                        "owner": "hrm-test-01"
+                    }
+                ]
+            """,
+        },
+        {
+            "omero_id": "G:9:Project:12205",
             "json_result": """
                 [
                     {
                         "children": [],
                         "class": "Dataset",
-                        "id": "G:2354:Dataset:2284",
-                        "label": "HRM-OMERO test dataset",
+                        "id": "G:9:Dataset:47056",
+                        "label": "Proj01--Dset01",
                         "load_on_demand": true,
-                        "owner": "hrm-omero-testuser"
+                        "owner": "hrm-test-01"
                     }
                 ]
             """,
-        }
+        },
     ],
 }
