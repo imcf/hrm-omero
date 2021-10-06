@@ -1,5 +1,32 @@
 """Settings for running tests against an actual OMERO instance."""
 
+_BASE_TREE_DEFAULT = """
+    {
+        "label": "SYS Test HRM-OMERO 1",
+        "class": "ExperimenterGroup",
+        "owner": null,
+        "id": "ExperimenterGroup:9",
+        "children": [
+            {
+                "label": "Test-01 HRM-OMERO",
+                "class": "Experimenter",
+                "owner": 5809,
+                "id": "G:9:Experimenter:5809",
+                "children": [],
+                "load_on_demand": true
+            },
+            {
+                "label": "Test-02 HRM-OMERO",
+                "class": "Experimenter",
+                "owner": 5810,
+                "id": "G:9:Experimenter:5810",
+                "children": [],
+                "load_on_demand": true
+            }
+        ]
+    }
+"""
+
 SETTINGS = {
     "hostname": "omero.example.xy",  # the OMERO server IP address or hostname
     "port": None,  # the port to connect to the OMERO server
@@ -59,4 +86,5 @@ SETTINGS = {
             """,
         },
     ],
+    "gen_group_tree__none": _BASE_TREE_DEFAULT,
 }
