@@ -21,7 +21,7 @@ used:
 pip install \
     -i https://test.pypi.org/simple/ \
     --extra-index-url https://pypi.org/simple \
-    hrm-omero==0.3.2.dev0
+    hrm-omero==0.4.0.dev1
 ```
 
 ## Testing
