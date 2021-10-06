@@ -44,4 +44,20 @@ dataset=$(omero obj new Dataset name='Proj01--Dset01')
 omero obj new ProjectDatasetLink parent="$project" child="$dataset"
 
 # create a dataset without a project (top-level):
-project=$(omero obj new Dataset name='NoProj--Dset01')
+dataset=$(omero obj new Dataset name='NoProj--Dset01')
+
+
+# reconnect using the second user:
+omero logout
+omero login -u "hrm-test-02" -w "$U2_PW"
+
+# create a project-dataset-tree:
+project=$(omero obj new Project name='U2-Proj01')
+dataset=$(omero obj new Dataset name='U2-Proj01--Dset01')
+omero obj new ProjectDatasetLink parent="$project" child="$dataset"
+dataset=$(omero obj new Dataset name='U2-Proj01--Dset02')
+omero obj new ProjectDatasetLink parent="$project" child="$dataset"
+
+# create some datasets without a project (top-level):
+dataset=$(omero obj new Dataset name='U2-NoProj--Dset01')
+dataset=$(omero obj new Dataset name='U2-NoProj--Dset02')
