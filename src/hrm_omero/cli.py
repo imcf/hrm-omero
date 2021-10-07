@@ -11,7 +11,7 @@ from loguru import logger as log
 from .__init__ import __version__
 from . import formatting
 from . import hrm
-from . import omero as dotomero
+from . import omero as _omero
 from . import transfer
 from .misc import printlog, OmeroId
 
@@ -264,7 +264,7 @@ def run_task(args):
         return False
 
     if args.action == "checkCredentials":
-        perform_action = dotomero.check_credentials
+        perform_action = _omero.check_credentials
         kwargs = {}
 
     elif args.action == "retrieveChildren":
