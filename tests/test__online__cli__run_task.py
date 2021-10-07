@@ -19,8 +19,12 @@ _IMPORT = pytest.importorskip(
     reason="Couldn't find 'omero_test_settings.py' to import!",
 )
 SETTINGS = _IMPORT.SETTINGS
-CONF = f'OMERO_HOSTNAME="{SETTINGS["hostname"]}"'
+HOSTNAME = SETTINGS["hostname"]
 USERNAME = SETTINGS["username"]
+PORT = SETTINGS.get("port", 4064)
+if PORT is None:
+    PORT = 4064
+CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
 
 # set the standard arguments for run_task():
 BASE_ARGS = ["-vvvv", "--conf", "config_file_will_be_mocked"]
