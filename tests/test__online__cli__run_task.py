@@ -168,6 +168,3 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch, json_is_equal):
         captured = capsys.readouterr()
 
         assert json_is_equal(current_config["json_result"], captured.out)
-
-
-# TODO: test invalid username / password
