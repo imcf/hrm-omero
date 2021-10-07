@@ -57,8 +57,7 @@ def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
 
     captured = capsys.readouterr()
     print(captured.err)
-    assert "Connected to OMERO" in captured.out
-    assert f"New OMERO connection [user={USERNAME}]" in captured.err
+    assert f"Connected to OMERO [user={USERNAME}, " in captured.out
     assert "User's default group is" in captured.err
     assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
 

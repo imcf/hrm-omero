@@ -58,9 +58,12 @@ def check_credentials(conn):
         True if connecting was successful (i.e. credentials are correct), False
         otherwise.
     """
+    log.debug("Trying to connect to OMERO...")
     connected = conn.connect()
     if connected:
-        printlog("SUCCESS", f"Connected to OMERO [user ID: {conn.getUserId()}].")
+        uid = conn.getUserId()
+        name = conn.getUser().getName()
+        printlog("SUCCESS", f"Connected to OMERO [user={name}, uid={uid}].")
     else:
         printlog("WARNING", "ERROR logging into OMERO.")
 
