@@ -1,11 +1,11 @@
 """Tests for the 'hrm' submodule."""
 
-from unittest.mock import patch, mock_open
-import pytest
+from unittest.mock import mock_open, patch
 
+import pytest
 from hrm_omero import hrm
 
-from .data import CONF_SHORT, CONF_LONG
+from .data import CONF_LONG, CONF_SHORT
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_SHORT)
