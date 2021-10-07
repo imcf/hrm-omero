@@ -25,8 +25,8 @@ def _stderr(message):
     print(message, file=sys.stderr)
 
 
-def _host_is_reachable(host, port):
-    """Check if a TCP connection to a host and port can be established.
+def _reach_tcp_or_skip(host, port):
+    """Skip a test if a TCP connection to the given host and port CAN'T be established.
 
     Parameters
     ----------
@@ -34,19 +34,12 @@ def _host_is_reachable(host, port):
         Host name (DNS) or IP address.
     port : int
         The TCP port number to connect to.
-
-    Returns
-    -------
-    bool
-        True in case a connection can be established, False otherwise.
     """
     socket.setdefaulttimeout(0.5)
     try:
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
     except socket.error:
-        return False
-
-    return True
+        pytest.skip(f"can't reach OMERO server at {host}:{port}")
 
 
 ### pytest setup ###
@@ -178,8 +171,7 @@ def omero_conn():
     if port is None:
         port = 4064
 
-    if not _host_is_reachable(host, port):
-        pytest.skip(f"can't reach OMERO server at {host}:{port}")
+    _reach_tcp_or_skip(host, port)
 
     # password from the settings file has precedence, fall back to env or skip the test
     # and print which password has been used (will be shown in case a test fails):
