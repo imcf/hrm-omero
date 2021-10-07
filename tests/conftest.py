@@ -12,10 +12,10 @@ from _pytest.logging import caplog as _caplog
 from loguru import logger
 
 
-### common functions used herein
+### common "private" functions
 
 
-def stderr(message):
+def _stderr(message):
     """Simple wrapper to print to stderr.
 
     This is required as several tests need to capture stdout (as this is integral
@@ -25,7 +25,7 @@ def stderr(message):
     print(message, file=sys.stderr)
 
 
-def host_is_reachable(host, port):
+def _host_is_reachable(host, port):
     """Check if a TCP connection to a host and port can be established.
 
     Parameters
@@ -125,17 +125,17 @@ def json_is_equal():
             otherwise.
         """
         if isinstance(expected, str):
-            stderr(f"EXPECTED RAW\n---\n{expected}\n---")
+            _stderr(f"EXPECTED RAW\n---\n{expected}\n---")
             expected = json.loads(expected)
         serialized_exp = json.dumps(expected, indent=4)
 
         if isinstance(received, str):
-            stderr(f"RECEIVED RAW\n---\n{received}\n---")
+            _stderr(f"RECEIVED RAW\n---\n{received}\n---")
             received = json.loads(received)
         serialized_rec = json.dumps(received, indent=4)
 
-        stderr(f"EXPECTED\n---\n{serialized_exp}\n---")
-        stderr(f"RECEIVED\n---\n{serialized_rec}\n---")
+        _stderr(f"EXPECTED\n---\n{serialized_exp}\n---")
+        _stderr(f"RECEIVED\n---\n{serialized_rec}\n---")
         return serialized_rec == serialized_exp
 
     return json_is_equal_inner
@@ -178,7 +178,7 @@ def omero_conn():
     if port is None:
         port = 4064
 
-    if not host_is_reachable(host, port):
+    if not _host_is_reachable(host, port):
         pytest.skip(f"can't reach OMERO server at {host}:{port}")
 
     # password from the settings file has precedence, fall back to env or skip the test
