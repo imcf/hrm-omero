@@ -8,7 +8,7 @@ import sys
 
 import omero.gateway
 import pytest
-from _pytest.logging import caplog as _caplog
+from _pytest.logging import caplog as _caplog  # pylint: disable-msg=unused-import
 from loguru import logger
 
 
