@@ -134,6 +134,12 @@ def json_is_equal():
     return json_is_equal_inner
 
 
+@pytest.fixture
+def reach_tcp_or_skip():
+    """Fixture function wrapper to check if a host is reachable on a given port."""
+    return _reach_tcp_or_skip
+
+
 ### OMERO connection related fixtures
 
 
