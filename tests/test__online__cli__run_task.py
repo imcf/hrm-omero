@@ -32,11 +32,13 @@ BASE_ARGS = ["-vvvv", "--conf", "config_file_will_be_mocked"]
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_valid_login(mock_file, capsys, monkeypatch):
+def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
     """Test the "checkCredentials" action.
 
     Expected behavior is to print sucess to stdout and a few infos to the log (stderr).
     """
+    reach_tcp_or_skip(HOSTNAME, PORT)
+
     assert mock_file  # we don't need the mock file for an actual call...
 
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
@@ -63,11 +65,13 @@ def test_valid_login(mock_file, capsys, monkeypatch):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_invalid_password(mock_file, capsys, monkeypatch):
+def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
     """Test the "checkCredentials" action with an invalid password.
 
     Expected behavior is to return False and print an error message to stdout.
     """
+    reach_tcp_or_skip(HOSTNAME, PORT)
+
     assert mock_file  # we don't need the mock file for an actual call...
 
     monkeypatch.setenv("OMERO_PASSWORD", "nobody-will-ever-use-this-pw-in-omero-really")
@@ -87,11 +91,13 @@ def test_invalid_password(mock_file, capsys, monkeypatch):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_root(mock_file, capsys, monkeypatch):
+def test_retrieve_children_root(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
     """Test the "retrieveChildren" action requesting the `ROOT` tree.
 
     Expected behavior is to print an OMERO tree in JSON notation.
     """
+    reach_tcp_or_skip(HOSTNAME, PORT)
+
     assert mock_file  # we don't need the mock file for an actual call...
 
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
@@ -120,7 +126,9 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_many(mock_file, capsys, monkeypatch, json_is_equal):
+def test_retrieve_children_many(
+    mock_file, capsys, monkeypatch, json_is_equal, reach_tcp_or_skip
+):
     """Test "retrieveChildren" requesting various items as defined in test settings.
 
     Expected behavior is to print the defined OMERO trees, they are required to match
@@ -148,6 +156,8 @@ def test_retrieve_children_many(mock_file, capsys, monkeypatch, json_is_equal):
     ...     ]
     ... }
     """
+    reach_tcp_or_skip(HOSTNAME, PORT)
+
     assert mock_file  # we don't need the mock file for an actual call...
 
     # if no password is given, the $OMERO_PASSWORD environment variable will be used:
