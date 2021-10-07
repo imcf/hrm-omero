@@ -21,6 +21,7 @@ USERNAME = SETTINGS["username"]
 GID = SETTINGS["default_group"]
 
 
+@pytest.mark.online
 def test_experimenter_group(omero_conn, caplog):
     """Test by requesting with an 'ExperimenterGroup' omero_id.
 
