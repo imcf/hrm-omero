@@ -19,10 +19,13 @@ OMERO_HOSTNAME="omero.mynetwork.xy"
 OMERO_PORT="4064"
 """
 
-CONF_LONG = CONF_SHORT + """
+CONF_LONG = (
+    CONF_SHORT
+    + """
 # OMERO_PKG specifies the path where the "OMERO.server" package is installed
 OMERO_PKG="/opt/OMERO/OMERO.server"
 """
+)
 
 CONF_SEMICOLON = 'FOO="one" ; BAR="two"'
 
