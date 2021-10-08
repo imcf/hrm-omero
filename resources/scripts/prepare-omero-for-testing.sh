@@ -48,9 +48,13 @@ omero login -u "hrm-test-01" -w "$U1_PW"
 project=$(omero obj new Project name='Proj01')
 dataset=$(omero obj new Dataset name='Proj01--Dset01')
 omero obj new ProjectDatasetLink parent="$project" child="$dataset"
+echo "#ts# (\"U1__PID_1\", \"$project\"),"
+echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
+
 
 # create a dataset without a project (top-level):
 dataset=$(omero obj new Dataset name='NoProj--Dset01')
+echo "#ts# (\"U1__DSID_1\", \"$dataset\"),"
 
 # reconnect using the second user:
 omero logout
@@ -60,9 +64,15 @@ omero login -u "hrm-test-02" -w "$U2_PW"
 project=$(omero obj new Project name='U2-Proj01')
 dataset=$(omero obj new Dataset name='U2-Proj01--Dset01')
 omero obj new ProjectDatasetLink parent="$project" child="$dataset"
+echo "#ts# (\"U2__PID_1\", \"$project\"),"
+echo "#ts# (\"U2__PID_1__DSID_1\", \"$dataset\"),"
+
 dataset=$(omero obj new Dataset name='U2-Proj01--Dset02')
 omero obj new ProjectDatasetLink parent="$project" child="$dataset"
+echo "#ts# (\"U2__PID_1__DSID_2\", \"$dataset\"),"
 
 # create some datasets without a project (top-level):
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset01')
+echo "#ts# (\"U2__DSID_1\", \"$dataset\"),"
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset02')
+echo "#ts# (\"U2__DSID_2\", \"$dataset\"),"
