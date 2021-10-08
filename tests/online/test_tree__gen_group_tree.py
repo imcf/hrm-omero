@@ -18,15 +18,22 @@ SETTINGS = _IMPORT.SETTINGS
 
 
 @pytest.mark.online
-def test_group_is_none(omero_conn, caplog, json_is_equal):
-    """Test calling the function with `group` set to `None`.
+def test_tree_structure(omero_conn, caplog, json_is_equal):
+    """Check tree structure returned by `gen_group_tree()` with different inputs.
 
     Expected behavior is to log a corresponding message and to generate the tree for the
-    user's default group.
+    requested group.
     """
-    received = gen_group_tree(omero_conn, group=None)
-    assert received is not None
-    assert "Getting group from current context" in caplog.text
+    for values in SETTINGS["gen_group_tree"]:
+        caplog.clear()
+        group = values["group"]
+        received = gen_group_tree(omero_conn, group=group)
+        assert received is not None
+        if group is None:
+            assert "Getting group from current context" in caplog.text
+        else:
+            assert "Getting group from current context" not in caplog.text
 
-    expected = SETTINGS["gen_group_tree__none"]
-    assert json_is_equal(expected, received)
+        expected = values["tree"]
+        assert json_is_equal(expected, received)
+
