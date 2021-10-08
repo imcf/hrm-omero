@@ -9,7 +9,7 @@ from .decorators import connect_and_set_group
 from .misc import printlog
 
 
-def connect(user, passwd, host, port=4064):
+def connect(user, passwd, host, port=4064):  # pragma: no cover
     """Establish the connection to an OMERO server.
 
     DEPRECATED function, rather use BlitzGateway's `connect()` in a context manager or
