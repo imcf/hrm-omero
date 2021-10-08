@@ -132,9 +132,10 @@ def gen_group_tree(conn, group=None):
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    group : omero.gateway._ExperimenterGroupWrapper, optional
-        The group object to generate the tree for, by default None which will result in
-        the group being derived from the current connection's context.
+    group : int or str or omero.gateway._ExperimenterGroupWrapper, optional
+        The group object (or the group ID as int or str) to generate the tree for, by
+        default `None` which will result in the group being derived from the current
+        connection's context.
 
     Returns
     -------
@@ -146,6 +147,19 @@ def gen_group_tree(conn, group=None):
     if group is None:
         log.debug("Getting group from current context...")
         group = conn.getGroupFromContext()
+
+    if isinstance(group, (int, str)):
+        target_gid = int(group)
+        group = None
+        for candidate in conn.getGroupsMemberOf():
+            if int(candidate.getId()) == target_gid:
+                log.debug(f"Found group object for ID {target_gid}!")
+                group = candidate
+                break
+        if group is None:
+            msg = f"Unable to identify group with ID {target_gid}!"
+            log.error(msg)
+            raise RuntimeError(msg)
 
     gid = str(group.getId())
     log.debug(f"Generating tree for group {gid}...")
