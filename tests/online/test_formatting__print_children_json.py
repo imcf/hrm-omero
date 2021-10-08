@@ -23,9 +23,9 @@ CONF = f'OMERO_HOSTNAME="{SETTINGS["hostname"]}"'
 def test_invalid_omero_id(omero_conn, caplog):
     """Test providing an invalid omero_id.
 
-    Expected behavior is FIXME
+    Expected behavior is to return False and to push a corresponding message to the log.
     """
-    omero_id = OmeroId("G:-100:ExperimenterGroup:-100")
+    omero_id = OmeroId("G:-100:Dataset:-100")
     ret = print_children_json(omero_conn, omero_id)
     assert ret is False
     assert "ERROR generating OMERO tree / node!" in caplog.text
