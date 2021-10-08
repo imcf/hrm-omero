@@ -41,3 +41,10 @@ FNAME_VALID = os.path.join(BASE_DIR, "valid-summary.txt")
 FNAME_VALID_IMAGE = os.path.join(BASE_DIR, "dummy_0123456789abc_hrm.png")
 FNAME_INVALID_HEADERS = os.path.join(BASE_DIR, "invalid-summary-duplicate-headers.txt")
 FNAME_INVALID_PARAMS = os.path.join(BASE_DIR, "invalid-summary-duplicate-params.txt")
+
+
+### mock strings as returned by OMERO ###
+
+IMPORT_YAML_VALID = "- Fileset: 54321\n  Image:\n  - 778899\n"
+IMPORT_YAML_INVALID = "- Fileset: 54321\n  XImage:\n  - 778899\n"
+IMPORT_YAML_INVALID_MULTI = "- Fileset: 54321\n  Image:\n  - 778899\n  - 118899\n"
