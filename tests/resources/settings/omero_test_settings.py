@@ -1,23 +1,26 @@
 """Settings for running tests against an actual OMERO instance."""
 
 
-def _replace_ids(raw_string):
+def _fmt(raw_string):
     """Helper function to replace the UID / GID / ... placeholders."""
-    result = (
-        raw_string.replace("{{GID_1}}", GID_1)
-        .replace("{{UID_1}}", UID_1)
-        .replace("{{UID_2}}", UID_2)
-        .replace("{{GID_2}}", GID_2)
-    )
+    result = raw_string
+    for pair in IDS_TO_REPLACE:
+        result = result.replace("{{" + pair[0] + "}}", pair[1])
     return result
 
 
-UID_1 = "5809"
-UID_2 = "5810"
-GID_1 = "9"
-GID_2 = "903"
+IDS_TO_REPLACE = [
+    ("UID_1", "5809"),
+    ("UID_2", "5810"),
+    ("GID_1", "9"),
+    ("GID_2", "903"),
+    ("U1__PID_1", "Project:12221"),
+    ("U1__PID_1__DSID_1", "Dataset:47119"),
+    ("U1__PID_1__DSID_2", "Dataset:47120"),
+    ("U1__DSID_1", "Dataset:47121"),
+]
 
-_BASE_TREE_DEFAULT = _replace_ids(
+_BASE_TREE_DEFAULT = _fmt(
     """
     {
         "label": "SYS Test HRM-OMERO 1",
@@ -47,7 +50,7 @@ _BASE_TREE_DEFAULT = _replace_ids(
 )
 
 
-_BASE_TREE_OTHER = _replace_ids(
+_BASE_TREE_OTHER = _fmt(
     """
     {
         "label": "SYS Test HRM-OMERO 2",
@@ -96,7 +99,7 @@ SETTINGS = {
     # "password": "w41dFee",  # the corresponding password for the OMERO user
     # "username": "hrm-test-02",  # a valid username on the OMERO server
     # "password": "H011aaaa",  # the corresponding password for the OMERO user
-    "default_group": "9",
+    "default_group": _fmt("{{GID_1}}"),
     "OMEROtoHRM": [
         # a list of dicts containing IDs of images in OMERO and their file name
         {
@@ -110,13 +113,14 @@ SETTINGS = {
     ],
     "retrieveChildren": [
         {
-            "omero_id": "G:9:Experimenter:5809",
-            "json_result": """
+            "omero_id": _fmt("G:{{GID_1}}:Experimenter:5809"),
+            "json_result": _fmt(
+                """
                 [
                     {
                         "children": [],
                         "class": "Project",
-                        "id": "G:9:Project:12205",
+                        "id": "G:{{GID_1}}:{{U1__PID_1}}",
                         "label": "Proj01",
                         "load_on_demand": true,
                         "owner": "hrm-test-01"
@@ -124,34 +128,45 @@ SETTINGS = {
                     {
                         "children": [],
                         "class": "Dataset",
-                        "id": "G:9:Dataset:47057",
+                        "id": "G:{{GID_1}}:{{U1__DSID_1}}",
                         "label": "NoProj--Dset01",
                         "load_on_demand": true,
                         "owner": "hrm-test-01"
                     }
                 ]
-            """,
+            """
+            ),
         },
         {
-            "omero_id": "G:9:Project:12205",
-            "json_result": """
+            "omero_id": _fmt("G:{{GID_1}}:{{U1__PID_1}}"),
+            "json_result": _fmt(
+                """
                 [
                     {
                         "children": [],
                         "class": "Dataset",
-                        "id": "G:9:Dataset:47056",
+                        "id": "G:{{GID_1}}:{{U1__PID_1__DSID_1}}",
                         "label": "Proj01--Dset01",
+                        "load_on_demand": true,
+                        "owner": "hrm-test-01"
+                    },
+                    {
+                        "children": [],
+                        "class": "Dataset",
+                        "id": "G:{{GID_1}}:{{U1__PID_1__DSID_2}}",
+                        "label": "upload-target",
                         "load_on_demand": true,
                         "owner": "hrm-test-01"
                     }
                 ]
-            """,
+            """
+            ),
         },
     ],
     "gen_group_tree__none": _BASE_TREE_DEFAULT,
     "gen_group_tree": [
         {"group": None, "tree": _BASE_TREE_DEFAULT},
-        {"group": GID_1, "tree": _BASE_TREE_DEFAULT},
-        {"group": GID_2, "tree": _BASE_TREE_OTHER},
+        {"group": _fmt("{{GID_1}}"), "tree": _BASE_TREE_DEFAULT},
+        {"group": _fmt("{{GID_2}}"), "tree": _BASE_TREE_OTHER},
     ],
 }
