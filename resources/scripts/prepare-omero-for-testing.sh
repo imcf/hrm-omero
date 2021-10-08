@@ -51,6 +51,8 @@ omero obj new ProjectDatasetLink parent="$project" child="$dataset"
 echo "#ts# (\"U1__PID_1\", \"$project\"),"
 echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
 
+# import a test image there:
+omero import -d "$dataset" resources/images/3ch-dapi-pha-atub.ics
 
 # create a dataset without a project (top-level):
 dataset=$(omero obj new Dataset name='NoProj--Dset01')
