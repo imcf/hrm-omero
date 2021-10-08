@@ -103,6 +103,7 @@ def extract_image_id(fname):
         printlog("ERROR", f"Error parsing imported image ID from YAML output: {err}")
         return None
 
+    log.success(f"Successfully parsed Image ID from YAML: {image_id}")
     return image_id
 
 
