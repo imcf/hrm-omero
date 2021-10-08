@@ -37,3 +37,15 @@ def test_tree_structure(omero_conn, caplog, json_is_equal):
         expected = values["tree"]
         assert json_is_equal(expected, received)
 
+
+@pytest.mark.online
+def test_tree_structure_invalid_group(omero_conn, caplog):
+    """Check `gen_group_tree()` with an invalid group being requested.
+
+    Expected behavior is to log a corresponding message and to generate the tree for the
+    requested group.
+    """
+    with pytest.raises(RuntimeError):
+        gen_group_tree(omero_conn, group=-100)
+
+    assert "Unable to identify group with ID" in caplog.text
