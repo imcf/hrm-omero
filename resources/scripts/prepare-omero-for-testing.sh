@@ -12,8 +12,8 @@ omero group add --type read-annotate "SYS Test HRM-OMERO 2"
 # Added group SYS Test HRM-OMERO 1 (id=9) with permissions rwra--
 # ---
 # make sure to set the group ID variables accordingly:
-G1_ID=9
-G2_ID=903
+GID_1=9
+GID_2=903
 
 # generate random 16-char passwords using letters (upper- and lower-case) and digits
 U1_PW=$(
@@ -26,19 +26,19 @@ U2_PW=$(
 )
 
 # create two users, add them to the first group:
-omero user add "hrm-test-01" Test-01 HRM-OMERO --userpassword "$U1_PW" --group-id "$G1_ID"
-omero user add "hrm-test-02" Test-02 HRM-OMERO --userpassword "$U2_PW" --group-id "$G1_ID"
+omero user add "hrm-test-01" Test-01 HRM-OMERO --userpassword "$U1_PW" --group-id "$GID_1"
+omero user add "hrm-test-02" Test-02 HRM-OMERO --userpassword "$U2_PW" --group-id "$GID_1"
 
 # again, make sure to parse the newly created user IDs from the output similar to this:
 # ---
 # Added user hrm-test-01 (id=5810) with password
 # ---
-U1_ID=5810
-U2_ID=5811
+UID_1=5810
+UID_2=5811
 
 # add the users to the second group:
-omero group adduser --id "$G2_ID" --user-id "$U1_ID"
-omero group adduser --id "$G2_ID" --user-id "$U2_ID"
+omero group adduser --id "$GID_2" --user-id "$UID_1"
+omero group adduser --id "$GID_2" --user-id "$UID_2"
 
 # reconnect using the newly created user:
 omero logout
@@ -51,7 +51,6 @@ omero obj new ProjectDatasetLink parent="$project" child="$dataset"
 
 # create a dataset without a project (top-level):
 dataset=$(omero obj new Dataset name='NoProj--Dset01')
-
 
 # reconnect using the second user:
 omero logout

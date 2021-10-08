@@ -2,19 +2,20 @@
 
 
 def _replace_ids(raw_string):
+    """Helper function to replace the UID / GID / ... placeholders."""
     result = (
-        raw_string.replace("{{GID}}", GID)
-        .replace("{{EID}}", EID)
-        .replace("{{EID_OTHER}}", EID_OTHER)
-        .replace("{{GID_OTHER}}", GID_OTHER)
+        raw_string.replace("{{GID_1}}", GID_1)
+        .replace("{{UID_1}}", UID_1)
+        .replace("{{UID_2}}", UID_2)
+        .replace("{{GID_2}}", GID_2)
     )
     return result
 
 
-EID = "5809"
-GID = "9"
-EID_OTHER = "5810"
-GID_OTHER = "903"
+UID_1 = "5809"
+UID_2 = "5810"
+GID_1 = "9"
+GID_2 = "903"
 
 _BASE_TREE_DEFAULT = _replace_ids(
     """
@@ -22,21 +23,21 @@ _BASE_TREE_DEFAULT = _replace_ids(
         "label": "SYS Test HRM-OMERO 1",
         "class": "ExperimenterGroup",
         "owner": null,
-        "id": "ExperimenterGroup:{{GID}}",
+        "id": "ExperimenterGroup:{{GID_1}}",
         "children": [
             {
                 "label": "Test-01 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": {{EID}},
-                "id": "G:{{GID}}:Experimenter:{{EID}}",
+                "owner": {{UID_1}},
+                "id": "G:{{GID_1}}:Experimenter:{{UID_1}}",
                 "children": [],
                 "load_on_demand": true
             },
             {
                 "label": "Test-02 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": {{EID_OTHER}},
-                "id": "G:{{GID}}:Experimenter:{{EID_OTHER}}",
+                "owner": {{UID_2}},
+                "id": "G:{{GID_1}}:Experimenter:{{UID_2}}",
                 "children": [],
                 "load_on_demand": true
             }
@@ -52,21 +53,21 @@ _BASE_TREE_OTHER = _replace_ids(
         "label": "SYS Test HRM-OMERO 2",
         "class": "ExperimenterGroup",
         "owner": null,
-        "id": "ExperimenterGroup:{{GID_OTHER}}",
+        "id": "ExperimenterGroup:{{GID_2}}",
         "children": [
             {
                 "label": "Test-01 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": {{EID}},
-                "id": "G:{{GID_OTHER}}:Experimenter:{{EID}}",
+                "owner": {{UID_1}},
+                "id": "G:{{GID_2}}:Experimenter:{{UID_1}}",
                 "children": [],
                 "load_on_demand": true
             },
             {
                 "label": "Test-02 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": {{EID_OTHER}},
-                "id": "G:{{GID_OTHER}}:Experimenter:{{EID_OTHER}}",
+                "owner": {{UID_2}},
+                "id": "G:{{GID_2}}:Experimenter:{{UID_2}}",
                 "children": [],
                 "load_on_demand": true
             }
@@ -150,7 +151,7 @@ SETTINGS = {
     "gen_group_tree__none": _BASE_TREE_DEFAULT,
     "gen_group_tree": [
         {"group": None, "tree": _BASE_TREE_DEFAULT},
-        {"group": GID, "tree": _BASE_TREE_DEFAULT},
-        {"group": GID_OTHER, "tree": _BASE_TREE_OTHER},
+        {"group": GID_1, "tree": _BASE_TREE_DEFAULT},
+        {"group": GID_2, "tree": _BASE_TREE_OTHER},
     ],
 }
