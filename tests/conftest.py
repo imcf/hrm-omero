@@ -120,12 +120,12 @@ def json_is_equal():
         if isinstance(expected, str):
             _stderr(f"EXPECTED RAW\n---\n{expected}\n---")
             expected = json.loads(expected)
-        serialized_exp = json.dumps(expected, indent=4)
+        serialized_exp = json.dumps(expected, indent=4, sort_keys=True)
 
         if isinstance(received, str):
             _stderr(f"RECEIVED RAW\n---\n{received}\n---")
             received = json.loads(received)
-        serialized_rec = json.dumps(received, indent=4)
+        serialized_rec = json.dumps(received, indent=4, sort_keys=True)
 
         _stderr(f"EXPECTED\n---\n{serialized_exp}\n---")
         _stderr(f"RECEIVED\n---\n{serialized_rec}\n---")
