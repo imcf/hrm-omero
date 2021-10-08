@@ -16,8 +16,14 @@ G1_ID=9
 G2_ID=903
 
 # generate random 16-char passwords using letters (upper- and lower-case) and digits
-U1_PW=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16 ; echo '')
-U2_PW=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16 ; echo '')
+U1_PW=$(
+    tr -dc A-Za-z0-9 </dev/urandom | head -c 16
+    echo ''
+)
+U2_PW=$(
+    tr -dc A-Za-z0-9 </dev/urandom | head -c 16
+    echo ''
+)
 
 # create two users, add them to the first group:
 omero user add "hrm-test-01" Test-01 HRM-OMERO --userpassword "$U1_PW" --group-id "$G1_ID"
