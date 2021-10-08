@@ -1,31 +1,92 @@
 """Settings for running tests against an actual OMERO instance."""
 
-_BASE_TREE_DEFAULT = """
+
+def _replace_ids(raw_string):
+    result = (
+        raw_string.replace("{{GID}}", GID)
+        .replace("{{EID}}", EID)
+        .replace("{{EID_OTHER}}", EID_OTHER)
+        .replace("{{GID_OTHER}}", GID_OTHER)
+    )
+    return result
+
+
+EID = "5809"
+GID = "9"
+EID_OTHER = "5810"
+GID_OTHER = "903"
+
+_BASE_TREE_DEFAULT = _replace_ids(
+    """
     {
         "label": "SYS Test HRM-OMERO 1",
         "class": "ExperimenterGroup",
         "owner": null,
-        "id": "ExperimenterGroup:9",
+        "id": "ExperimenterGroup:{{GID}}",
         "children": [
             {
                 "label": "Test-01 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": 5809,
-                "id": "G:9:Experimenter:5809",
+                "owner": {{EID}},
+                "id": "G:{{GID}}:Experimenter:{{EID}}",
                 "children": [],
                 "load_on_demand": true
             },
             {
                 "label": "Test-02 HRM-OMERO",
                 "class": "Experimenter",
-                "owner": 5810,
-                "id": "G:9:Experimenter:5810",
+                "owner": {{EID_OTHER}},
+                "id": "G:{{GID}}:Experimenter:{{EID_OTHER}}",
                 "children": [],
                 "load_on_demand": true
             }
         ]
     }
 """
+)
+
+
+_BASE_TREE_OTHER = _replace_ids(
+    """
+    {
+        "label": "SYS Test HRM-OMERO 2",
+        "class": "ExperimenterGroup",
+        "owner": null,
+        "id": "ExperimenterGroup:{{GID_OTHER}}",
+        "children": [
+            {
+                "label": "Test-01 HRM-OMERO",
+                "class": "Experimenter",
+                "owner": {{EID}},
+                "id": "G:{{GID_OTHER}}:Experimenter:{{EID}}",
+                "children": [],
+                "load_on_demand": true
+            },
+            {
+                "label": "Test-02 HRM-OMERO",
+                "class": "Experimenter",
+                "owner": {{EID_OTHER}},
+                "id": "G:{{GID_OTHER}}:Experimenter:{{EID_OTHER}}",
+                "children": [],
+                "load_on_demand": true
+            }
+        ]
+    }
+"""
+)
+
+_ROOT_TREE = (
+    """
+    [
+"""
+    + _BASE_TREE_DEFAULT
+    + """,
+"""
+    + _BASE_TREE_OTHER
+    + """
+    ]
+"""
+)
 
 SETTINGS = {
     "hostname": "omero.example.xy",  # the OMERO server IP address or hostname
@@ -87,4 +148,9 @@ SETTINGS = {
         },
     ],
     "gen_group_tree__none": _BASE_TREE_DEFAULT,
+    "gen_group_tree": [
+        {"group": None, "tree": _BASE_TREE_DEFAULT},
+        {"group": GID, "tree": _BASE_TREE_DEFAULT},
+        {"group": GID_OTHER, "tree": _BASE_TREE_OTHER},
+    ],
 }
