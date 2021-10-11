@@ -9,15 +9,6 @@ import pytest
 from hrm_omero.misc import OmeroId
 from hrm_omero.formatting import print_children_json
 
-# import the settings to test against an actual OMERO instance or skip the whole module
-# in case the import fails:
-_IMPORT = pytest.importorskip(
-    modname="omero_test_settings",
-    reason="Couldn't find 'omero_test_settings.py' to import!",
-)
-SETTINGS = _IMPORT.SETTINGS
-CONF = f'OMERO_HOSTNAME="{SETTINGS["hostname"]}"'
-
 
 @pytest.mark.online
 def test_invalid_omero_id(omero_conn, caplog):

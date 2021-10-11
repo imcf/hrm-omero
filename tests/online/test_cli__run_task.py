@@ -4,26 +4,13 @@ The tests here also require a file `omero_test_settings.py` to be found at the l
 where pytest is started from. Look in `tests/resources/settings/` for an example file.
 """
 
-from unittest.mock import patch, mock_open
 import os
+from unittest.mock import mock_open, patch
 
 import pytest
-
 from hrm_omero import cli
+from settings.common import HOSTNAME
 
-
-# import the settings to test against an actual OMERO instance or skip the whole module
-# in case the import fails:
-_IMPORT = pytest.importorskip(
-    modname="omero_test_settings",
-    reason="Couldn't find 'omero_test_settings.py' to import!",
-)
-SETTINGS = _IMPORT.SETTINGS
-HOSTNAME = SETTINGS["hostname"]
-USERNAME = SETTINGS["username"]
-PORT = SETTINGS.get("port", 4064)
-if PORT is None:
-    PORT = 4064
 CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
 
 # set the standard arguments for run_task():
@@ -32,24 +19,24 @@ BASE_ARGS = ["-vvvv", "--conf", "config_file_will_be_mocked"]
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
+def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings):
     """Test the "checkCredentials" action.
 
     Expected behavior is to print sucess to stdout and a few infos to the log (stderr).
     """
-    reach_tcp_or_skip(HOSTNAME, PORT)
+    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     assert mock_file  # we don't need the mock file for an actual call...
 
-    # if no password is given, the $OMERO_PASSWORD environment variable will be used:
-    if "password" in SETTINGS:
-        monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    # if no password was defined in the settings, check if the environment has one:
+    if settings.PASSWORD is not None:
+        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
     elif "OMERO_PASSWORD" not in os.environ:
         pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
-    args.append(USERNAME)
+    args.append(settings.USERNAME)
     args.append("checkCredentials")
 
     ret = cli.run_task(args)
@@ -57,19 +44,19 @@ def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
 
     captured = capsys.readouterr()
     print(captured.err)
-    assert f"Connected to OMERO [user={USERNAME}, " in captured.out
+    assert f"Connected to OMERO [user={settings.USERNAME}, " in captured.out
     assert "User's default group is" in captured.err
-    assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
+    assert f"Closed OMERO connection [user={settings.USERNAME}]" in captured.err
 
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
+def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings):
     """Test the "checkCredentials" action with an invalid password.
 
     Expected behavior is to return False and print an error message to stdout.
     """
-    reach_tcp_or_skip(HOSTNAME, PORT)
+    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     assert mock_file  # we don't need the mock file for an actual call...
 
@@ -77,7 +64,7 @@ def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
 
     args = BASE_ARGS.copy()
     args.append("--user")
-    args.append(USERNAME)
+    args.append(settings.USERNAME)
     args.append("checkCredentials")
 
     ret = cli.run_task(args)
@@ -90,24 +77,26 @@ def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_root(mock_file, capsys, monkeypatch, reach_tcp_or_skip):
+def test_retrieve_children_root(
+    mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings
+):
     """Test the "retrieveChildren" action requesting the `ROOT` tree.
 
     Expected behavior is to print an OMERO tree in JSON notation.
     """
-    reach_tcp_or_skip(HOSTNAME, PORT)
+    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     assert mock_file  # we don't need the mock file for an actual call...
 
-    # if no password is given, the $OMERO_PASSWORD environment variable will be used:
-    if "password" in SETTINGS:
-        monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    # if no password was defined in the settings, check if the environment has one:
+    if settings.PASSWORD is not None:
+        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
     elif "OMERO_PASSWORD" not in os.environ:
         pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
-    args.append(USERNAME)
+    args.append(settings.USERNAME)
     args.append("retrieveChildren")
     args.append("--id")
     args.append("ROOT")
@@ -120,13 +109,13 @@ def test_retrieve_children_root(mock_file, capsys, monkeypatch, reach_tcp_or_ski
     assert 'children": [' in captured.out
     assert "ExperimenterGroup:" in captured.out
     assert '"owner":' in captured.out
-    assert f"Closed OMERO connection [user={USERNAME}]" in captured.err
+    assert f"Closed OMERO connection [user={settings.USERNAME}]" in captured.err
 
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
 def test_retrieve_children_many(
-    mock_file, capsys, monkeypatch, json_is_equal, reach_tcp_or_skip
+    mock_file, capsys, monkeypatch, json_is_equal, reach_tcp_or_skip, settings
 ):
     """Test "retrieveChildren" requesting various items as defined in test settings.
 
@@ -155,22 +144,22 @@ def test_retrieve_children_many(
     ...     ]
     ... }
     """
-    reach_tcp_or_skip(HOSTNAME, PORT)
+    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     assert mock_file  # we don't need the mock file for an actual call...
 
-    # if no password is given, the $OMERO_PASSWORD environment variable will be used:
-    if "password" in SETTINGS:
-        monkeypatch.setenv("OMERO_PASSWORD", SETTINGS["password"])
+    # if no password was defined in the settings, check if the environment has one:
+    if settings.PASSWORD is not None:
+        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
     elif "OMERO_PASSWORD" not in os.environ:
         pytest.skip("password for OMERO is required (via settings or environment)")
 
-    for current_config in SETTINGS["retrieveChildren"]:
+    for current_config in settings.retrieveChildren:
         omero_id = current_config["omero_id"]
 
         args = BASE_ARGS.copy()
         args.append("--user")
-        args.append(USERNAME)
+        args.append(settings.USERNAME)
         args.append("retrieveChildren")
         args.append("--id")
         args.append(omero_id)
