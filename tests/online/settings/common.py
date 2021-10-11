@@ -164,6 +164,15 @@ gen_group_tree = [
 ]
 
 
+download_image = [
+    {
+        "image_id": 1579412,
+        "gid": GID,
+        "filename": "3ch-dapi-pha-atub.ics",
+        "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
+    }
+]
+
 SETTINGS = {
     "OMEROtoHRM": [
         # a list of dicts containing IDs of images in OMERO and their file name
