@@ -19,6 +19,7 @@ OMERO_HOSTNAME="omero.mynetwork.xy"
 OMERO_PORT="4064"
 """
 
+# a valid configuration containing the legacy "OMERO_PKG" setting (now unused)
 CONF_LONG = (
     CONF_SHORT
     + """
