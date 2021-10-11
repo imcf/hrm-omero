@@ -35,7 +35,7 @@ def _sha1(filename):
     str
         The SHA1 checksum in hexadecimal notation.
     """
-    buf_size = 65536  # read file in 64kb chunks!
+    buf_size = 65536  # read file in 64kB chunks
 
     sha1sum = hashlib.sha1()
 
