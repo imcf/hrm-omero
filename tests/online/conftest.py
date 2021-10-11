@@ -23,7 +23,7 @@ def _reach_tcp_or_skip(host, port):
     socket.setdefaulttimeout(0.5)
     try:
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
-    except socket.error:
+    except (socket.error, socket.timeout):
         pytest.skip(f"can't reach OMERO server at {host}:{port}")
 
 
