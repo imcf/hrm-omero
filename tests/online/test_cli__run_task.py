@@ -1,7 +1,7 @@
 """Tests for the 'cli.run_task() function requiring the '--online' flag.
 
-The tests here also require a file `omero_test_settings.py` to be found at the location
-where pytest is started from. Look in `tests/resources/settings/` for an example file.
+These tests require `site_specific.py` to be found in `tests/online/settings`, see
+`tests/resources/settings/` for a template.
 """
 
 import os
