@@ -1,5 +1,6 @@
 """Module-wide fixtures for testing hrm-omero."""
 
+import hashlib
 import json
 import logging
 import os
@@ -10,7 +11,6 @@ import omero.gateway
 import pytest
 from _pytest.logging import caplog as _caplog  # pylint: disable-msg=unused-import
 from loguru import logger
-
 
 ### common "private" functions
 
@@ -40,6 +40,35 @@ def _reach_tcp_or_skip(host, port):
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
     except socket.error:
         pytest.skip(f"can't reach OMERO server at {host}:{port}")
+
+
+def _sha1(filename):
+    """Calculate the SHA1 sum of a file.
+
+    Parameters
+    ----------
+    filename : str
+        The full path to the file to calculate the checksum for.
+
+    Returns
+    -------
+    str
+        The SHA1 checksum in hexadecimal notation.
+    """
+    buf_size = 65536  # read file in 64kb chunks!
+
+    sha1sum = hashlib.sha1()
+
+    with open(filename, "rb") as infile:
+        while True:
+            data = infile.read(buf_size)
+            if not data:
+                break
+            sha1sum.update(data)
+
+    digest = sha1sum.hexdigest()
+    print(f"sha1({filename}): {digest}")
+    return digest
 
 
 ### pytest setup ###
@@ -138,6 +167,12 @@ def json_is_equal():
 def reach_tcp_or_skip():
     """Fixture function wrapper to check if a host is reachable on a given port."""
     return _reach_tcp_or_skip
+
+
+@pytest.fixture
+def sha1():
+    """Fixture to generate the SHA1 sum of a file."""
+    return _sha1
 
 
 ### OMERO connection related fixtures
