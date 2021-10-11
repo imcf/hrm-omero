@@ -31,74 +31,74 @@ if PORT is None:
 
 BASE_TREE_DEFAULT = _fmt(
     """
-    {
-        "label": "SYS Test HRM-OMERO 1",
-        "class": "ExperimenterGroup",
-        "owner": null,
-        "id": "ExperimenterGroup:{{GID_1}}",
-        "children": [
-            {
-                "label": "Test-01 HRM-OMERO",
-                "class": "Experimenter",
-                "owner": {{UID_1}},
-                "id": "G:{{GID_1}}:Experimenter:{{UID_1}}",
-                "children": [],
-                "load_on_demand": true
-            },
-            {
-                "label": "Test-02 HRM-OMERO",
-                "class": "Experimenter",
-                "owner": {{UID_2}},
-                "id": "G:{{GID_1}}:Experimenter:{{UID_2}}",
-                "children": [],
-                "load_on_demand": true
-            }
-        ]
-    }
-"""
+        {
+            "label": "SYS Test HRM-OMERO 1",
+            "class": "ExperimenterGroup",
+            "owner": null,
+            "id": "ExperimenterGroup:{{GID_1}}",
+            "children": [
+                {
+                    "label": "Test-01 HRM-OMERO",
+                    "class": "Experimenter",
+                    "owner": {{UID_1}},
+                    "id": "G:{{GID_1}}:Experimenter:{{UID_1}}",
+                    "children": [],
+                    "load_on_demand": true
+                },
+                {
+                    "label": "Test-02 HRM-OMERO",
+                    "class": "Experimenter",
+                    "owner": {{UID_2}},
+                    "id": "G:{{GID_1}}:Experimenter:{{UID_2}}",
+                    "children": [],
+                    "load_on_demand": true
+                }
+            ]
+        }
+    """
 )
 
 
 BASE_TREE_OTHER = _fmt(
     """
-    {
-        "label": "SYS Test HRM-OMERO 2",
-        "class": "ExperimenterGroup",
-        "owner": null,
-        "id": "ExperimenterGroup:{{GID_2}}",
-        "children": [
-            {
-                "label": "Test-01 HRM-OMERO",
-                "class": "Experimenter",
-                "owner": {{UID_1}},
-                "id": "G:{{GID_2}}:Experimenter:{{UID_1}}",
-                "children": [],
-                "load_on_demand": true
-            },
-            {
-                "label": "Test-02 HRM-OMERO",
-                "class": "Experimenter",
-                "owner": {{UID_2}},
-                "id": "G:{{GID_2}}:Experimenter:{{UID_2}}",
-                "children": [],
-                "load_on_demand": true
-            }
-        ]
-    }
-"""
+        {
+            "label": "SYS Test HRM-OMERO 2",
+            "class": "ExperimenterGroup",
+            "owner": null,
+            "id": "ExperimenterGroup:{{GID_2}}",
+            "children": [
+                {
+                    "label": "Test-01 HRM-OMERO",
+                    "class": "Experimenter",
+                    "owner": {{UID_1}},
+                    "id": "G:{{GID_2}}:Experimenter:{{UID_1}}",
+                    "children": [],
+                    "load_on_demand": true
+                },
+                {
+                    "label": "Test-02 HRM-OMERO",
+                    "class": "Experimenter",
+                    "owner": {{UID_2}},
+                    "id": "G:{{GID_2}}:Experimenter:{{UID_2}}",
+                    "children": [],
+                    "load_on_demand": true
+                }
+            ]
+        }
+    """
 )
 
 ROOT_TREE = (
     """
     [
-"""
+    """
     + BASE_TREE_DEFAULT
     + """,
-"""
+    """
     + BASE_TREE_OTHER
     + """
     ]
-"""
+    """
 )
 
 GID = _fmt("{{GID_1}}")
