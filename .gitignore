@@ -13,8 +13,7 @@ __pycache__/
 /htmlcov/
 
 # connection details for testing
-cred.py
-/omero_test_settings.py
+/tests/online/settings/site_specific.py
 
 # old script while porting:
 /ome_hrm.py

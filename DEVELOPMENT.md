@@ -34,15 +34,19 @@ poetry run pytest
 
 By default only *local* tests will be performed, all tests that require the connection
 to an actual OMERO instance are disabled. To activate them you need to pass the
-`--online` flag to the pytest call and a corresponding file `omero_test_settings.py`
-needs to be present in the repository root that contains the settings on how to connect
-to your OMERO, plus the information on what to test. See `tests/resources/settings/` for
-an example file, copy it to the repository root and make your adjustments there. Then
+`--online` flag to the pytest call and a corresponding file `site_specific.py` needs to
+be present in `tests/online/settings/` that contains the settings on how to connect to
+your OMERO, plus the mapping of object and user IDs. See `tests/resources/settings/` for
+a template file, copy it to the repository root and make your adjustments there. Then
 run this command:
 
 ```bash
 poetry run pytest --online
 ```
+
+NOTE: each online test does a connectivity check first, if the OMERO server specified in
+the site-specific settings can't be reached they will be skipped (instead of generating
+tons of failed test results).
 
 ### Prepare an OMERO instance for tests
 
