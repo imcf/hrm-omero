@@ -3,6 +3,7 @@
 import os
 import tempfile
 from io import BytesIO
+from pathlib import Path
 
 from loguru import logger as log
 from PIL import Image
@@ -129,13 +130,18 @@ def fetch_thumbnail(conn, image_id, dest):
         True in case the download was successful, False otherwise.
     """
     log.info(f"Trying to fetch thumbnail for OMERO image [{image_id}]...")
+    log.trace(f"Requested target location: [{dest}].")
+
+    base_dir, fname = os.path.split(dest)
+    target_dir = Path(base_dir) / "hrm_previews"
+    target = os.path.join(target_dir, f"{fname}.preview_xy.jpg")
+
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
     thumbnail = Image.open(BytesIO(image_data))
-    base_dir, fname = os.path.split(dest)
-    target = "/hrm_previews/" + fname + ".preview_xy.jpg"
     try:
-        thumbnail.save(base_dir + target)
+        os.mkdir(target_dir)
+        thumbnail.save(target)
         # TODO: os.chown() to fix permissions, see #457!
         printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
         return True

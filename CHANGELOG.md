@@ -41,6 +41,8 @@
 * *Datasets* in OMERO that are not associated to a *Project* will no longer be ignored
   but rather be shown on the same level than the user's projects, just as OMERO.web and
   OMERO.insight are doing it.
+* The target directory for downloading preview thumbnails from OMERO will be created
+  automatically in case it doesn't exist yet.
 * The command line parameter `--password` (or `-w`) is now *deprecated* in favor of
   using the environment variable described above.
 * The following functions are now *deprecated* and will be removed in a future release.
