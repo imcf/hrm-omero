@@ -60,6 +60,9 @@ def from_omero(conn, id_str, dest):
 
     # check if dest is a directory, rewrite it otherwise:
     if not os.path.isdir(dest):
+        # FIXME: this should raise a ValueError as it's quite counter-intuitive that
+        # specifying a file *name* for the target doesn't have an effect on how the
+        # downloaded file will be called actually!
         dest = os.path.dirname(dest)
     from omero_model_OriginalFileI import OriginalFileI
 
