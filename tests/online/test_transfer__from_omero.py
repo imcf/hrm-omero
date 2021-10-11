@@ -31,5 +31,3 @@ def test_download_image(omero_conn, tmp_path, sha1, settings):
         assert test["filename"] in files
 
         assert test["sha1sum"] == sha1(tmp_path / test["filename"])
-
-    assert 0
