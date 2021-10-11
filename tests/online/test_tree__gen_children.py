@@ -16,8 +16,6 @@ _IMPORT = pytest.importorskip(
     reason="Couldn't find 'omero_test_settings.py' to import!",
 )
 SETTINGS = _IMPORT.SETTINGS
-CONF = f'OMERO_HOSTNAME="{SETTINGS["hostname"]}"'
-USERNAME = SETTINGS["username"]
 GID = SETTINGS["default_group"]
 
 
