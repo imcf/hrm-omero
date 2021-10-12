@@ -42,8 +42,6 @@ def from_omero(conn, id_str, dest):
         True in case the download was successful, False otherwise.
     """
     _, gid, obj_type, image_id = id_str.split(":")
-    if obj_type != "Image":
-        raise ValueError("An '--imageid' ID of the form 'G:7:Image:98765' is required!")
 
     if not image_id:
         printlog("ERROR", f"Malformed ID '{id_str}'. Expecting `G:[gid]:[type]:[iid]`")
@@ -58,6 +56,8 @@ def from_omero(conn, id_str, dest):
     # conn.SERVICE_OPTS.setOmeroGroup(gid)
     # the new way for switching the group was suggested in HRM upstream ticket #539:
     conn.setGroupForSession(gid)
+    if obj_type != "Image":
+        raise ValueError("Currently only the download of 'Image' objects is supported!")
 
     # check if dest is a directory, rewrite it otherwise:
     if not os.path.isdir(dest):

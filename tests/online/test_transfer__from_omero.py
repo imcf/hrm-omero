@@ -122,7 +122,7 @@ def test_download_dataset(omero_conn, tmp_path):
     Expected behavior is to raise a ValueError.
     """
     id_str = "G:1:Dataset:1"
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="only the download of 'Image' objects"):
         from_omero(omero_conn, id_str, tmp_path)
 
 
