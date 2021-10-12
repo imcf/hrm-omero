@@ -1,5 +1,7 @@
 """Functions related to direct interaction with OMERO."""
 
+from datetime import datetime, timedelta
+
 import yaml
 from loguru import logger as log
 import omero.gateway
@@ -181,3 +183,50 @@ def new_dataset(conn, id_str, ds_name):
         The name of the dataset to be created.
     """
     raise NotImplementedError("Creating Datasets is not yet implemented.")
+
+
+def find_recently_imported(conn, ds_id, label, age=15):
+    """Speculative way of identifying a recently imported image in a dataset.
+
+    Check children of a dataset in OMERO until one is found that is matching following
+    criteria:
+
+    * the import date is not more than the specified `age` tolerance ago (in seconds)
+    * the object name is matching the given label
+
+    Usually it will hit the right object in the first iteration as `listChildren()`
+    seems to give the images in reverse order of their import (newest ones first).
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        The OMERO connection object.
+    ds_id : int or int-like
+        The ID of the dataset where to look for the image.
+    label : str
+        The label of the imported image, in the simplest case this is usually just the
+        file name of the original file without any path components.
+    age : int, optional
+        The maximum age in seconds that the identified image object in OMERO is allowed
+        to have, by default 15.
+
+    Returns
+    -------
+    omero.gateway._ImageWrapper or None
+        The "Image" object as returned by OMERO's BlitzGateway or None in case no image
+        object matching the criteria could be found.
+    """
+    imported = None
+    dset = conn.getObject("Dataset", ds_id)
+    for image in dset.listChildren():
+        if image.getName() != label:
+            continue
+
+        oldest_allowed_date = datetime.now() - timedelta(seconds=age)
+        date = image.getDate()
+        if date >= oldest_allowed_date:
+            imported = image
+            log.success(f"Found imported image: {image.getId()}")
+            break
+
+    return imported

@@ -19,6 +19,8 @@
   files that belong to the set of results from a certain HRM job.
 * `hrm_omero.omero.add_annotation_keyvalue()` can be used to add so-called [Map
   Annotations][c4] (key-value pairs) to objects in OMERO.
+* `hrm_omero.omero.find_recently_imported()` tries to identify an image in OMERO using
+  the import timestamp and the object label as criteria.
 * A decorator `hrm_omero.decorators.connect_and_set_group()` is now available that can
   be used with functions that require a valid connection plus an OMERO object identifier
   pair (submitted on the command line as "`G:4:Image:12345`" or similar, passed on to
