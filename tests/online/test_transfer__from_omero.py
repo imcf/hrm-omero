@@ -25,6 +25,7 @@ def test_download_image(omero_conn, tmp_path, sha1, settings):
         image_id = test["image_id"]
         target_file = tmp_path / test["filename"]
         obj_id = f"G:{gid}:{image_id}"
+        print(f"obj_id: [{obj_id}]")
 
         ret = from_omero(omero_conn, obj_id, tmp_path)
         assert ret is True
