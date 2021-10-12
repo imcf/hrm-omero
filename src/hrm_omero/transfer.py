@@ -223,6 +223,7 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     # TODO: check the more recent code mentioned by the OME developers in the forum
     # thread: https://forum.image.sc/t/automated-uploader-to-omero-in-python/38290
     # https://gitlab.com/openmicroscopy/incubator/omero-python-importer/-/blob/master/import.py)
+    # and also see https://pypi.org/project/omero-upload/
     from omero.cli import CLI
 
     cli = CLI()
