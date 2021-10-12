@@ -42,8 +42,7 @@ def test_unsupported_target(omero_conn, settings):
         to_omero(omero_conn, target_id, fname)
 
 
-@pytest.mark.online
-def test_import_image(omero_conn, settings, capfd):
+def _test_import_image(conn, import_image, capfd, logfile=""):
     """Test importing local files into OMERO and check its properties in OMERO.
 
     Expected behavior is to import the file, and to print a bunch of specific messages
@@ -60,28 +59,48 @@ def test_import_image(omero_conn, settings, capfd):
         "PIXELDATA_PROCESSED",
         "IMPORT_DONE",
     ]
+    fname = import_image["filename"]
+    sha1sum = import_image["sha1sum"]
+    target_id = import_image["target_id"]
+
+    print(f"Trying to import [{fname}] into [{target_id}] (sha1: {sha1sum})")
+    ret = to_omero(conn, target_id, fname, logfile)
+    assert ret is True
+
+    # capsys won't work as it misses the output of subprocesses (the "omero import"
+    # call in this case), but using capfd does the job:
+    captured = capfd.readouterr().err
+    # print(f"import stdout: {captured.out}")
+    # print(f"import stderr: {captured.err}")
+    if logfile:
+        with open(logfile, "r", encoding="utf-8") as infile:
+            captured = infile.read()
+
+    for pattern in expected_output_patterns:
+        assert pattern in captured
+
+    ds_id = target_id.split(":")[-1]
+    imported = find_recently_imported(conn, ds_id, os.path.basename(fname))
+    assert imported is not None
+
+    files_info = imported.getImportedFilesInfo()
+    assert files_info["count"] == import_image["fset_count"]
+    assert files_info["size"] == import_image["fset_size"]
+
+
+@pytest.mark.online
+def test_import_image(omero_conn, settings, capfd):
+    """Call `_test_import_image()` for each defined import test setting."""
     for import_image in settings.import_image:
-        fname = import_image["filename"]
-        sha1sum = import_image["sha1sum"]
-        target_id = import_image["target_id"]
+        _test_import_image(omero_conn, import_image, capfd)
 
-        print(f"Trying to import [{fname}] into [{target_id}] (sha1: {sha1sum})")
-        ret = to_omero(omero_conn, target_id, fname)
-        assert ret is True
 
-        # capsys won't work as it misses the output of subprocesses (the "omero import"
-        # call in this case), but using capfd does the job:
-        captured = capfd.readouterr()
-        for pattern in expected_output_patterns:
-            assert pattern in captured.err
-
-        ds_id = target_id.split(":")[-1]
-        imported = find_recently_imported(omero_conn, ds_id, os.path.basename(fname))
-        assert imported is not None
-
-        files_info = imported.getImportedFilesInfo()
-        assert files_info["count"] == import_image["fset_count"]
-        assert files_info["size"] == import_image["fset_size"]
+@pytest.mark.online
+def test_import_image_log(omero_conn, settings, capfd, tmp_path):
+    """Call `_test_import_image()` for one import setting using a log file."""
+    import_image = settings.import_image[0]
+    logfile = str(tmp_path / "omero-import-debug-log")
+    _test_import_image(omero_conn, import_image, capfd, logfile)
 
 
 @pytest.mark.online
