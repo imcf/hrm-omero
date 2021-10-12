@@ -173,6 +173,17 @@ download_image = [
     }
 ]
 
+_RESULTS = "tests/resources/hrm-results"
+import_image = [
+    {
+        "filename": f"{_RESULTS}/01/3ch-dapi-pha-atub_0123456789abc_hrm.ics",
+        "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
+        "target_id": _fmt("G:{{GID_1}}:{{U1__PID_1__DSID_2}}"),
+        "fset_count": 1,
+        "fset_size": 30438,
+    }
+]
+
 SETTINGS = {
     "OMEROtoHRM": [
         # a list of dicts containing IDs of images in OMERO and their file name
