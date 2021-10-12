@@ -52,7 +52,8 @@ echo "#ts# (\"U1__PID_1\", \"$project\"),"
 echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
 
 # import a test image there:
-omero import -d "$dataset" resources/images/3ch-dapi-pha-atub.ics
+image=$(omero import -d "$dataset" resources/images/3ch-dapi-pha-atub.ics)
+echo "#ts# (\"U1__IID_1\", \"$image\"),"
 
 # create another dataset in that project that will be used as an upload target:
 dataset=$(omero obj new Dataset name='upload-target')

@@ -24,7 +24,7 @@ def test_download_image(omero_conn, tmp_path, sha1, settings):
         gid = test["gid"]
         image_id = test["image_id"]
         target_file = tmp_path / test["filename"]
-        obj_id = f"G:{gid}:Image:{image_id}"
+        obj_id = f"G:{gid}:{image_id}"
 
         ret = from_omero(omero_conn, obj_id, tmp_path)
         assert ret is True
@@ -50,7 +50,7 @@ def test_download_image_filename(omero_conn, tmp_path, sha1, settings):
     gid = test["gid"]
     image_id = test["image_id"]
     target_file = tmp_path / test["filename"]
-    obj_id = f"G:{gid}:Image:{image_id}"
+    obj_id = f"G:{gid}:{image_id}"
 
     ret = from_omero(omero_conn, obj_id, tmp_path / "some-other-filename")
     assert ret is True
@@ -75,7 +75,7 @@ def test_download_file_exists(omero_conn, tmp_path, settings, capsys):
     image_id = test["image_id"]
     target_file = tmp_path / test["filename"]
 
-    obj_id = f"G:{gid}:Image:{image_id}"
+    obj_id = f"G:{gid}:{image_id}"
 
     Path(target_file).touch()
 
@@ -102,7 +102,7 @@ def test_download_dir_unwritable(omero_conn, tmp_path, settings, capsys):
     stat = os.stat(tmp_path)
     os.chmod(tmp_path, 0o000)
 
-    obj_id = f"G:{gid}:Image:{image_id}"
+    obj_id = f"G:{gid}:{image_id}"
 
     ret = from_omero(omero_conn, obj_id, tmp_path)
     assert ret is False
