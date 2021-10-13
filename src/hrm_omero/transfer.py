@@ -138,6 +138,7 @@ def fetch_thumbnail(conn, image_id, dest):
 
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
+    log.trace(f"len(image_data)={len(image_data)}")
     thumbnail = Image.open(BytesIO(image_data))
     try:
         os.mkdir(target_dir)
