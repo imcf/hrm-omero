@@ -48,3 +48,27 @@ def test_unsupported_formats(hrm_conf, tmp_path, settings, capsys):
 
     captured = capsys.readouterr()
     assert "format not supported by OMERO" in captured.out
+
+
+@pytest.mark.online
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
+def test_unsupported_target(hrm_conf, tmp_path, settings, capsys):
+    """Test attempting imports to an invalid target (only "Dataset" is allowed).
+
+    Expected behavior is to return False and print an error message.
+    """
+    additional_args = [
+        "--dset",
+        "G:7:Project:42",
+        "--file",
+        settings.import_image[0]["filename"],
+    ]
+    args = build_args(hrm_conf, tmp_path, settings, additional_args)
+    print(args)
+
+    ret = cli.run_task(args)
+    assert ret is False
+
+    captured = capsys.readouterr()
+    print(captured.out)
+    assert "only the upload to 'Dataset' objects is supported" in captured.out
