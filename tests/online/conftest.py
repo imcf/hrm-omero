@@ -55,7 +55,7 @@ def settings():
 
 
 @pytest.fixture
-def omero_conn(settings):  # pylint: disable-msg=redefined-outer-name
+def omero_conn(settings):
     """Establish a connection to on OMERO instance.
 
     The fixture will try to import the test settings file or skip the entire test in

@@ -26,6 +26,7 @@ pytest = "^6.0"
 black = "^21.9b0"
 pylint = "^2.11.0"
 pytest-cov = "^2.12.1"
+pylint-pytest = "^1.1.2"
 
 [tool.poetry.scripts]
 ome-hrm = "hrm_omero.cli:main"
