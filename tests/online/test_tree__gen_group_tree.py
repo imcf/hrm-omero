@@ -5,7 +5,6 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 """
 
 import pytest
-
 from hrm_omero.tree import gen_group_tree
 
 

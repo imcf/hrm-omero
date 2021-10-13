@@ -4,11 +4,11 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 `tests/resources/settings/` for a template.
 """
 
-import os
 from unittest.mock import mock_open, patch
 
 import pytest
 from hrm_omero import cli
+
 from settings.common import HOSTNAME  # pylint: disable-msg=wrong-import-order
 
 CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'

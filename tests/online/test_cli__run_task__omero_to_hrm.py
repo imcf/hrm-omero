@@ -11,7 +11,6 @@ from hrm_omero import cli
 
 from settings.common import HOSTNAME  # pylint: disable-msg=wrong-import-order
 
-
 CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
 
 

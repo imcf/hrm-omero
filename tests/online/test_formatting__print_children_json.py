@@ -5,9 +5,8 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 """
 
 import pytest
-
-from hrm_omero.misc import OmeroId
 from hrm_omero.formatting import print_children_json
+from hrm_omero.misc import OmeroId
 
 
 @pytest.mark.online
