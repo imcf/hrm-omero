@@ -28,6 +28,39 @@ def settings():
     return _settings()
 
 
+### HRM related fixtures
+
+
+@pytest.fixture
+def hrm_conf():
+    """Callable fixture providing a (temporary) 'hrm.conf' file with the given content.
+
+    This is useful when the `mock_open` fixture can't be used for a test as the tested
+    code involves several `open()` calls.
+
+    Parameters
+    ----------
+    base_path : pathlib.Path
+        The path where the configuration file should be created.
+    content : str
+        The content that will be placed in the configuration file.
+
+    Returns
+    -------
+    str
+        The full path of the created configuration file.
+    """
+
+    def _hrm_conf(base_path, content):
+        conffile = base_path / "hrm.conf"
+        with open(conffile, mode="w", encoding="utf-8") as outfile:
+            outfile.write(content)
+
+        return conffile.as_posix()
+
+    return _hrm_conf
+
+
 ### OMERO connection related fixtures
 
 
