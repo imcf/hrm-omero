@@ -3,7 +3,7 @@
 from loguru import logger as log
 
 
-class OmeroId():
+class OmeroId:
 
     """Representation of a (group-qualified) OMERO object ID.
 
@@ -72,7 +72,6 @@ class OmeroId():
 
     def __str__(self):
         return f"G:{self.group}:{self.obj_type}:{self.obj_id}"
-
 
 
 def printlog(level, message):
