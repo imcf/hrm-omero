@@ -55,7 +55,7 @@ def settings():
 
 
 @pytest.fixture
-def omero_conn():
+def omero_conn(settings):  # pylint: disable-msg=redefined-outer-name
     """Establish a connection to on OMERO instance.
 
     The fixture will try to import the test settings file or skip the entire test in
@@ -78,13 +78,12 @@ def omero_conn():
     If the test is skipped for any of the above described reasons a corresponding
     message will be shown explaining the reason for skipping the test.
     """
-    settg = _settings()
-    _reach_tcp_or_skip(settg.HOSTNAME, settg.PORT)
+    _reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     # password from the settings file has precedence, fall back to env or skip the test
     # and print which password has been used (will be shown in case a test fails):
-    if settg.PASSWORD is not None:
-        password = settg.PASSWORD
+    if settings.PASSWORD is not None:
+        password = settings.PASSWORD
         print(f"{__name__}: Using OMERO password from settings file.")
     elif "OMERO_PASSWORD" in os.environ:
         print(f"{__name__}: Using OMERO_PASSWORD environment variable.")
@@ -93,10 +92,10 @@ def omero_conn():
         pytest.skip("no password found to connect to OMERO")
 
     conn = omero.gateway.BlitzGateway(
-        settg.USERNAME,
+        settings.USERNAME,
         password,
-        host=settg.HOSTNAME,
-        port=settg.PORT,
+        host=settings.HOSTNAME,
+        port=settings.PORT,
         secure=True,
         useragent="HRM-OMERO.pytest",
     )
