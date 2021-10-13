@@ -53,28 +53,6 @@ def test_retrieve_children_many(mock_file, capsys, json_is_equal, settings):
 
     Expected behavior is to print the defined OMERO trees, they are required to match
     the `json_result` attribute from the corresponding test settings dict.
-
-    Example
-    -------
-    >>> SETTINGS = {
-    ...     "retrieveChildren": [
-    ...         {
-    ...             "omero_id": "G:2354:Experimenter:9",
-    ...             "json_result": '''
-    ...                 [
-    ...                     {
-    ...                         "children": [],
-    ...                         "class": "Project",
-    ...                         "id": "G:2354:Project:8404",
-    ...                         "label": "HRM Demo Data",
-    ...                         "load_on_demand": true,
-    ...                         "owner": "hrm-omero-testuser"
-    ...                     }
-    ...                 ]
-    ...             '''
-    ...         }
-    ...     ]
-    ... }
     """
     assert mock_file  # we don't need the mock file for an actual call...
 
