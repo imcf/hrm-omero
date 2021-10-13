@@ -141,7 +141,7 @@ def fetch_thumbnail(conn, image_id, dest):
     thumbnail = Image.open(BytesIO(image_data))
     try:
         os.mkdir(target_dir)
-        thumbnail.save(target)
+        thumbnail.save(target, format="jpeg")
         # TODO: os.chown() to fix permissions, see #457!
         printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
         return True
