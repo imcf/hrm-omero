@@ -10,23 +10,6 @@ from _pytest.logging import caplog as _caplog  # pylint: disable-msg=unused-impo
 ### common "private" functions
 
 
-def _reach_tcp_or_skip(host, port):
-    """Skip a test if a TCP connection to the given host and port CAN'T be established.
-
-    Parameters
-    ----------
-    host : str
-        Host name (DNS) or IP address.
-    port : int
-        The TCP port number to connect to.
-    """
-    socket.setdefaulttimeout(0.5)
-    try:
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
-    except (socket.error, socket.timeout):
-        pytest.skip(f"can't reach OMERO server at {host}:{port}")
-
-
 def _settings():
     """Load online test settings or skip a test."""
     try:
@@ -40,18 +23,24 @@ def _settings():
 
 
 @pytest.fixture
-def reach_tcp_or_skip():
-    """Fixture function wrapper to check if a host is reachable on a given port."""
-    return _reach_tcp_or_skip
-
-
-@pytest.fixture
 def settings():
     """Load online test settings and return them."""
     return _settings()
 
 
 ### OMERO connection related fixtures
+
+
+@pytest.fixture
+def reach_tcp_or_skip(settings):
+    """Skip a test if the OMERO server defined in settings can't be reached via TCP."""
+    host = settings.HOSTNAME
+    port = settings.PORT
+    socket.setdefaulttimeout(0.5)
+    try:
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+    except (socket.error, socket.timeout):
+        pytest.skip(f"can't reach OMERO server at {host}:{port}")
 
 
 @pytest.fixture
@@ -88,7 +77,7 @@ def omeropw(monkeypatch, settings):
 
 
 @pytest.fixture
-def omero_conn(settings, omeropw):
+def omero_conn(reach_tcp_or_skip, settings, omeropw):
     """Establish a connection to on OMERO instance.
 
     The fixture will try to import the test settings file or skip the entire test in
@@ -111,7 +100,6 @@ def omero_conn(settings, omeropw):
     If the test is skipped for any of the above described reasons a corresponding
     message will be shown explaining the reason for skipping the test.
     """
-    _reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     conn = omero.gateway.BlitzGateway(
         settings.USERNAME,

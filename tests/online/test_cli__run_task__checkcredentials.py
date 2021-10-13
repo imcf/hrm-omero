@@ -24,8 +24,6 @@ def test_valid_login(mock_file, capsys, omeropw, reach_tcp_or_skip, settings):
 
     Expected behavior is to print sucess to stdout and a few infos to the log (stderr).
     """
-    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
-
     assert mock_file  # we don't need the mock file for an actual call...
 
     args = BASE_ARGS.copy()
@@ -50,8 +48,6 @@ def test_invalid_password(mock_file, capsys, monkeypatch, reach_tcp_or_skip, set
 
     Expected behavior is to return False and print an error message to stdout.
     """
-    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
-
     assert mock_file  # we don't need the mock file for an actual call...
 
     monkeypatch.setenv("OMERO_PASSWORD", "nobody-will-ever-use-this-pw-in-omero-really")
