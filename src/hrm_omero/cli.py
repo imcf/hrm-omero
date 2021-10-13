@@ -316,6 +316,9 @@ def run_task(args):
 
         return perform_action(conn, **kwargs)
 
+    except Exception as err:  # pylint: disable-msg=broad-except  # pragma: no cover
+        log.error(f"An unforeseen error occured: {err}")
+        return False
     finally:
         conn.close()
         log.info(f"Closed OMERO connection [user={args.user}].")
