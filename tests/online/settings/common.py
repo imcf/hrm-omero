@@ -183,18 +183,3 @@ import_image = [
         "fset_size": 30438,
     }
 ]
-
-SETTINGS = {
-    "OMEROtoHRM": [
-        # a list of dicts containing IDs of images in OMERO and their file name
-        {
-            "id_str": "G:4:Image:1567250",
-            "expected_name": "test-image.tif",
-        },
-        {
-            "id_str": "G:753:Image:1569216",
-            "expected_name": "2014-02-28-dapi-phalloidin-atub_0123456789abc_hrm.png",
-        },
-    ],
-    "gen_group_tree__none": BASE_TREE_DEFAULT,
-}
