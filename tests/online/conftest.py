@@ -55,7 +55,40 @@ def settings():
 
 
 @pytest.fixture
-def omero_conn(settings):
+def omeropw(monkeypatch, settings):
+    """Prepare (and return) an OMERO password or skip the test.
+
+    First the fixture checks if the test settings do have a password configured
+    explicitly. If yes the environment variable 'OMERO_PASSWORD' will be monkey-patched
+    using that configured value.
+
+    If no password is configured the current environment is checked if the variable
+    already exists.
+
+    In any case of success the password will also be returned, so the fixture can be
+    used via `@pytest.mark.usefixtures("omeropw")` or as a parameter of a test function.
+
+    In case no password is found `pytest.skip()` will be called.
+    """
+    password = None
+    # if no password was defined in the settings, check if the environment has one:
+    if settings.PASSWORD is not None:
+        password = settings.PASSWORD
+        monkeypatch.setenv("OMERO_PASSWORD", password)
+        print("Monkeypatching environment variable OMERO_PASSWORD...")
+        return password
+
+    password = os.environ.get("OMERO_PASSWORD")
+    if password is None:
+        pytest.skip("password for OMERO is required (via settings or environment)")
+    else:
+        print("Using existing OMERO_PASSWORD environment variable...")
+
+    return password
+
+
+@pytest.fixture
+def omero_conn(settings, omeropw):
     """Establish a connection to on OMERO instance.
 
     The fixture will try to import the test settings file or skip the entire test in
@@ -80,20 +113,9 @@ def omero_conn(settings):
     """
     _reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
-    # password from the settings file has precedence, fall back to env or skip the test
-    # and print which password has been used (will be shown in case a test fails):
-    if settings.PASSWORD is not None:
-        password = settings.PASSWORD
-        print(f"{__name__}: Using OMERO password from settings file.")
-    elif "OMERO_PASSWORD" in os.environ:
-        print(f"{__name__}: Using OMERO_PASSWORD environment variable.")
-        password = os.environ["OMERO_PASSWORD"]
-    else:
-        pytest.skip("no password found to connect to OMERO")
-
     conn = omero.gateway.BlitzGateway(
         settings.USERNAME,
-        password,
+        omeropw,
         host=settings.HOSTNAME,
         port=settings.PORT,
         secure=True,

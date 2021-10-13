@@ -19,7 +19,7 @@ BASE_ARGS = ["-vvvv", "--conf", "config_file_will_be_mocked"]
 
 @pytest.mark.online
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings):
+def test_valid_login(mock_file, capsys, omeropw, reach_tcp_or_skip, settings):
     """Test the "checkCredentials" action.
 
     Expected behavior is to print sucess to stdout and a few infos to the log (stderr).
@@ -27,12 +27,6 @@ def test_valid_login(mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings
     reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
 
     assert mock_file  # we don't need the mock file for an actual call...
-
-    # if no password was defined in the settings, check if the environment has one:
-    if settings.PASSWORD is not None:
-        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
-    elif "OMERO_PASSWORD" not in os.environ:
-        pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
