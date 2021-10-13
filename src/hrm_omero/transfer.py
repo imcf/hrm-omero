@@ -143,10 +143,11 @@ def fetch_thumbnail(conn, image_id, dest):
         os.mkdir(target_dir)
         thumbnail.save(target, format="jpeg")
         printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
-        return True
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"ERROR downloading thumbnail to '{target}': {err}")
         return False
+
+    return True
 
 
 def to_omero(conn, id_str, image_file, omero_logfile=""):
