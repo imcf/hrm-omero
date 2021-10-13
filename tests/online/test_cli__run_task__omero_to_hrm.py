@@ -16,31 +16,18 @@ CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
 
 
 @pytest.mark.online
-def test_download_image(
-    monkeypatch, capsys, reach_tcp_or_skip, tmp_path, settings, sha1
-):
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
+def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf):
     """Test the "OMEROtoHRM" action with a valid and accessible image ID.
 
     Expected behavior is to download the image and the corresponding thumbnail.
     """
-    hrm_conf = tmp_path / "hrm.conf"
-    with open(hrm_conf, mode="w", encoding="utf-8") as outfile:
-        outfile.write(CONF)
-
-    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
-
-    # if no password was defined in the settings, check if the environment has one:
-    if settings.PASSWORD is not None:
-        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
-    elif "OMERO_PASSWORD" not in os.environ:
-        pytest.skip("password for OMERO is required (via settings or environment)")
-
     download_image = settings.download_image[0]
     dl_fname = download_image["filename"]
 
     args = ["-vvvv"]
     args.append("--conf")
-    args.append(hrm_conf.as_posix())
+    args.append(hrm_conf(tmp_path, CONF))
     args.append("--user")
     args.append(settings.USERNAME)
     args.append("OMEROtoHRM")

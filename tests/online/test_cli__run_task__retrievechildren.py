@@ -18,23 +18,14 @@ BASE_ARGS = ["-vvvv", "--conf", "config_file_will_be_mocked"]
 
 
 @pytest.mark.online
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_root(
-    mock_file, capsys, monkeypatch, reach_tcp_or_skip, settings
-):
+def test_retrieve_children_root(mock_file, capsys, settings):
     """Test the "retrieveChildren" action requesting the `ROOT` tree.
 
     Expected behavior is to print an OMERO tree in JSON notation.
     """
-    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
-
     assert mock_file  # we don't need the mock file for an actual call...
-
-    # if no password was defined in the settings, check if the environment has one:
-    if settings.PASSWORD is not None:
-        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
-    elif "OMERO_PASSWORD" not in os.environ:
-        pytest.skip("password for OMERO is required (via settings or environment)")
 
     args = BASE_ARGS.copy()
     args.append("--user")
@@ -55,10 +46,9 @@ def test_retrieve_children_root(
 
 
 @pytest.mark.online
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
 @patch("builtins.open", new_callable=mock_open, read_data=CONF)
-def test_retrieve_children_many(
-    mock_file, capsys, monkeypatch, json_is_equal, reach_tcp_or_skip, settings
-):
+def test_retrieve_children_many(mock_file, capsys, json_is_equal, settings):
     """Test "retrieveChildren" requesting various items as defined in test settings.
 
     Expected behavior is to print the defined OMERO trees, they are required to match
@@ -86,15 +76,7 @@ def test_retrieve_children_many(
     ...     ]
     ... }
     """
-    reach_tcp_or_skip(settings.HOSTNAME, settings.PORT)
-
     assert mock_file  # we don't need the mock file for an actual call...
-
-    # if no password was defined in the settings, check if the environment has one:
-    if settings.PASSWORD is not None:
-        monkeypatch.setenv("OMERO_PASSWORD", settings.PASSWORD)
-    elif "OMERO_PASSWORD" not in os.environ:
-        pytest.skip("password for OMERO is required (via settings or environment)")
 
     for current_config in settings.retrieveChildren:
         omero_id = current_config["omero_id"]
