@@ -126,7 +126,7 @@ def test_dry_run_to_omero(capsys, monkeypatch, cli_args):
 def test_wrong_parameter_order(capsys, monkeypatch, cli_args):
     """Test run_task() with a wrong order of the otherwise correct parameters.
 
-    Expected behavior is FIXME
+    Expected behavior is to print an error message and raise a SystemExit.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
