@@ -65,3 +65,49 @@ def test_unsupported_target(hrm_conf, tmp_path, settings, capsys, cli_args):
     captured = capsys.readouterr()
     print(captured.out)
     assert "only the upload to 'Dataset' objects is supported" in captured.out
+
+
+def _import_image(import_image, hrm_conf, user, expected_stdout, cli_args, capfd):
+    """Test the "HRMtoOMERO" action with a valid local file.
+
+    Expected behavior is to import the file, and to print a bunch of specific
+    messages to stderr.
+    """
+    fname = import_image["filename"]
+    target_id = import_image["target_id"]
+    args = cli_args(
+        "HRMtoOMERO",
+        hrm_conf=hrm_conf,
+        user=user,
+        action_args=[
+            "--dset",
+            target_id,
+            "--file",
+            fname,
+        ],
+    )
+
+    ret = cli.run_task(args)
+    assert ret is True
+
+    captured = capfd.readouterr().err
+    # print(f"import stdout: {captured.out}")
+    # print(f"import stderr: {captured.err}")
+
+    for pattern in expected_stdout:
+        assert pattern in captured
+
+
+@pytest.mark.online
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
+def test_upload_image(capfd, tmp_path, settings, hrm_conf, cli_args):
+    """Call `_import_image()` for each defined import test setting."""
+    for import_image in settings.import_image:
+        _import_image(
+            import_image,
+            hrm_conf=hrm_conf(tmp_path, CONF),
+            user=settings.USERNAME,
+            expected_stdout=settings.import_messages,
+            cli_args=cli_args,
+            capfd=capfd,
+        )
