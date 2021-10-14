@@ -42,23 +42,13 @@ def test_unsupported_target(omero_conn, settings):
         to_omero(omero_conn, target_id, fname)
 
 
-def _test_import_image(conn, import_image, capfd, logfile=""):
+def _test_import_image(conn, import_image, capfd, expected_stdout, logfile=""):
     """Test importing local files into OMERO and check its properties in OMERO.
 
     Expected behavior is to import the file, and to print a bunch of specific messages
     to stderr. The test tries to find back the imported object in OMERO and checks if
     the size and fileset count matches the ones defined in the test settings.
     """
-    expected_output_patterns = [
-        "Using import target: Dataset",
-        "FILESET_UPLOAD_PREPARATION",
-        "FILESET_UPLOAD_START",
-        "FILE_UPLOAD_STARTED",
-        "FILE_UPLOAD_COMPLETE",
-        "IMPORT_STARTED",
-        "PIXELDATA_PROCESSED",
-        "IMPORT_DONE",
-    ]
     fname = import_image["filename"]
     sha1sum = import_image["sha1sum"]
     target_id = import_image["target_id"]
@@ -76,7 +66,7 @@ def _test_import_image(conn, import_image, capfd, logfile=""):
         with open(logfile, "r", encoding="utf-8") as infile:
             captured = infile.read()
 
-    for pattern in expected_output_patterns:
+    for pattern in expected_stdout:
         assert pattern in captured
 
     ds_id = target_id.split(":")[-1]
@@ -92,7 +82,7 @@ def _test_import_image(conn, import_image, capfd, logfile=""):
 def test_import_image(omero_conn, settings, capfd):
     """Call `_test_import_image()` for each defined import test setting."""
     for import_image in settings.import_image:
-        _test_import_image(omero_conn, import_image, capfd)
+        _test_import_image(omero_conn, import_image, capfd, settings.import_messages)
 
 
 @pytest.mark.online
@@ -100,7 +90,9 @@ def test_import_image_log(omero_conn, settings, capfd, tmp_path):
     """Call `_test_import_image()` for one import setting using a log file."""
     import_image = settings.import_image[0]
     logfile = str(tmp_path / "omero-import-debug-log")
-    _test_import_image(omero_conn, import_image, capfd, logfile)
+    _test_import_image(
+        omero_conn, import_image, capfd, settings.import_messages, logfile
+    )
 
 
 @pytest.mark.online

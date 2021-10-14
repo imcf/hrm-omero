@@ -183,3 +183,14 @@ import_image = [
         "fset_size": 30438,
     }
 ]
+
+import_messages = [
+    "Using import target: Dataset",
+    "FILESET_UPLOAD_PREPARATION",
+    "FILESET_UPLOAD_START",
+    "FILE_UPLOAD_STARTED",
+    "FILE_UPLOAD_COMPLETE",
+    "IMPORT_STARTED",
+    "PIXELDATA_PROCESSED",
+    "IMPORT_DONE",
+]
