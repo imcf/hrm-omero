@@ -12,11 +12,12 @@ from hrm_omero import cli
 from settings.common import HOSTNAME  # pylint: disable-msg=wrong-import-order
 
 CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
+ACTION = "OMEROtoHRM"
 
 
 @pytest.mark.online
 @pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
-def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf):
+def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
     """Test the "OMEROtoHRM" action with a valid and accessible image ID.
 
     Expected behavior is to download the image and the corresponding thumbnail.
@@ -24,16 +25,17 @@ def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf):
     download_image = settings.download_image[0]
     dl_fname = download_image["filename"]
 
-    args = ["-vvvv"]
-    args.append("--conf")
-    args.append(hrm_conf(tmp_path, CONF))
-    args.append("--user")
-    args.append(settings.USERNAME)
-    args.append("OMEROtoHRM")
-    args.append("--imageid")
-    args.append(f'G:{download_image["gid"]}:{download_image["image_id"]}')
-    args.append("--dest")
-    args.append(tmp_path.as_posix())
+    args = cli_args(
+        action=ACTION,
+        action_args=[
+            "--imageid",
+            f'G:{download_image["gid"]}:{download_image["image_id"]}',
+            "--dest",
+            tmp_path.as_posix(),
+        ],
+        hrm_conf=hrm_conf(tmp_path, CONF),
+        user=settings.USERNAME,
+    )
 
     ret = cli.run_task(args)
     assert ret is True
