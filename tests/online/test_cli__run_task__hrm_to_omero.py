@@ -4,8 +4,6 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 `tests/resources/settings/` for a template.
 """
 
-import os
-
 import pytest
 from hrm_omero import cli
 
