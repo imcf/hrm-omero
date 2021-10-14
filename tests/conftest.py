@@ -147,3 +147,53 @@ def json_is_equal():
 def sha1():
     """Fixture to generate the SHA1 sum of a file."""
     return _sha1
+
+
+@pytest.fixture
+def cli_args():
+    """Construct the list of arguments required by `hrm_omero.cli.run_task()`.
+
+    Parameters
+    ----------
+    action : str
+        The *action* name.
+    action_args : list(str), optional
+        A list of additional arguments to be put after the action parameter.
+    hrm_conf : str, optional
+        Path to an `hrm.conf` configuration file. If skipped or empty the
+        default value `resources/hrm.conf` will be used.
+    user : str, optional
+        The user name to put as an argument for the `--user` parameter. If
+        skipped or empty the default value `pytest` will be used.
+    dry_run : bool, optional
+        Whether to add the `--dry-run` flag to the argument list as the second
+        argument, by default False.
+
+    Returns
+    -------
+    list(str)
+    """
+
+    def _cli_args(action, action_args=[], hrm_conf="", user="", dry_run=False):
+        if not hrm_conf:
+            hrm_conf = "resources/hrm.conf"
+        if not user:
+            user = "pytest"
+
+        base_args = [
+            "-vvvv",
+            "--conf",
+            hrm_conf,
+            "--user",
+            user,
+            action,
+        ]
+        if dry_run:
+            base_args.insert(1, "--dry-run")
+
+        args = base_args + action_args
+        print(f"{__name__}: assembled CLI args = {args}")
+
+        return args
+
+    return _cli_args

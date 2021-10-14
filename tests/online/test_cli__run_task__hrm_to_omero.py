@@ -14,34 +14,24 @@ from settings.common import HOSTNAME  # pylint: disable-msg=wrong-import-order
 CONF = f'OMERO_HOSTNAME="{HOSTNAME}"'
 
 
-def build_args(hrm_conf, tmp_path, settings, additional_args):
-    args = [
-        "-vvvv",
-        "--conf",
-        hrm_conf(tmp_path, CONF),
-        "--user",
-        settings.USERNAME,
-        "HRMtoOMERO",
-    ]
-
-    return args + additional_args
-
-
 @pytest.mark.online
 @pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
-def test_unsupported_formats(hrm_conf, tmp_path, settings, capsys):
+def test_unsupported_formats(hrm_conf, tmp_path, settings, capsys, cli_args):
     """Test attempting imports with unsupported file name suffixes.
 
     Expected behavior is to return False and print an error message.
     """
-    additional_args = [
-        "--dset",
-        settings.import_image[0]["target_id"],
-        "--file",
-        settings.import_image[0]["filename"] + ".h5",
-    ]
-    args = build_args(hrm_conf, tmp_path, settings, additional_args)
-    print(args)
+    args = cli_args(
+        "HRMtoOMERO",
+        [
+            "--dset",
+            settings.import_image[0]["target_id"],
+            "--file",
+            settings.import_image[0]["filename"] + ".h5",
+        ],
+        hrm_conf(tmp_path, CONF),
+        settings.USERNAME,
+    )
 
     ret = cli.run_task(args)
     assert ret is False
@@ -52,19 +42,22 @@ def test_unsupported_formats(hrm_conf, tmp_path, settings, capsys):
 
 @pytest.mark.online
 @pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
-def test_unsupported_target(hrm_conf, tmp_path, settings, capsys):
+def test_unsupported_target(hrm_conf, tmp_path, settings, capsys, cli_args):
     """Test attempting imports to an invalid target (only "Dataset" is allowed).
 
     Expected behavior is to return False and print an error message.
     """
-    additional_args = [
-        "--dset",
-        "G:7:Project:42",
-        "--file",
-        settings.import_image[0]["filename"],
-    ]
-    args = build_args(hrm_conf, tmp_path, settings, additional_args)
-    print(args)
+    args = cli_args(
+        "HRMtoOMERO",
+        [
+            "--dset",
+            "G:7:Project:42",
+            "--file",
+            settings.import_image[0]["filename"],
+        ],
+        hrm_conf(tmp_path, CONF),
+        settings.USERNAME,
+    )
 
     ret = cli.run_task(args)
     assert ret is False
