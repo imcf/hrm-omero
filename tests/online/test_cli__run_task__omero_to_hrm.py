@@ -52,3 +52,30 @@ def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
     captured = capsys.readouterr()
     assert "downloaded as" in captured.out
     assert "Thumbnail downloaded to" in captured.out
+
+
+@pytest.mark.online
+def test_download_dataset(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
+    """Test downloading a dataset (currently unsupported).
+
+    Expected behavior is to return False and print an error to stderr.
+    """
+
+    args = cli_args(
+        action=ACTION,
+        action_args=[
+            "--imageid",
+            "G:1:Dataset:1",
+            "--dest",
+            tmp_path.as_posix(),
+        ],
+        hrm_conf=hrm_conf(tmp_path, CONF),
+        user=settings.USERNAME,
+    )
+
+    ret = cli.run_task(args)
+    assert ret is False
+
+    captured = capsys.readouterr()
+    assert "only the download of 'Image' objects is supported" in captured.err
+    assert "An unforeseen error occured" in captured.err
