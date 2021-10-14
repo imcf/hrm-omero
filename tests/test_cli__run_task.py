@@ -5,12 +5,7 @@ import pytest
 from hrm_omero import cli
 
 
-# set the standard arguments for run_task() - note that for several tests we need a
-# valid configuration file to reach the relevant parts of the code:
-BASE_ARGS = ["-vvvv", "--conf", "resources/hrm.conf", "--user", "pytest"]
-
-
-def test_no_password(capsys, monkeypatch):
+def test_no_password(capsys, monkeypatch, cli_args):
     """Test run_task() without specifying a password.
 
     Expected behavior is to print a message to stderr and return False.
@@ -18,37 +13,36 @@ def test_no_password(capsys, monkeypatch):
     # make sure the environment has no "OMERO_PASSWORD"
     monkeypatch.delenv("OMERO_PASSWORD", raising=False)
 
-    args = BASE_ARGS.copy()
-    args.append("checkCredentials")
+    args = cli_args("checkCredentials")
     ret = cli.run_task(args)
     captured = capsys.readouterr()
     assert "no password given to connect to OMERO" in captured.err
     assert ret is False
 
 
-def test_no_action(capsys, monkeypatch):
+def test_no_action(capsys, monkeypatch, cli_args):
     """Test run_task() without specifying an action.
 
     Expected behavior is to print a message to stderr and return False.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    ret = cli.run_task(BASE_ARGS)
+    args = cli_args("NoAction")
+    args.pop(-1)  # remove the "NoAction" argument
+    ret = cli.run_task(args)
     captured = capsys.readouterr()
     assert "No valid action specified that should be performed" in captured.err
     assert ret is False
 
 
-def test_dry_run_check_credentials(capsys, monkeypatch):
+def test_dry_run_check_credentials(capsys, monkeypatch, cli_args):
     """Test run_task() with action "checkCredentials" in "dry-run" mode.
 
     Expected behavior is to print the function name to stdout and return True.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    args = BASE_ARGS.copy()
-    args.append("--dry-run")
-    args.append("checkCredentials")
+    args = cli_args("checkCredentials", dry_run=True)
     ret = cli.run_task(args)
     captured = capsys.readouterr()
     assert "dry-run, only showing action and parameters" in captured.out
@@ -56,19 +50,14 @@ def test_dry_run_check_credentials(capsys, monkeypatch):
     assert ret is True
 
 
-def test_dry_run_retrieve_children(capsys, monkeypatch):
+def test_dry_run_retrieve_children(capsys, monkeypatch, cli_args):
     """Test run_task() with action "retrieveChildren" in "dry-run" mode.
 
     Expected behavior is to print the function name and args to stdout and return True.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    args = BASE_ARGS.copy()
-    args.append("--dry-run")
-    # NOTE: the parameter order is important, see test_wrong_parameter_order() below!
-    args.append("retrieveChildren")
-    args.append("--id")
-    args.append("ROOT")
+    args = cli_args("retrieveChildren", ["--id", "ROOT"], dry_run=True)
     ret = cli.run_task(args)
     captured = capsys.readouterr()
     print(captured.out)
@@ -78,20 +67,24 @@ def test_dry_run_retrieve_children(capsys, monkeypatch):
     assert ret is True
 
 
-def test_dry_run_from_omero(capsys, monkeypatch):
+def test_dry_run_from_omero(capsys, monkeypatch, cli_args):
     """Test run_task() with action "OMEROtoHRM" in "dry-run" mode.
 
     Expected behavior is to print the function name and args to stdout and return True.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    args = BASE_ARGS.copy()
-    args.append("--dry-run")
-    args.append("OMEROtoHRM")
-    args.append("--imageid")
-    args.append("G:7:Image:42")
-    args.append("--dest")
-    args.append("/tmp/foo")
+    args = cli_args(
+        "OMEROtoHRM",
+        [
+            "--imageid",
+            "G:7:Image:42",
+            "--dest",
+            "/tmp/foo",
+        ],
+        dry_run=True,
+    )
+
     ret = cli.run_task(args)
     captured = capsys.readouterr()
     print(captured.out)
@@ -102,20 +95,24 @@ def test_dry_run_from_omero(capsys, monkeypatch):
     assert ret is True
 
 
-def test_dry_run_to_omero(capsys, monkeypatch):
+def test_dry_run_to_omero(capsys, monkeypatch, cli_args):
     """Test run_task() with action "HRMtoOMERO" in "dry-run" mode.
 
     Expected behavior is to print the function name and args to stdout and return True.
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    args = BASE_ARGS.copy()
-    args.append("--dry-run")
-    args.append("HRMtoOMERO")
-    args.append("--dset")
-    args.append("G:7:Dataset:23")
-    args.append("--file")
-    args.append("/tmp/foo")
+    args = cli_args(
+        "HRMtoOMERO",
+        [
+            "--dset",
+            "G:7:Dataset:23",
+            "--file",
+            "/tmp/foo",
+        ],
+        dry_run=True,
+    )
+
     ret = cli.run_task(args)
     captured = capsys.readouterr()
     print(captured.out)
@@ -126,21 +123,19 @@ def test_dry_run_to_omero(capsys, monkeypatch):
     assert ret is True
 
 
-def test_wrong_parameter_order(capsys, monkeypatch):
+def test_wrong_parameter_order(capsys, monkeypatch, cli_args):
     """Test run_task() with a wrong order of the otherwise correct parameters.
 
     Expected behavior is FIXME
     """
     monkeypatch.setenv("OMERO_PASSWORD", "non_empty_dummy_password_string")
 
-    args = BASE_ARGS.copy()
-    args.append("--dry-run")
     # the order is important here, trying to supply the action ("retrieveChildren") as
     # the last parameter will result in an error (as the "--id" parameter belongs to the
     # sub-parser that is only selected when the corresponding action keyword is found)
-    args.append("--id")
-    args.append("ROOT")
-    args.append("retrieveChildren")
+    args = cli_args("retrieveChildren", ["--id", "ROOT"], dry_run=True)
+    args.append(args.pop(-3))  # swap 3rd last element to the last position
+
     with pytest.raises(SystemExit):
         cli.run_task(args)
     captured = capsys.readouterr()
