@@ -7,7 +7,7 @@ from hrm_omero import cli
 
 # set the standard arguments for run_task() - note that for several tests we need a
 # valid configuration file to reach the relevant parts of the code:
-BASE_ARGS = ["--conf", "resources/hrm.conf", "--user", "pytest"]
+BASE_ARGS = ["-vvvv", "--conf", "resources/hrm.conf", "--user", "pytest"]
 
 
 def test_no_password(capsys, monkeypatch):
