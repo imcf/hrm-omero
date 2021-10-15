@@ -151,7 +151,7 @@ def fetch_thumbnail(conn, image_id, dest):
     return True
 
 
-def to_omero(conn, id_str, image_file, omero_logfile=""):
+def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
     """Upload an image into a specific dataset in OMERO.
 
     In case we know from the suffix that a given  format is not supported by OMERO, the
@@ -176,6 +176,9 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         If the parameter is non-empty the `--debug ALL` option will be added to the
         `omero` call with the output being placed in the specified file. If the
         parameter is omitted or empty, debug messages will be disabled.
+    _fetch_zip_only : bool, optional
+        Replaces all parameters to the import call by `--advanced-help`, which is
+        **intended for INTERNAL TESTING ONLY**. No actual import will be attempted!
 
     Returns
     -------
@@ -252,6 +255,12 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
     #### for ann_id in annotations:
     ####     import_args.extend(['--annotation_link', str(ann_id)])
     import_args.append(image_file)
+    if _fetch_zip_only:
+        # calling 'import --advanced-help' will trigger the download of OMERO.java.zip
+        # in case it is not yet present (the extract_image_id() call will then fail,
+        # resulting in the whole function returning "False")
+        printlog("WARNING", "As '_fetch_zip_only' is set NO IMPORT WILL BE ATTEMPTED!")
+        import_args = ["import", "--advanced-help"]
     log.debug(f"import_args: {import_args}")
     try:
         cli.invoke(import_args, strict=True)
