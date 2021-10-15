@@ -257,6 +257,17 @@ def to_omero(conn, id_str, image_file, omero_logfile=""):
         cli.invoke(import_args, strict=True)
         imported_id = extract_image_id(cap_stdout)
         log.success(f"Imported OMERO image ID: {imported_id}")
+    except PermissionError as err:
+        printlog("ERROR", err)
+        printlog(
+            "ERROR",
+            (
+                "Please make sure to read the documentation about the 'OMERO_USERDIR' "
+                "environment variable and also check if the file to be imported has "
+                "appropriate permissions!"
+            ),
+        )
+        return False
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"ERROR: uploading '{image_file}' to {id_str} failed!")
         printlog("ERROR", f"OMERO error message: >>>{err}<<<")
