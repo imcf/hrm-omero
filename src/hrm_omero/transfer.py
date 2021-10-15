@@ -201,7 +201,9 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
 
     _, gid, obj_type, dset_id = id_str.split(":")
     if obj_type != "Dataset":
-        raise ValueError("Currently only the upload to 'Dataset' objects is supported!")
+        msg = "Currently only the upload to 'Dataset' objects is supported!"
+        printlog("ERROR", msg)
+        raise ValueError(msg)
 
     # set the group for this import session:
     conn.setGroupForSession(gid)
