@@ -122,3 +122,35 @@ def test_invalid_target(omero_conn, settings, capfd):
     captured = capfd.readouterr()
     for pattern in expected_output_patterns:
         assert pattern in captured.err
+
+
+@pytest.mark.online
+def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
+    """Call `to_omero()` with env variable `OMERO_USERDIR` set.
+
+    With the environment variable set to a writable location the expected
+    behavior is to download and extract "OMERO.java.zip" into a folder under
+    `cache/jars/` inside that location.
+
+    The test is requesting an import with a non-existing file, so the actual
+    call should return False and the only side-effect expected is the creation
+    of the described hierarchy with the files extracted from the ZIP.
+    """
+    import_image = settings.import_image[0]
+    fname = tmp_path / "non-existing-file"
+    target_id = import_image["target_id"]
+
+    # make sure the file doesn't exist as we don't want to trigger an actual import:
+    assert fname.exists() is False
+
+    monkeypatch.setenv("OMERO_USERDIR", tmp_path.as_posix())
+    cache_path = tmp_path / "cache" / "jars"
+    assert cache_path.exists() is False
+
+    ret = to_omero(omero_conn, target_id, fname.as_posix())
+    assert ret is False
+
+    assert cache_path.exists() is True
+
+    omero_java = cache_path.glob("OMERO.java-*-ice*")
+    assert len(list(omero_java)) == 1
