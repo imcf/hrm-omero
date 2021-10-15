@@ -11,6 +11,7 @@ __pycache__/
 *.code-workspace
 /.coverage
 /htmlcov/
+/requests-cache/
 
 # connection details for testing
 /tests/online/settings/site_specific.py

@@ -5,8 +5,10 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 """
 
 import os
+from pathlib import Path
 
 import pytest
+import requests_cache
 from hrm_omero.omero import find_recently_imported
 from hrm_omero.transfer import to_omero
 
@@ -132,28 +134,34 @@ def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
     behavior is to download and extract "OMERO.java.zip" into a folder under
     `cache/jars/` inside that location.
 
-    The test is requesting an import with a non-existing file, so the actual
-    call should return False and the only side-effect expected is the creation
-    of the described hierarchy with the files extracted from the ZIP.
+    The call to `transfer.to_omero()` has the `_fetch_zip_only` flag set so it
+    will return False and the only side-effect expected is the creation of the
+    described hierarchy with the files extracted from the ZIP.
     """
-    import_image = settings.import_image[0]
-    fname = tmp_path / "non-existing-file"
-    target_id = import_image["target_id"]
+    here = Path("requests-cache")
+    cache = requests_cache.backends.filesystem.FileCache(here.as_posix())
+    requests_cache.install_cache(backend=cache)
 
-    # make sure the file doesn't exist as we don't want to trigger an actual import:
-    assert fname.exists() is False
+    import_image = settings.import_image[0]
+    target_id = import_image["target_id"]
 
     monkeypatch.setenv("OMERO_USERDIR", tmp_path.as_posix())
     cache_path = tmp_path / "cache" / "jars"
     assert cache_path.exists() is False
 
-    ret = to_omero(omero_conn, target_id, fname.as_posix())
-    assert ret is False
+    try:
+        ret = to_omero(omero_conn, target_id, "//", _fetch_zip_only=True)
+        assert ret is False
+    finally:
+        requests_cache.uninstall_cache()
 
     assert cache_path.exists() is True
 
-    omero_java = cache_path.glob("OMERO.java-*-ice*")
-    assert len(list(omero_java)) == 1
+    omero_java_dir = list(cache_path.glob("OMERO.java-*-ice*"))
+    assert len(omero_java_dir) == 1
+    omero_java_files = (omero_java_dir[0] / "libs").glob("*")
+    # version 5.6.3 contains 189 files, let's just check if there are many:
+    assert len(list(omero_java_files)) > 150
 
 
 @pytest.mark.online
