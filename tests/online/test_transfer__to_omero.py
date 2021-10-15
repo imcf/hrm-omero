@@ -5,10 +5,8 @@ These tests require `site_specific.py` to be found in `tests/online/settings`, s
 """
 
 import os
-from pathlib import Path
 
 import pytest
-import requests_cache
 from hrm_omero.omero import find_recently_imported
 from hrm_omero.transfer import to_omero
 
@@ -127,6 +125,7 @@ def test_invalid_target(omero_conn, settings, capfd):
 
 
 @pytest.mark.online
+@pytest.mark.usefixtures("req_cache")
 def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
     """Call `to_omero()` with env variable `OMERO_USERDIR` set.
 
@@ -138,10 +137,6 @@ def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
     will return False and the only side-effect expected is the creation of the
     described hierarchy with the files extracted from the ZIP.
     """
-    here = Path("requests-cache")
-    cache = requests_cache.backends.filesystem.FileCache(here.as_posix())
-    requests_cache.install_cache(backend=cache)
-
     import_image = settings.import_image[0]
     target_id = import_image["target_id"]
 
@@ -149,11 +144,8 @@ def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
     cache_path = tmp_path / "cache" / "jars"
     assert cache_path.exists() is False
 
-    try:
-        ret = to_omero(omero_conn, target_id, "//", _fetch_zip_only=True)
-        assert ret is False
-    finally:
-        requests_cache.uninstall_cache()
+    ret = to_omero(omero_conn, target_id, "//", _fetch_zip_only=True)
+    assert ret is False
 
     assert cache_path.exists() is True
 
@@ -165,6 +157,7 @@ def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
 
 
 @pytest.mark.online
+@pytest.mark.usefixtures("req_cache")
 def test_omerouserdir_nonwritable(omero_conn, settings, monkeypatch, tmp_path, caplog):
     """Call `to_omero()` with `OMERO_USERDIR` set to a non-writable location.
 

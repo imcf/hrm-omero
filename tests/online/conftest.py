@@ -3,6 +3,9 @@
 import os
 import socket
 
+from pathlib import Path
+import requests_cache
+
 import omero.gateway
 import pytest
 from _pytest.logging import caplog as _caplog  # pylint: disable-msg=unused-import
@@ -26,6 +29,29 @@ def _settings():
 def settings():
     """Load online test settings and return them."""
     return _settings()
+
+
+### requests caching
+
+
+@pytest.fixture
+def req_cache():
+    """Wrap a test with a 'requests' cache using a local directory.
+
+    The fixture sets up the cache using a local directory and makes sure the
+    caching mechanism gets disabled after the test function has completed.
+    """
+    print("Preparing REQUESTS-CACHE...")
+    here = Path("requests-cache")
+    cache = requests_cache.backends.filesystem.FileCache(here.as_posix())
+    requests_cache.install_cache(backend=cache)
+    print("REQUESTS-CACHE enabled.")
+
+    yield
+
+    print("Disabling REQUESTS-CACHE...")
+    requests_cache.uninstall_cache()
+    print("REQUESTS-CACHE disabled.")
 
 
 ### HRM related fixtures
