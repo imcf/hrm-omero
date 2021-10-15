@@ -154,3 +154,34 @@ def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
 
     omero_java = cache_path.glob("OMERO.java-*-ice*")
     assert len(list(omero_java)) == 1
+
+
+@pytest.mark.online
+def test_omerouserdir_nonwritable(omero_conn, settings, monkeypatch, tmp_path, caplog):
+    """Call `to_omero()` with `OMERO_USERDIR` set to a non-writable location.
+
+    Expected behavior is that the call to `omero.cli.CLI.invoke` will attempt to
+    download "OMERO.java.zip" to the non-writable location and therefore fail
+    with a "Permission denied" error raising a `PermissionError`.
+    """
+    import_image = settings.import_image[0]
+    fname = tmp_path / "non-existing-file"
+    target_id = import_image["target_id"]
+
+    # make sure the file doesn't exist as we don't want to trigger an actual import:
+    assert fname.exists() is False
+
+    # remove all permissions from tmp_dir but remember them for later:
+    stat = tmp_path.stat()
+    tmp_path.chmod(0o000)
+
+    monkeypatch.setenv("OMERO_USERDIR", tmp_path.as_posix())
+
+    ret = to_omero(omero_conn, target_id, fname.as_posix())
+    assert ret is False
+
+    # make sure the temp dir can be cleaned up again:
+    tmp_path.chmod(stat.st_mode)
+
+    assert "Permission denied" in caplog.text
+    assert "documentation about the 'OMERO_USERDIR'" in caplog.text
