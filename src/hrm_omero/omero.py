@@ -154,7 +154,7 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
 
 
 @connect_and_set_group
-def new_project(conn, id_str, proj_name):
+def new_project(conn, id_str, proj_name):  # pragma: no cover
     """Create a new Project in OMERO.
 
     Parameters
@@ -170,7 +170,7 @@ def new_project(conn, id_str, proj_name):
 
 
 @connect_and_set_group
-def new_dataset(conn, id_str, ds_name):
+def new_dataset(conn, id_str, ds_name):  # pragma: no cover
     """Create a new Project in OMERO.
 
     Parameters
