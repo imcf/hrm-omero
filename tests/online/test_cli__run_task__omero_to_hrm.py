@@ -55,6 +55,7 @@ def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
 
 
 @pytest.mark.online
+@pytest.mark.usefixtures("omeropw", "reach_tcp_or_skip")
 def test_download_dataset(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
     """Test downloading a dataset (currently unsupported).
 
