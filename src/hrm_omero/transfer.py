@@ -270,6 +270,8 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
         log.success(f"Imported OMERO image ID: {imported_id}")
     except PermissionError as err:
         printlog("ERROR", err)
+        omero_userdir = os.environ.get("OMERO_USERDIR", "<not-set>")
+        printlog("ERROR", f"Current OMERO_USERDIR value: {omero_userdir}")
         printlog(
             "ERROR",
             (

@@ -185,4 +185,5 @@ def test_omerouserdir_nonwritable(omero_conn, settings, monkeypatch, tmp_path, c
     tmp_path.chmod(stat.st_mode)
 
     assert "Permission denied" in caplog.text
+    assert f"Current OMERO_USERDIR value: {tmp_path.as_posix()}" in caplog.text
     assert "documentation about the 'OMERO_USERDIR'" in caplog.text
