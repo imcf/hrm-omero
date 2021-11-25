@@ -47,7 +47,7 @@ eval "$(pyenv init -)"
 pyenv install 3.6.15  # takes a bit (compiling...)
 
 # define the target path for the virtual environment:
-$HRM_OMERO_VENV="/opt/venvs/hrm-omero"
+HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
 # create a bare, stand-alone Python 3.6 virtual environment
 ~/.pyenv/versions/3.6.15/bin/python -m venv --copies $HRM_OMERO_VENV
