@@ -17,10 +17,11 @@ pip install hrm-omero
 
 ### CentOS 6
 
-[CentOS 6][co6] is EOL since 2020-11-30, so you should really consider upgrading to a newer
-release. However, we know that sometimes this is not easily doable due to dependencies,
-hardware support or whatever reason - so here are instructions to make the connector
-work on that old distribution.
+**NOTE:** [CentOS 6][co6] is EOL since 2020-11-30, please consider upgrading!
+
+However, we know that sometimes this is not easily doable due to dependencies, hardware
+support or whatever reason - so here are instructions to make the connector work on that
+old distribution.
 
 It's strongly recommended to use [pyenv][3] for installing *Python 3.6*, which is the
 absolute minimum for using the HRM-OMERO connector (or its actual dependencies, to be
