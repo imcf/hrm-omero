@@ -49,7 +49,7 @@ pyenv install 3.6.15  # takes a bit (compiling...)
 # define the target path for the virtual environment:
 HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
-# create a bare, stand-alone Python 3.6 virtual environment
+# create a bare, stand-alone Python 3.6 virtual environment:
 ~/.pyenv/versions/3.6.15/bin/python -m venv --copies $HRM_OMERO_VENV
 
 # now you can install the connector into this virtual environment - please note that the
