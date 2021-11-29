@@ -7,53 +7,50 @@ Its purpose is to simplify the data transfer by allowing raw images to be downlo
 from OMERO as well as uploading deconvolution results back to OMERO directly from within
 the HRM web interface.
 
-## Installation
+## Setup
 
-### Distributions that include Python 3.6 or newer (e.g. Ubuntu 20.04)
+### Installing requirements
 
-```bash
-pip install hrm-omero
-```
-
-### CentOS 6 / RHEL 6
-
-**NOTE:** they are EOL since 2020-11-30, please consider upgrading!
-
-However, we know that sometimes this is not easily doable due to dependencies, hardware
-support or whatever reason - so here are instructions to make the connector work on that
-old distribution.
-
-It's strongly recommended to use [pyenv][3] for installing *Python 3.6*, which is the
-absolute minimum for using the HRM-OMERO connector (or its actual dependencies, to be
-fully correct). In case you don't want *pyenv* to mess with your system setup, you can
-simply ask it to install that version somewhere and then only create a *virtual
-environment* from it using the `--copies` flag - this will result in a standalone
-setup that won't affect anything else on the system.
+#### CentOS / RHEL 7 and 8
 
 ```bash
 # install the build-time requirements for Python 3.6 and Java 1.8 for Bio-Formats
-sudo yum install openssl-devel bzip2-devel readline-devel gcc-c++ java-1.8.0-openjdk
-
-# get pyenv and put it into your home directory or wherever you prefer it to be
-git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-
-# activate pyenv *FOR THIS SHELL ONLY* (needs to be done whenever you want to use it)
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-
-# ask pyenv to install Python 3.6.15 (will end up in "~/.pyenv/versions/3.6.15/")
-pyenv install 3.6.15  # takes a bit (compiling...)
+sudo yum install \
+    python36 \
+    python36-devel \
+    openssl-devel \
+    bzip2-devel \
+    readline-devel \
+    gcc-c++ \
+    java-1.8.0-openjdk
 
 # define the target path for the virtual environment:
 HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
-# create a bare, stand-alone Python 3.6 virtual environment:
-~/.pyenv/versions/3.6.15/bin/python -m venv --copies $HRM_OMERO_VENV
+# create a Python 3.6 virtual environment:
+python3 -m venv $HRM_OMERO_VENV
+```
 
-# now you can install the connector into this virtual environment - please note that the
-# installation takes quite a while (~15min) as it needs to build the ZeroC Ice bindings
+#### Ubuntu 20.04
+
+```bash
+# FIXME: check build-time requirements and update here!
+
+# define the target path for the virtual environment:
+HRM_OMERO_VENV="/opt/venvs/hrm-omero"
+
+# create a Python 3.6 virtual environment:
+python -m venv $HRM_OMERO_VENV
+```
+
+### Installing the HRM-OMERO package
+
+```bash
+# upgrade pip, install wheel:
+$HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
+
+# install the connector - please note that it takes quite a while (~15min) as it needs
+# to build (compile) the ZeroC Ice bindings:
 $HRM_OMERO_VENV/bin/pip install hrm-omero
 
 # from now on you can simply call the connector using its full path, there is no need
