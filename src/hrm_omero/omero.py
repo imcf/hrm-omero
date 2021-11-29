@@ -3,9 +3,10 @@
 from datetime import datetime, timedelta
 
 import yaml
-from loguru import logger as log
-import omero.gateway
 from Ice import ConnectionLostException  # pylint: disable-msg=no-name-in-module
+from loguru import logger as log
+
+import omero.gateway
 
 from .decorators import connect_and_set_group
 from .misc import printlog
