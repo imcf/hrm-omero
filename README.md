@@ -15,9 +15,9 @@ the HRM web interface.
 pip install hrm-omero
 ```
 
-### CentOS 6
+### CentOS 6 / RHEL 6
 
-**NOTE:** [CentOS 6][co6] is EOL since 2020-11-30, please consider upgrading!
+**NOTE:** they are EOL since 2020-11-30, please consider upgrading!
 
 However, we know that sometimes this is not easily doable due to dependencies, hardware
 support or whatever reason - so here are instructions to make the connector work on that
@@ -167,4 +167,3 @@ ome-hrm \
 [1]: https://huygens-rm.org/
 [2]: https://www.openmicroscopy.org/omero/
 [3]: https://github.com/pyenv/pyenv
-[co6]: https://wiki.centos.org/About/Product
