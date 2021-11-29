@@ -258,7 +258,7 @@ def run_task(args):
     # while being deprecated an explicitly specified password still has priority:
     if args.password:  # pragma: no cover
         passwd = args.password
-        printlog("WARNING", "Using the '--password' parameter is deprecated!")
+        log.warning("Using the '--password' parameter is deprecated!")
     if not passwd:
         printlog("ERROR", "ERROR: no password given to connect to OMERO!")
         return False
