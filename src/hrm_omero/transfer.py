@@ -142,7 +142,10 @@ def fetch_thumbnail(conn, image_id, dest):
     log.trace(f"len(image_data)={len(image_data)}")
     thumbnail = Image.open(BytesIO(image_data))
     try:
-        os.mkdir(target_dir)
+        target_dir.mkdir(parents=True, exist_ok=True)
+        # for an unkown reason using mode=(S_IRWXU | S_IRWXG) on the `mkdir()` call
+        # doesn't seem to work, so we have to add group-write in a second step:
+        target_dir.chmod(target_dir.stat().st_mode | stat.S_IWGRP)
         thumbnail.save(target.as_posix(), format="jpeg")
         printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
         target.chmod(target.stat().st_mode | stat.S_IWGRP)
