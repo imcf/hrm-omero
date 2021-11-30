@@ -4,6 +4,7 @@ import os
 import tempfile
 from io import BytesIO
 from pathlib import Path
+import stat
 
 from loguru import logger as log
 from PIL import Image
@@ -134,7 +135,7 @@ def fetch_thumbnail(conn, image_id, dest):
 
     base_dir, fname = os.path.split(dest)
     target_dir = Path(base_dir) / "hrm_previews"
-    target = os.path.join(target_dir, f"{fname}.preview_xy.jpg")
+    target = Path(target_dir) / f"{fname}.preview_xy.jpg"
 
     image_obj = conn.getObject("Image", image_id)
     image_data = image_obj.getThumbnail()
@@ -142,8 +143,10 @@ def fetch_thumbnail(conn, image_id, dest):
     thumbnail = Image.open(BytesIO(image_data))
     try:
         os.mkdir(target_dir)
-        thumbnail.save(target, format="jpeg")
+        thumbnail.save(target.as_posix(), format="jpeg")
         printlog("SUCCESS", f"Thumbnail downloaded to '{target}'.")
+        target.chmod(target.stat().st_mode | stat.S_IWGRP)
+        log.success(f"Added group-write permissions to '{target}'.")
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"ERROR downloading thumbnail to '{target}': {err}")
         return False
