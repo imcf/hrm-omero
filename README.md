@@ -65,6 +65,14 @@ ln -s "$HRM_OMERO_VENV/bin/ome-hrm" "ome_hrm.py"
 
 ## Debugging
 
+The connector will try to place log messages in a file in the location specified as
+`$HRM_LOG` in the HRM configuration file **unless** a configuration option named
+`$OMERO_CONNECTOR_LOGFILE_DISABLED` is present and non-empty. In a standard setup this
+will result in the log file being `/var/log/hrm/omero-connector.log`.
+
+In addtion, log messages produced by the connector when called by HRM will be sent to
+`stderr`, which usually means they will end up in the web server's *error log*.
+
 By default the connector will be rather silent as otherwise the log files will be
 cluttered up quite a bit on a production system. However, it is possible to increase the
 log level by specifying `-v`, `-vv` and so on.
@@ -74,9 +82,7 @@ the default) it's also possible to set the verbosity level by adjusting the
 `OMERO_CONNECTOR_LOGLEVEL` in `/etc/hrm.conf`.
 
 Valid settings are `"SUCCESS"`, `"INFO"`, `"DEBUG"` and `"TRACE"`. If the option is
-commented out in the configuration file, the level will be set to `WARNING`. Log
-messages produced by the connector when called by HRM will usually end up in the web
-server's error log (as they go to `stderr`).
+commented out in the configuration file, the level will be set to `WARNING`.
 
 ## Example Usage
 

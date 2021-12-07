@@ -218,6 +218,38 @@ def verbosity_to_loglevel(verbosity):
     return log_level
 
 
+def logger_add_file_sink(hrm_config, target=""):
+    """Helper to add a file sink to the logger unless disabled in the config file.
+
+    By default logging messages from the connector into a separate file is desired, so
+    this function will try to add a file sink by default. Only if the HRM configuration
+    file explicitly asks for no log file to be created it will skip this step.
+
+    Parameters
+    ----------
+    hrm_config : dict
+        A parsed HRM configuration file as returned by `hrm_omero.hrm.parse_config()`.
+    target : str, optional
+        The path for the log file to be used. If empty (or skipped) the default
+        `$HRM_LOG/omero-connector.log` will be used, falling back to
+        `HRM_LOG="/var/log/hrm"` in case `$HRM_LOG` is not set in the hrm configuration.
+    """
+    disable_file_logging = hrm_config.get("OMERO_CONNECTOR_LOGFILE_DISABLED", "")
+    if disable_file_logging:
+        return
+
+    if not target:
+        log_base = hrm_config.get("HRM_LOG", "/var/log/hrm")
+        target = f"{log_base}/omero-connector.log"
+
+    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL", "")
+    try:
+        log.add(target, level=log_level)
+        log.trace(f"Added file sink for logging: {target}.")
+    except Exception as err:  # pylint: disable-msg=broad-except
+        log.error(f"Adding a file sink for logging failed: {err}")
+
+
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
     argparser = arguments_parser()
@@ -243,6 +275,8 @@ def run_task(args):
         log.add(sys.stderr, level=log_level)
         log.success(f"Log level set from config file: {log_level}")
 
+    logger_add_file_sink(hrm_config)
+
     # NOTE: reading the OMERO password from an environment variable instead of an
     # argument supplied on the command line improves handling of this sensitive data as
     # the value is *NOT* immediately revealed to anyone with shell access by simply
@@ -259,19 +293,24 @@ def run_task(args):
     if args.password:  # pragma: no cover
         passwd = args.password
         log.warning("Using the '--password' parameter is deprecated!")
+    else:
+        log.debug("Using password from environment.")
     if not passwd:
         printlog("ERROR", "ERROR: no password given to connect to OMERO!")
         return False
 
     if args.action == "checkCredentials":
+        log.trace("checkCredentials")
         perform_action = _omero.check_credentials
         kwargs = {}
 
     elif args.action == "retrieveChildren":
+        log.trace("retrieveChildren")
         perform_action = formatting.print_children_json
         kwargs = {"omero_id": OmeroId(args.id)}
 
     elif args.action == "OMEROtoHRM":
+        log.trace("OMEROtoHRM")
         perform_action = transfer.from_omero
         kwargs = {
             "id_str": args.imageid,
@@ -279,6 +318,7 @@ def run_task(args):
         }
 
     elif args.action == "HRMtoOMERO":
+        log.trace("HRMtoOMERO")
         perform_action = transfer.to_omero
         kwargs = {
             "id_str": args.dset,

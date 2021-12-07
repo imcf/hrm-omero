@@ -11,6 +11,9 @@
   stack trace in case an uncaught exception is raised.
 * Log level of the HRM-OMERO connector itself can now be set through the configuration
   option `OMERO_CONNECTOR_LOGLEVEL` in the HRM config file.
+* Log messages of the connector will also be placed in a separate log file in the
+  default location defined via `HRM_LOG` in the HRM config file. This can be disabled by
+  setting `OMERO_CONNECTOR_LOGFILE_DISABLED=true`.
 * Debug logging for the OMERO *import call* can now be requested be setting the
   configuration option `OMERO_DEBUG_LOG` in the HRM config file.
 * `hrm_omero.hrm.parse_summary()` has been added to provide a function for parsing the

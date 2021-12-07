@@ -68,9 +68,9 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [x] use "key-value pairs" for the HRM job parameter summaries
 - [x] trees for different groups
   - [x] (REJECTED) requesting groups through a commandline option
-- [ ] logging
+- [x] logging
   - [x] proper logging ([loguru][d3])
-  - [ ] separate logfile for the connector
+  - [x] separate logfile for the connector
   - [x] adjust log verbosity through a parameter
   - [x] adjust log verbosity through the configuration file
 - [x] allow debug logging of the "omero import" call
