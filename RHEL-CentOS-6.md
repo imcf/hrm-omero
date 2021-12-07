@@ -6,7 +6,7 @@ As we know that sometimes upgrading this is not easily doable due to dependencie
 hardware support or whatever reason - so here are instructions to make the connector
 work on that old distribution.
 
-We recommend to use [pyenv][3] for installing *Python 3.6*. In case you don't want
+We recommend to use [pyenv] for installing *Python 3.6*. In case you don't want
 *pyenv* to mess with your system setup, you can simply ask it to install that version
 somewhere and then only create a *virtual environment* from it using the `--copies`
 flag - this will result in a standalone setup not affecting anything else on the system.
@@ -35,3 +35,5 @@ HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 ```
 
 From here on follow the generic installation instructions.
+
+[pyenv]: https://github.com/pyenv/pyenv
