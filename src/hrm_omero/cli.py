@@ -269,7 +269,7 @@ def run_task(args):
     port = hrm_config.get("OMERO_PORT", 4064)
     omero_logfile = hrm_config.get("OMERO_DEBUG_LOG", "")
 
-    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL", "")
+    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL")
     if log_level:
         log.remove()
         log.add(sys.stderr, level=log_level)
