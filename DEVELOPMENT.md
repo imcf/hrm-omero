@@ -81,6 +81,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [ ] add command line action to create new projects and datasets in OMERO
 - [x] lift assumption that datasets are always members of a project in OMERO
 - [x] create target directory for thumbnails in case it doesn't exist
+- [ ] create documentation on the `OMERO_USERDIR` configuration
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
