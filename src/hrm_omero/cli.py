@@ -250,6 +250,26 @@ def logger_add_file_sink(hrm_config, target=""):
         log.error(f"Adding a file sink for logging failed: {err}")
 
 
+def set_omero_userdir(hrm_config):
+    """Set the OMERO_USERDIR environment variable if defined in the config.
+
+    This affects where the OME libraries will try to place stuff (like the OMERO server
+    zip file) instead of simply trying to dump it into the current user's `$HOME`
+    directory which will likely fail if called from the HRM web interface as the user
+    usually will be the web server system account and that one doesn't have write
+    permissions for its home directory on properly configured systems.
+
+    Parameters
+    ----------
+    hrm_config : dict
+        A parsed HRM configuration file as returned by `hrm_omero.hrm.parse_config()`.
+    """
+    omero_userdir = hrm_config.get("OMERO_USERDIR")
+    if omero_userdir:
+        log.debug(f"Setting 'OMERO_USERDIR=\"{omero_userdir}\"'")
+        os.environ["OMERO_USERDIR"] = omero_userdir
+
+
 def run_task(args):
     """Parse commandline arguments and initiate the requested tasks."""
     argparser = arguments_parser()
@@ -276,6 +296,8 @@ def run_task(args):
         log.success(f"Log level set from config file: {log_level}")
 
     logger_add_file_sink(hrm_config)
+
+    set_omero_userdir(hrm_config)
 
     # NOTE: reading the OMERO password from an environment variable instead of an
     # argument supplied on the command line improves handling of this sensitive data as
