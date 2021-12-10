@@ -63,6 +63,19 @@ mv "ome_hrm.py" "__old__ome_hrm.py"
 ln -s "$HRM_OMERO_VENV/bin/ome-hrm" "ome_hrm.py"
 ```
 
+### Configuration
+
+Add the following lines to `/etc/hrm.conf` and fill in the desired values:
+
+```bash
+# Interaction with OMERO (if switched on in hrm/config).
+OMERO_HOSTNAME="omero.example.xy"
+# OMERO_PORT="4064"
+OMERO_CONNECTOR_LOGLEVEL="DEBUG"
+# OMERO_CONNECTOR_LOGFILE_DISABLED="true"
+OMERO_USERDIR="/var/cache/omero"
+```
+
 ## Debugging
 
 The connector will try to place log messages in a file in the location specified as
