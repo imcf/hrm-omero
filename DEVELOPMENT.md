@@ -82,6 +82,8 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [x] lift assumption that datasets are always members of a project in OMERO
 - [x] create target directory for thumbnails in case it doesn't exist
 - [ ] create documentation on the `OMERO_USERDIR` configuration
+- [ ] try to catch "assert failed" errors when uploading data to OMERO, this usually
+  indicates that the file / fileset was refused by Bio-Formats
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
