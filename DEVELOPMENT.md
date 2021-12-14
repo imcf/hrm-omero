@@ -50,9 +50,19 @@ tons of failed test results).
 
 ### Prepare an OMERO instance for tests
 
-See the example script in `resources/scripts/prepare-omero-for-testing.sh` on how to set
-up an OMERO instance so it can be used with the `--online` tests. Note that currently
-the settings file will still need to be adjusted for *user* and *object IDs*!
+It is recommended to test against an isolated OMERO instance to avoid messing up any
+production data. The script in `resources/omero-recipes/setup-ubuntu-20-04.sh` can be
+used to install OMERO quickly on Ubuntu 20.04. A reasonable approach would be this:
+
+- Create a VM with a basic Ubuntu 20.04 installation.
+- Copy the OMERO-setup-script into the VM.
+- Run the setup script *from within* the VM.
+
+After that you can use the preparation script
+`resources/scripts/prepare-omero-for-testing.sh` to create the required groups, users,
+projects, ... in that OMERO instance. Please note that the preparation script is meant
+to be run **from the HRM-OMERO development environment** (i.e. not from within your
+shiny new OMERO-VM)!
 
 ## Generating Documentation
 
