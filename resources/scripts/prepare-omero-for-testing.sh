@@ -87,6 +87,20 @@ function prepare_omero_admin_connection() {
 
 ###############################################################################
 
+cat - <<EOF
+
+    ***************************************************************************
+    **                              WARNING                                  **
+    ***************************************************************************
+    **  NEVER run this script against a PRODUCTION server, this is purely    **
+    **  meant to set up a defined environment for testing the HRM-OMERO      **
+    **  connector against an actual OMERO (e.g. in a development container)  **
+    ***************************************************************************
+
+    Press <Enter> to continue or <Ctrl>+<C> to abort!
+EOF
+read
+
 GIDCOUNT=0
 UIDCOUNT=0
 
