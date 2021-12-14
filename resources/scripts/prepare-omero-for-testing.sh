@@ -36,39 +36,39 @@ omero user add "hrm-test-02" Test-02 HRM-OMERO --userpassword "$U2_PW" --group-i
 UID_1=5810
 UID_2=5811
 
-# add the users to the second group:
+echo "Adding the users to the second group..."
 omero group adduser --id "$GID_2" --user-id "$UID_1" --quiet
 omero group adduser --id "$GID_2" --user-id "$UID_2" --quiet
 
-# reconnect using the newly created user:
+echo "Reconnecting using the newly created user..."
 omero logout
 omero login -u "hrm-test-01" -w "$U1_PW"
 
-# create a project-dataset-tree:
+echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='Proj01' --quiet)
 dataset=$(omero obj new Dataset name='Proj01--Dset01' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "#ts# (\"U1__PID_1\", \"$project\"),"
 echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
 
-# import a test image there:
+echo "Importing a test image there..."
 image=$(omero import -d "$dataset" resources/images/3ch-dapi-pha-atub.ics --quiet)
 echo "#ts# (\"U1__IID_1\", \"$image\"),"
 
-# create another dataset in that project that will be used as an upload target:
+echo "Creating another dataset in that project to be used as an upload target..."
 dataset=$(omero obj new Dataset name='upload-target' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "#ts# (\"U1__PID_1__DSID_2\", \"$dataset\"),"
 
-# create a dataset without a project (top-level):
+echo "Creating a dataset without a project (top-level)..."
 dataset=$(omero obj new Dataset name='NoProj--Dset01' --quiet)
 echo "#ts# (\"U1__DSID_1\", \"$dataset\"),"
 
-# reconnect using the second user:
+echo "Reconnecting using the second user..."
 omero logout
 omero login -u "hrm-test-02" -w "$U2_PW"
 
-# create a project-dataset-tree:
+echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='U2-Proj01' --quiet)
 dataset=$(omero obj new Dataset name='U2-Proj01--Dset01' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
@@ -79,7 +79,7 @@ dataset=$(omero obj new Dataset name='U2-Proj01--Dset02' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "#ts# (\"U2__PID_1__DSID_2\", \"$dataset\"),"
 
-# create some datasets without a project (top-level):
+echo "Creating some datasets without a project (top-level)..."
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset01' --quiet)
 echo "#ts# (\"U2__DSID_1\", \"$dataset\"),"
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset02' --quiet)
