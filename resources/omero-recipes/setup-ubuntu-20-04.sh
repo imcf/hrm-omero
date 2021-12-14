@@ -188,4 +188,7 @@ EOF
 
 systemctl daemon-reload
 
+echo "Installation complete, starting OMERO service..."
 systemctl start omero.service
+
+echo "Done."
