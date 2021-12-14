@@ -105,6 +105,7 @@ GIDCOUNT=0
 UIDCOUNT=0
 
 SEEDS=${1:-$(mktemp --suffix=.inc.sh)}
+SUMMARY=${2:-$(mktemp --suffix=.log)}
 
 echo "Using seeds file '$SEEDS' for reading and storing IDs etc."
 if ! [ -f "$SEEDS" ]; then
@@ -140,22 +141,22 @@ echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='Proj01' --quiet)
 dataset=$(omero obj new Dataset name='Proj01--Dset01' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
-echo "#ts# (\"U1__PID_1\", \"$project\"),"
-echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
+echo "U1__PID_1: $project" | tee -a "$SUMMARY"
+echo "U1__PID_1__DSID_1: $dataset" | tee -a "$SUMMARY"
 
 echo "Importing a test image there..."
-echo "#ts# (\"U1__IID_1\", \"$image\"),"
 TESTIMAGE="$(dirname "$0")/../../resources/images/3ch-dapi-pha-atub.ics"
 image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
+echo "U1__IID_1: $image" | tee -a "$SUMMARY"
 
 echo "Creating another dataset in that project to be used as an upload target..."
 dataset=$(omero obj new Dataset name='upload-target' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
-echo "#ts# (\"U1__PID_1__DSID_2\", \"$dataset\"),"
+echo "U1__PID_1__DSID_2: $dataset" | tee -a "$SUMMARY"
 
 echo "Creating a dataset without a project (top-level)..."
 dataset=$(omero obj new Dataset name='NoProj--Dset01' --quiet)
-echo "#ts# (\"U1__DSID_1\", \"$dataset\"),"
+echo "U1__DSID_1: $dataset" | tee -a "$SUMMARY"
 
 echo "Reconnecting using the second user..."
 omero logout
@@ -165,15 +166,17 @@ echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='U2-Proj01' --quiet)
 dataset=$(omero obj new Dataset name='U2-Proj01--Dset01' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
-echo "#ts# (\"U2__PID_1\", \"$project\"),"
-echo "#ts# (\"U2__PID_1__DSID_1\", \"$dataset\"),"
-
+echo "U2__PID_1: $project" | tee -a "$SUMMARY"
+echo "U2__PID_1__DSID_1: $dataset" | tee -a "$SUMMARY"
 dataset=$(omero obj new Dataset name='U2-Proj01--Dset02' --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
-echo "#ts# (\"U2__PID_1__DSID_2\", \"$dataset\"),"
+echo "U2__PID_1__DSID_2: $dataset" | tee -a "$SUMMARY"
 
 echo "Creating some datasets without a project (top-level)..."
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset01' --quiet)
-echo "#ts# (\"U2__DSID_1\", \"$dataset\"),"
+echo "U2__DSID_1: $dataset" | tee -a "$SUMMARY"
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset02' --quiet)
-echo "#ts# (\"U2__DSID_2\", \"$dataset\"),"
+echo "U2__DSID_2: $dataset" | tee -a "$SUMMARY"
+
+echo " ---------------- done - see summary below ---------------- "
+cat "$SUMMARY"
