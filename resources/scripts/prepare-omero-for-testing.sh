@@ -95,6 +95,9 @@ cat - <<EOF
     **  NEVER run this script against a PRODUCTION server, this is purely    **
     **  meant to set up a defined environment for testing the HRM-OMERO      **
     **  connector against an actual OMERO (e.g. in a development container)  **
+    **                                                                       **
+    **  This has been tested against OMERO 5.6.3 - use with caution on any   **
+    **  other version and test in an isolated environment (VM/container/...) **
     ***************************************************************************
 
     Press <Enter> to continue or <Ctrl>+<C> to abort!
