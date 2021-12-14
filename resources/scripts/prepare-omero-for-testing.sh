@@ -1,40 +1,118 @@
 #!/bin/bash
 
+function extract_omero_id() {
+    # parse the ID from the output of an `omero` command, e.g. like:
+    # "Added group SYS Test HRM-OMERO 1 (id=9) with permissions rwra--"
+    sed 's/.*(id=\([0-9]*\)).*/\1/'
+}
+
+function omero_group_add() {
+    GIDCOUNT=$((GIDCOUNT + 1))
+    . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
+    if grep -qs "^GID_${GIDCOUNT}=" "$SEEDS"; then
+        echo "Using pre-defined group ID!"
+        return
+    fi
+    ID_STR=$(omero group add --type read-annotate "$1" --quiet 2>&1)
+    RETVAL=$?
+    if [ "$RETVAL" -gt 0 ]; then
+        if [ "$RETVAL" -eq 3 ]; then
+            echo "Using existing group!"
+        else
+            echo " ---- STOPPING ---- "
+            exit $RETVAL
+        fi
+    fi
+    ID=$(echo "$ID_STR" | extract_omero_id)
+    echo "GID_${GIDCOUNT}=$ID" | tee -a "$SEEDS"
+    . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
+}
+
+function random_password() {
+    tr -dc a-zA-Z0-9 </dev/urandom | head -c 16
+    echo ""
+}
+
+function omero_user_add() {
+    UIDCOUNT=$((UIDCOUNT + 1))
+    . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
+    if grep -qs "^UID_${UIDCOUNT}=" "$SEEDS"; then
+        echo "Using pre-defined user ID!"
+        return
+    fi
+    RNDPW=$(random_password)
+    ID_STR=$(omero user add "$1" "$2" "$3" --userpassword "$RNDPW" --group-id "$4" --quiet 2>&1)
+    RETVAL=$?
+    if [ "$RETVAL" -gt 0 ]; then
+        if [ "$RETVAL" -eq 3 ]; then
+            echo "Using existing user!"
+            echo "Please edit '$SEEDS' in case the password for user '$1' doesnt match!"
+            RNDPW=""
+        else
+            echo " ---- STOPPING ---- "
+            exit $RETVAL
+        fi
+    fi
+    ID=$(echo "$ID_STR" | extract_omero_id)
+    echo "### OMERO username: $1" | tee -a "$SEEDS"
+    echo "UID_${UIDCOUNT}=$ID" | tee -a "$SEEDS"
+    if [ -z "$RNDPW" ]; then
+        PFX="# "
+    fi
+    echo "${PFX}U${UIDCOUNT}_PW=$RNDPW" >>"$SEEDS"
+    . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
+}
+
+function prepare_omero_admin_connection() {
+    . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
+
+    if [ -z "$SERVER" ]; then
+        read -p "Address of your OMERO server: [local-omero] " SERVER
+        SERVER=${SERVER:-local-omero}
+        echo "SERVER=$SERVER" >>"$SEEDS"
+    fi
+
+    if [ -z "$OMERO_USER" ]; then
+        read -p "Username: [root] " OMERO_USER
+        OMERO_USER=${OMERO_USER:-root}
+        echo "OMERO_USER=$OMERO_USER" >>"$SEEDS"
+    fi
+
+    if [ -z "$OMERO_PASSWORD" ]; then
+        read -p "Password: " OMERO_PASSWORD
+        OMERO_PASSWORD=${OMERO_PASSWORD:-omero_root_password}
+        echo "OMERO_PASSWORD=$OMERO_PASSWORD" >>"$SEEDS"
+    fi
+}
+
+###############################################################################
+
+GIDCOUNT=0
+UIDCOUNT=0
+
+SEEDS=${1:-$(mktemp --suffix=.inc.sh)}
+
+echo "Using seeds file '$SEEDS' for reading and storing IDs etc."
+if ! [ -f "$SEEDS" ]; then
+    echo "# preparation script values for testing HRM-OMERO" >"$SEEDS"
+    echo "# created at $(date "+%F %H:%m:%S")" >>"$SEEDS"
+fi
+
+prepare_omero_admin_connection
+
+. "$SEEDS" # re-read the GIDs, UIDs, passwords
+
 # log in with an account that can create users and groups:
-omero login
+omero logout
+omero login --server "$SERVER" --user "$OMERO_USER" --password "$OMERO_PASSWORD"
 
-# create two test groups
-omero group add --type read-annotate "SYS Test HRM-OMERO 1"
-omero group add --type read-annotate "SYS Test HRM-OMERO 2"
+echo "Creating two test groups..."
+omero_group_add "SYS Test HRM-OMERO 1"
+omero_group_add "SYS Test HRM-OMERO 2"
 
-# NOTE: the above commands will produce output similar to this below:
-# ---
-# Added group SYS Test HRM-OMERO 1 (id=9) with permissions rwra--
-# ---
-# make sure to set the group ID variables accordingly:
-GID_1=9
-GID_2=903
-
-# generate random 16-char passwords using letters (upper- and lower-case) and digits
-U1_PW=$(
-    tr -dc A-Za-z0-9 </dev/urandom | head -c 16
-    echo ''
-)
-U2_PW=$(
-    tr -dc A-Za-z0-9 </dev/urandom | head -c 16
-    echo ''
-)
-
-# create two users, add them to the first group:
-omero user add "hrm-test-01" Test-01 HRM-OMERO --userpassword "$U1_PW" --group-id "$GID_1"
-omero user add "hrm-test-02" Test-02 HRM-OMERO --userpassword "$U2_PW" --group-id "$GID_1"
-
-# again, make sure to parse the newly created user IDs from the output similar to this:
-# ---
-# Added user hrm-test-01 (id=5810) with password
-# ---
-UID_1=5810
-UID_2=5811
+echo "Creating two users, adding them to the first group..."
+omero_user_add "hrm-test-01" "Test-01" "HRM-OMERO" "$GID_1"
+omero_user_add "hrm-test-02" "Test-02" "HRM-OMERO" "$GID_1"
 
 echo "Adding the users to the second group..."
 omero group adduser --id "$GID_2" --user-id "$UID_1" --quiet
@@ -42,7 +120,7 @@ omero group adduser --id "$GID_2" --user-id "$UID_2" --quiet
 
 echo "Reconnecting using the newly created user..."
 omero logout
-omero login -u "hrm-test-01" -w "$U1_PW"
+omero login -u "hrm-test-01" -w "$U1_PW" --server "$SERVER" --quiet
 
 echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='Proj01' --quiet)
@@ -52,8 +130,9 @@ echo "#ts# (\"U1__PID_1\", \"$project\"),"
 echo "#ts# (\"U1__PID_1__DSID_1\", \"$dataset\"),"
 
 echo "Importing a test image there..."
-image=$(omero import -d "$dataset" resources/images/3ch-dapi-pha-atub.ics --quiet)
 echo "#ts# (\"U1__IID_1\", \"$image\"),"
+TESTIMAGE="$(dirname "$0")/../../resources/images/3ch-dapi-pha-atub.ics"
+image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 
 echo "Creating another dataset in that project to be used as an upload target..."
 dataset=$(omero obj new Dataset name='upload-target' --quiet)
@@ -66,7 +145,7 @@ echo "#ts# (\"U1__DSID_1\", \"$dataset\"),"
 
 echo "Reconnecting using the second user..."
 omero logout
-omero login -u "hrm-test-02" -w "$U2_PW"
+omero login -u "hrm-test-02" -w "$U2_PW" --server "$SERVER" --quiet
 
 echo "Creating a project-dataset-tree..."
 project=$(omero obj new Project name='U2-Proj01' --quiet)
