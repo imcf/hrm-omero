@@ -14,10 +14,7 @@ __pycache__/
 /requests-cache/
 
 # connection details for testing
-/tests/online/settings/site_specific.py
-
-# old script while porting:
-/ome_hrm.py
+/tests/online/settings/site_specific*.py
 
 # local configuration for manual testing:
 /hrm.conf
