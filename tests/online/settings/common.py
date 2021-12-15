@@ -106,7 +106,7 @@ GID = _fmt("{{GID_1}}")
 
 retrieveChildren = [
     {
-        "omero_id": _fmt("G:{{GID_1}}:Experimenter:5809"),
+        "omero_id": _fmt("G:{{GID_1}}:Experimenter:{{UID_1}}"),
         "json_result": _fmt(
             """
                 [
