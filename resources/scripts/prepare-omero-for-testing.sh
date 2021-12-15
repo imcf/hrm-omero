@@ -30,6 +30,7 @@ function omero_group_add() {
     fi
     ID=$(echo "$ID_STR" | extract_omero_id)
     echo "GID_${GIDCOUNT}=$ID" | tee -a "$SEEDS"
+    echo "GID_${GIDCOUNT}: $ID" | tee -a "$YAML"
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
 }
 
@@ -62,6 +63,7 @@ function omero_user_add() {
     ID=$(echo "$ID_STR" | extract_omero_id)
     echo "### OMERO username: $1" | tee -a "$SEEDS"
     echo "UID_${UIDCOUNT}=$ID" | tee -a "$SEEDS"
+    echo "UID_${UIDCOUNT}: $ID" | tee -a "$YAML"
     if [ -z "$USER_PW" ]; then
         PFX="# "
     fi
