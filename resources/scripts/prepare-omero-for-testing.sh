@@ -40,14 +40,20 @@ function omero_user_add() {
         echo "Using pre-defined user ID!"
         return
     fi
-    RNDPW=$(random_password)
-    ID_STR=$(omero user add "$1" "$2" "$3" --userpassword "$RNDPW" --group-id "$4" --quiet 2>&1)
+    PWD_STR="^U${UIDCOUNT}_PW"
+    if grep -qs "$PWD_STR" "$SEEDS"; then
+        echo "Using pre-defined password!"
+        eval "USER_PW=$(grep "$PWD_STR" "$SEEDS" | cut -d '=' -f 2)"
+    else
+        USER_PW=$(random_password)
+    fi
+    ID_STR=$(omero user add "$1" "$2" "$3" --userpassword "$USER_PW" --group-id "$4" --quiet 2>&1)
     RETVAL=$?
     if [ "$RETVAL" -gt 0 ]; then
         if [ "$RETVAL" -eq 3 ]; then
             echo "Using existing user!"
             echo "Please edit '$SEEDS' in case the password for user '$1' doesnt match!"
-            RNDPW=""
+            USER_PW=""
         else
             echo " ---- STOPPING ---- "
             exit $RETVAL
@@ -56,10 +62,10 @@ function omero_user_add() {
     ID=$(echo "$ID_STR" | extract_omero_id)
     echo "### OMERO username: $1" | tee -a "$SEEDS"
     echo "UID_${UIDCOUNT}=$ID" | tee -a "$SEEDS"
-    if [ -z "$RNDPW" ]; then
+    if [ -z "$USER_PW" ]; then
         PFX="# "
     fi
-    echo "${PFX}U${UIDCOUNT}_PW=$RNDPW" >>"$SEEDS"
+    echo "${PFX}U${UIDCOUNT}_PW=$USER_PW" >>"$SEEDS"
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
 }
 
