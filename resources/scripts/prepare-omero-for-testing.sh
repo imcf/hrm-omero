@@ -6,6 +6,11 @@ function extract_omero_id() {
     sed 's/.*(id=\([0-9]*\)).*/\1/'
 }
 
+function random_password() {
+    tr -dc a-zA-Z0-9 </dev/urandom | head -c 16
+    echo ""
+}
+
 function omero_group_add() {
     GIDCOUNT=$((GIDCOUNT + 1))
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
@@ -26,11 +31,6 @@ function omero_group_add() {
     ID=$(echo "$ID_STR" | extract_omero_id)
     echo "GID_${GIDCOUNT}=$ID" | tee -a "$SEEDS"
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
-}
-
-function random_password() {
-    tr -dc a-zA-Z0-9 </dev/urandom | head -c 16
-    echo ""
 }
 
 function omero_user_add() {
