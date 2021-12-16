@@ -81,6 +81,14 @@ def from_omero(conn, id_str, dest):
         printlog("ERROR", f"ERROR: no original file(s) for image {image_id} found!")
         return False
 
+    # FIXME: for images (or image file formats) that consist of multiple files in a
+    # certain folder structure, we have to take into account the paths associated to
+    # each fileset file, e.g. like this:
+    # for orig_file in fset.listFiles():
+    #     name = orig_file.getName()
+    #     path = orig_file.getPath()
+    #     print(path, name)
+
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
     # data) as an alternative has been discarded for the moment - see upstream HRM
     # ticket #398 (http://hrm.svi.nl:8080/redmine/issues/398)
