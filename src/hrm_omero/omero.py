@@ -154,6 +154,35 @@ def add_annotation_keyvalue(conn, omero_id, annotation):
     return True
 
 
+def add_annotation_tag(conn, gid, annotation, obj_id, obj_type="Image", desc=None):
+    """WARNING: entirely untested at the moment!"""
+    if obj_id is None:
+        log.warning(f"No object ID given, not adding annotation >>>{annotation}<<<")
+        return False
+
+    # the connection might be closed (e.g. after importing an image), so reconnect:
+    conn.connect()
+    if not conn._connected:  # pylint: disable-msg=protected-access
+        raise RuntimeError("Failed to (re-)establish connection to OMERO!")
+
+    conn.setGroupForSession(gid)
+    target_obj = conn.getObject(obj_type, obj_id)
+    if target_obj is None:
+        log.warning(f"Unable to identify target object {obj_id} in OMERO!")
+        return False
+
+    tag_ann = omero.gateway.TagAnnotationWrapper(conn)
+    tag_ann.setValue(annotation)
+    if desc:
+        tag_ann.setDescription(desc)
+    tag_ann.save()
+    target_obj.linkAnnotation(tag_ann)
+
+    log.success(f"Successfully added annotation to {obj_type}:{obj_id}.")
+
+    return True
+
+
 @connect_and_set_group
 def new_project(conn, omero_id, proj_name):  # pragma: no cover
     """Create a new Project in OMERO.
