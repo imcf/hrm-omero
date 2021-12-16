@@ -1,0 +1,891 @@
+Job id: 600eef69969be (pid 30685 on localhost), started at 2021-01-25 17:48:33 and finished at 2021-01-25 17:49:58
+
+- HUYGENS ERROR REPORT (stderr) --------------
+
+
+
+-----------------------------------------------
+Skipping log file creation
+-----------------------------------------------
+
+Local time 2021-01-25 17:48:27
+Local time 2021-01-25 17:49:37
+- HUYGENS REPORT (stdout) --------------------
+
+30685
+Running /usr/local/svi/bin/hucore.bin
+HomePath $SVIHOME= /usr/local/svi
+Looking for Tcl in /usr/local/svi/tcl/lib/tcl8.6...
+Tcl version 8.6.9 type 2.
+Tcl_AppInit Timing appInit
+Huygens Core 20.04.0p5 initializing Compute Engine 20.04.0p5...
+The system ID is 67e7-aa75-0786-26a2.
+Failed to load library libcuda.so, got: libcuda.so: cannot open shared object file: No such file or directory
+
+Could not link with libcuda.so. GPGPU disabled.
+
+Launching task 0 for client 0, ID: 0 on cpu group 0
+Setting export option type to ics2
+Setting export option multidir to 0
+Setting export option cmode to scale
+Complete envArr:
+key gpuDevice ; val 0
+key useMultiGpu ; val 0
+key OMP_DYNAMIC ; val 1
+key retainProcess ; val false
+key inputConversion ; val int
+key resultDir ; val /export/hrm_data/hrm-test-01/dst
+key attemptGpu ; val 0
+key exportFormat ; val type ics2 multidir 0 cmode scale
+key timeOut ; val 10000
+key concurrentJobCnt ; val 1
+key perJobThreadCnt ; val auto
+Requesting auto threads.
+Setting GPU status.
+Init complete
+Doing sub task imgOpen...
+File read series mode: off
+File /export/hrm_data/hrm-test-01/src/140612-Cells07_5_R3 seems to be a DeltaVision file,
+	but has unknown lens number 10612.
+File /export/hrm_data/hrm-test-01/src/140612-Cells07_5_R3 seems to be a DeltaVision file,
+	but has unknown lens number 10612.
+Skipping input data conversion from uint to int.
+Image 140612-Cells07_5_R3D created
+Doing sub task setp...
+Parameter dx will be taken from template: 0.107000.
+Parameter dy will be taken from template: 0.107000.
+Parameter dz will be taken from template: 0.200000.
+Parameter dt will be taken from meta data: 1.000000.
+Parameter iFacePrim will be taken from meta data: 0.000.
+Parameter iFaceScnd will be taken from meta data: 1000000.000.
+Basic microscopic parameters set with command:
+	
+	                    140612-Cells07_5_R3D setp -dx 0.107000 -dy 0.107000 -dz 0.200000 -chan -1
+Microscopic parameters in channel 3 and beyond were not available in the template.
+Parameter micr of channel 0 will be taken from template: widefield.
+Parameter na of channel 0 will be taken from template: 1.420.
+Parameter objQuality of channel 0 will be taken from meta data: good.
+Parameter ps of channel 0 will be taken from meta data: 2.530.
+Parameter ri of channel 0 will be taken from template: 1.470.
+Parameter ril of channel 0 will be taken from template: 1.515.
+Parameter pr of channel 0 will be taken from meta data: 280.000.
+Parameter ex of channel 0 will be taken from template: 475.000.
+Parameter em of channel 0 will be taken from template: 523.000.
+Parameter pcnt of channel 0 will be taken from template: 1.000.
+Parameter ppu of channel 0 will be taken from meta data: 1.000.
+Parameter baseline of channel 0 will be taken from meta data: 0.000.
+Parameter lineAvgCnt of channel 0 will be taken from meta data: 1.000.
+Parameter noiseGain of channel 0 will be taken from meta data: 1.000.
+Parameter exBeamFill of channel 0 will be taken from meta data: 2.000.
+Parameter imagingDir of channel 0 will be taken from template: upward.
+Parameter stedMode of channel 0 will be taken from meta data: vortexPulsed.
+Parameter stedLambda of channel 0 will be taken from meta data: 676.000.
+Parameter stedSatFact of channel 0 will be taken from meta data: 30.000.
+Parameter stedImmunity of channel 0 will be taken from meta data: 10.000.
+Parameter stedInhibContr of channel 0 will be taken from meta data: 0.010.
+Parameter sted3D of channel 0 will be taken from meta data: 0.000.
+Parameter stedCoeff of channel 0 will be taken from meta data: 2.10 8.00.
+Parameter spimExc of channel 0 will be taken from meta data: gauss.
+Parameter spimNA of channel 0 will be taken from meta data: 0.030.
+Parameter spimFill of channel 0 will be taken from meta data: 0.500.
+Parameter spimGaussWidth of channel 0 will be taken from meta data: 4.000.
+Parameter spimDir of channel 0 will be taken from meta data: 0.000.
+Parameter spimCenterOff of channel 0 will be taken from meta data: 0.000.
+Parameter spimFocusOff of channel 0 will be taken from meta data: 0.000.
+Parameter scatterModel of channel 0 will be taken from meta data: none.
+Parameter scatterFreePath of channel 0 will be taken from meta data: 1000.000.
+Parameter scatterRelContrib of channel 0 will be taken from meta data: 0.000.
+Parameter scatterBlurring of channel 0 will be taken from meta data: 0.000.
+Microscopic channel parameters set with command:
+	 140612-Cells07_5_R3D setp -micr widefield -na 1.420 -ri 1.470 -ril 1.515 -ex 475.000 -em 523.000 -pcnt 1.000 -imagingDir upward -chan 0
+Parameter micr of channel 1 will be taken from template: widefield.
+Parameter na of channel 1 will be taken from template: 1.420.
+Parameter objQuality of channel 1 will be taken from meta data: good.
+Parameter ps of channel 1 will be taken from meta data: 2.530.
+Parameter ri of channel 1 will be taken from template: 1.470.
+Parameter ril of channel 1 will be taken from template: 1.515.
+Parameter pr of channel 1 will be taken from meta data: 280.000.
+Parameter ex of channel 1 will be taken from template: 390.000.
+Parameter em of channel 1 will be taken from template: 435.000.
+Parameter pcnt of channel 1 will be taken from template: 1.000.
+Parameter ppu of channel 1 will be taken from meta data: 1.000.
+Parameter baseline of channel 1 will be taken from meta data: 0.000.
+Parameter lineAvgCnt of channel 1 will be taken from meta data: 1.000.
+Parameter noiseGain of channel 1 will be taken from meta data: 1.000.
+Parameter exBeamFill of channel 1 will be taken from meta data: 2.000.
+Parameter imagingDir of channel 1 will be taken from template: upward.
+Parameter stedMode of channel 1 will be taken from meta data: vortexPulsed.
+Parameter stedLambda of channel 1 will be taken from meta data: 676.000.
+Parameter stedSatFact of channel 1 will be taken from meta data: 30.000.
+Parameter stedImmunity of channel 1 will be taken from meta data: 10.000.
+Parameter stedInhibContr of channel 1 will be taken from meta data: 0.010.
+Parameter sted3D of channel 1 will be taken from meta data: 0.000.
+Parameter stedCoeff of channel 1 will be taken from meta data: 2.10 8.00.
+Parameter spimExc of channel 1 will be taken from meta data: gauss.
+Parameter spimNA of channel 1 will be taken from meta data: 0.030.
+Parameter spimFill of channel 1 will be taken from meta data: 0.500.
+Parameter spimGaussWidth of channel 1 will be taken from meta data: 4.000.
+Parameter spimDir of channel 1 will be taken from meta data: 0.000.
+Parameter spimCenterOff of channel 1 will be taken from meta data: 0.000.
+Parameter spimFocusOff of channel 1 will be taken from meta data: 0.000.
+Parameter scatterModel of channel 1 will be taken from meta data: none.
+Parameter scatterFreePath of channel 1 will be taken from meta data: 1000.000.
+Parameter scatterRelContrib of channel 1 will be taken from meta data: 0.000.
+Parameter scatterBlurring of channel 1 will be taken from meta data: 0.000.
+Microscopic channel parameters set with command:
+	 140612-Cells07_5_R3D setp -micr widefield -na 1.420 -ri 1.470 -ril 1.515 -ex 390.000 -em 435.000 -pcnt 1.000 -imagingDir upward -chan 1
+Parameter micr of channel 2 will be taken from template: widefield.
+Parameter na of channel 2 will be taken from template: 1.420.
+Parameter objQuality of channel 2 will be taken from meta data: good.
+Parameter ps of channel 2 will be taken from meta data: 2.530.
+Parameter ri of channel 2 will be taken from template: 1.470.
+Parameter ril of channel 2 will be taken from template: 1.515.
+Parameter pr of channel 2 will be taken from meta data: 280.000.
+Parameter ex of channel 2 will be taken from template: 632.000.
+Parameter em of channel 2 will be taken from template: 676.000.
+Parameter pcnt of channel 2 will be taken from template: 1.000.
+Parameter ppu of channel 2 will be taken from meta data: 1.000.
+Parameter baseline of channel 2 will be taken from meta data: 0.000.
+Parameter lineAvgCnt of channel 2 will be taken from meta data: 1.000.
+Parameter noiseGain of channel 2 will be taken from meta data: 1.000.
+Parameter exBeamFill of channel 2 will be taken from meta data: 2.000.
+Parameter imagingDir of channel 2 will be taken from template: upward.
+Parameter stedMode of channel 2 will be taken from meta data: vortexPulsed.
+Parameter stedLambda of channel 2 will be taken from meta data: 676.000.
+Parameter stedSatFact of channel 2 will be taken from meta data: 30.000.
+Parameter stedImmunity of channel 2 will be taken from meta data: 10.000.
+Parameter stedInhibContr of channel 2 will be taken from meta data: 0.010.
+Parameter sted3D of channel 2 will be taken from meta data: 0.000.
+Parameter stedCoeff of channel 2 will be taken from meta data: 2.10 8.00.
+Parameter spimExc of channel 2 will be taken from meta data: gauss.
+Parameter spimNA of channel 2 will be taken from meta data: 0.030.
+Parameter spimFill of channel 2 will be taken from meta data: 0.500.
+Parameter spimGaussWidth of channel 2 will be taken from meta data: 4.000.
+Parameter spimDir of channel 2 will be taken from meta data: 0.000.
+Parameter spimCenterOff of channel 2 will be taken from meta data: 0.000.
+Parameter spimFocusOff of channel 2 will be taken from meta data: 0.000.
+Parameter scatterModel of channel 2 will be taken from meta data: none.
+Parameter scatterFreePath of channel 2 will be taken from meta data: 1000.000.
+Parameter scatterRelContrib of channel 2 will be taken from meta data: 0.000.
+Parameter scatterBlurring of channel 2 will be taken from meta data: 0.000.
+Microscopic channel parameters set with command:
+	 140612-Cells07_5_R3D setp -micr widefield -na 1.420 -ri 1.470 -ril 1.515 -ex 632.000 -em 676.000 -pcnt 1.000 -imagingDir upward -chan 2
+Parameter micr of channel 3 will be taken from template: widefield.
+Parameter na of channel 3 will be taken from meta data: 1.250.
+Parameter objQuality of channel 3 will be taken from meta data: good.
+Parameter ps of channel 3 will be taken from meta data: 2.530.
+Parameter ri of channel 3 will be taken from meta data: 1.515.
+Parameter ril of channel 3 will be taken from meta data: 1.515.
+Parameter pr of channel 3 will be taken from meta data: 280.000.
+Parameter ex of channel 3 will be taken from meta data: 622.000.
+Parameter em of channel 3 will be taken from meta data: 676.000.
+Parameter pcnt of channel 3 will be taken from meta data: 1.000.
+Parameter ppu of channel 3 will be taken from meta data: 1.000.
+Parameter baseline of channel 3 will be taken from meta data: 0.000.
+Parameter lineAvgCnt of channel 3 will be taken from meta data: 1.000.
+Parameter noiseGain of channel 3 will be taken from meta data: 1.000.
+Parameter exBeamFill of channel 3 will be taken from meta data: 2.000.
+Parameter imagingDir of channel 3 will be taken from meta data: upward.
+Parameter stedMode of channel 3 will be taken from meta data: vortexPulsed.
+Parameter stedLambda of channel 3 will be taken from meta data: 676.000.
+Parameter stedSatFact of channel 3 will be taken from meta data: 30.000.
+Parameter stedImmunity of channel 3 will be taken from meta data: 10.000.
+Parameter stedInhibContr of channel 3 will be taken from meta data: 0.010.
+Parameter sted3D of channel 3 will be taken from meta data: 0.000.
+Parameter stedCoeff of channel 3 will be taken from meta data: 2.10 8.00.
+Parameter spimExc of channel 3 will be taken from meta data: gauss.
+Parameter spimNA of channel 3 will be taken from meta data: 0.030.
+Parameter spimFill of channel 3 will be taken from meta data: 0.500.
+Parameter spimGaussWidth of channel 3 will be taken from meta data: 4.000.
+Parameter spimDir of channel 3 will be taken from meta data: 0.000.
+Parameter spimCenterOff of channel 3 will be taken from meta data: 0.000.
+Parameter spimFocusOff of channel 3 will be taken from meta data: 0.000.
+Parameter scatterModel of channel 3 will be taken from meta data: none.
+Parameter scatterFreePath of channel 3 will be taken from meta data: 1000.000.
+Parameter scatterRelContrib of channel 3 will be taken from meta data: 0.000.
+Parameter scatterBlurring of channel 3 will be taken from meta data: 0.000.
+Microscopic channel parameters set with command:
+	 140612-Cells07_5_R3D setp -micr widefield -chan 3
+Doing sub task autocrop...
+Skipping autocrop.
+Doing sub task adjbl...
+Doing sub task stabilize...
+Skipping stabilization.
+Doing sub task cmle:0 cmle:1 cmle:2...
+Copy the single channel image slice for channel 0
+Executing single channel CMLE deconvolution command:
+		140612-Cells07_5_R3D_chan cmle psf -> 140612-Cells07_5_R3D_cmle_chan -it 200 -q 0.0000001 -sn 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 -bg 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -bgMode auto -bgRadius 0.7 -pad auto -mode fast -reduceMode all -blMode auto -brMode auto -varPsf off -tclReturn
+Fast Classic MLE: starting...
+SNR:  75.0 (Legacy mode)
+Using solid brick mode.
+	Max iterations: 200
+	Quality change threshold: 1.0000e-07
+Equalize flux: in-focus plane located at z = 29
+Processing on CPU.
+Iteration 1
+Iteration 2: quality 2.403
+Iteration 4: quality 2.838
+Iteration 5: quality 11.285
+Iteration 6: quality 12.654
+Iteration 7: quality 13.350
+Iteration 8: quality 14.089
+Iteration 9: quality 14.979
+Iteration 10: quality 15.954
+Iteration 11: quality 16.950
+Iteration 12: quality 17.828
+Iteration 13: quality 18.604
+Iteration 14: quality 19.293
+Iteration 15: quality 19.906
+Iteration 16: quality 20.457
+Iteration 17: quality 20.948
+Iteration 18: quality 21.397
+Iteration 19: quality 21.787
+Iteration 20: quality 22.141
+Iteration 21: quality 22.332
+Iteration 22: quality 22.438
+Iteration 23: quality 22.544
+Iteration 24: quality 22.749
+Iteration 25: quality 23.221
+Iteration 26: quality 23.298
+Iteration 27: quality 23.372
+Iteration 28: quality 23.462
+Iteration 29: quality 23.566
+Iteration 30: quality 23.682
+Iteration 31: quality 23.811
+Iteration 32: quality 23.946
+Iteration 33: quality 24.081
+Iteration 34: quality 24.214
+Iteration 35: quality 24.341
+Iteration 36: quality 24.461
+Iteration 37: quality 24.574
+Iteration 38: quality 24.681
+Iteration 39: quality 24.784
+Iteration 40: quality 24.881
+Iteration 41: quality 24.973
+Iteration 42: quality 25.061
+Iteration 43: quality 25.146
+Iteration 44: quality 25.226
+Iteration 45: quality 25.303
+Iteration 46: quality 25.380
+Iteration 47: quality 25.457
+Iteration 48: quality 25.534
+Iteration 49: quality 25.611
+Iteration 50: quality 25.687
+Iteration 51: quality 25.763
+Iteration 52: quality 25.835
+Iteration 53: quality 25.905
+Iteration 54: quality 25.949
+Iteration 55: quality 25.976
+Iteration 56: quality 25.9879
+Iteration 57: quality 26.074
+Iteration 58: quality 26.126
+Iteration 59: quality 26.154
+Iteration 60: quality 26.175
+Iteration 61: quality 26.192
+Iteration 62: quality 26.209
+Iteration 63: quality 26.230
+Iteration 64: quality 26.255
+Iteration 65: quality 26.282
+Iteration 66: quality 26.314
+Iteration 67: quality 26.346
+Iteration 68: quality 26.378
+Iteration 69: quality 26.409
+Iteration 70: quality 26.439
+Iteration 71: quality 26.468
+Iteration 72: quality 26.497
+Iteration 73: quality 26.525
+Iteration 74: quality 26.552
+Iteration 75: quality 26.579
+Iteration 76: quality 26.605
+Iteration 77: quality 26.631
+Iteration 78: quality 26.656
+Iteration 79: quality 26.681
+Iteration 80: quality 26.705
+Iteration 81: quality 26.729
+Iteration 82: quality 26.752
+Iteration 83: quality 26.774
+Iteration 84: quality 26.797
+Iteration 85: quality 26.820
+Iteration 86: quality 26.844
+Iteration 87: quality 26.869
+Iteration 88: quality 26.894
+Iteration 89: quality 26.920
+Iteration 90: quality 26.946
+Iteration 91: quality 26.973
+Iteration 92: quality 27.001
+Iteration 93: quality 27.029
+Iteration 94: quality 27.056
+Iteration 95: quality 27.082
+Iteration 96: quality 27.108
+Iteration 97: quality 27.133
+Iteration 98: quality 27.158
+Iteration 99: quality 27.182
+Iteration 100: quality 27.205
+Iteration 101: quality 27.221
+Iteration 102: quality 27.2335
+Iteration 103: quality 27.2451
+Iteration 104: quality 27.262
+Iteration 105: quality 27.279
+Iteration 106: quality 27.299
+Iteration 107: quality 27.3121
+Iteration 108: quality 27.3252
+Iteration 109: quality 27.3340
+Iteration 110: quality 27.3436
+Iteration 111: quality 27.3545
+Iteration 112: quality 27.3671
+Iteration 113: quality 27.3808
+Iteration 114: quality 27.395
+Iteration 115: quality 27.410
+Iteration 116: quality 27.425
+Iteration 117: quality 27.441
+Iteration 118: quality 27.456
+Iteration 119: quality 27.472
+Iteration 120: quality 27.487
+Iteration 121: quality 27.501
+Iteration 122: quality 27.516
+Iteration 123: quality 27.5295
+Iteration 124: quality 27.544
+Iteration 125: quality 27.5498
+Iteration 126: quality 27.5594
+Iteration 127: quality 27.5656
+Iteration 128: quality 27.588
+Iteration 129: quality 27.5993
+Iteration 130: quality 27.6080
+Iteration 131: quality 27.6132
+Iteration 132: quality 27.6189
+Iteration 133: quality 27.6258
+Iteration 134: quality 27.6338
+Iteration 135: quality 27.6429
+Iteration 136: quality 27.6530
+Iteration 137: quality 27.6636
+Iteration 138: quality 27.6746
+Iteration 139: quality 27.6855
+Iteration 140: quality 27.6963
+Iteration 141: quality 27.7069
+Iteration 142: quality 27.7174
+Iteration 143: quality 27.7278
+Iteration 144: quality 27.7381
+Iteration 145: quality 27.7482
+Iteration 146: quality 27.7583
+Iteration 147: quality 27.7682
+Iteration 148: quality 27.7780
+Iteration 149: quality 27.7877
+Iteration 150: quality 27.7974
+Iteration 151: quality 27.8069
+Iteration 152: quality 27.8163
+Iteration 153: quality 27.8256
+Iteration 154: quality 27.8348
+Iteration 155: quality 27.8439
+Iteration 156: quality 27.8534
+Iteration 157: quality 27.8632
+Iteration 158: quality 27.8733
+Iteration 159: quality 27.8838
+Iteration 160: quality 27.8946
+Iteration 161: quality 27.9057
+Iteration 162: quality 27.9168
+Iteration 163: quality 27.9279
+Iteration 164: quality 27.9370
+Iteration 165: quality 27.9446
+Iteration 166: quality 27.9498
+Iteration 167: quality 27.9600
+Iteration 168: quality 27.9661
+Iteration 169: quality 27.9699
+Iteration 170: quality 27.9736
+Iteration 171: quality 27.9776
+Iteration 172: quality 27.9823
+Iteration 173: quality 27.9879
+Iteration 174: quality 27.9942
+Iteration 175: quality 28.0012
+Iteration 176: quality 28.0085
+Iteration 177: quality 28.0161
+Iteration 178: quality 28.0236
+Iteration 179: quality 28.0311
+Iteration 180: quality 28.0385
+Iteration 181: quality 28.0458
+Iteration 182: quality 28.0531
+Iteration 183: quality 28.0603
+Iteration 184: quality 28.0674
+Iteration 185: quality 28.0745
+Iteration 186: quality 28.0815
+Iteration 187: quality 28.0884
+Iteration 188: quality 28.0953
+Iteration 189: quality 28.1021
+Iteration 190: quality 28.1089
+Iteration 191: quality 28.1159
+Iteration 192: quality 28.1232
+Iteration 193: quality 28.1307
+Iteration 194: quality 28.1386
+Iteration 195: quality 28.1464
+Iteration 196: quality 28.1546
+Iteration 197: quality 28.1618
+Iteration 198: quality 28.1690
+Iteration 199: quality 28.1729
+Iteration 200: quality 28.1729
+Maximum no. iterations reached: iterations stopped. Final quality factor: 28.17
+	Elapsed time: 19.22 sec
+Background removed: 112.000
+Scaling of output not necessary
+Copy single channel deconvolution result slice to destination
+Restoration output task cmle:0: chanCnt 1 frameCnt 1 criterions idiv diff,ch0,t0 8.447266e-01 bg,ch0,t0 111.9999 Z,blCorr,ch0,t0 1.014 T,blCorr,ch0,t0 1.000 scale,ch0,t0 1.0000 bricks 1 subBricks 1 dynamic 0
+Scaling of deconvolution result for task cmle:0: 1.0
+
+		Bleaching correction for task cmle:0:
+z dim: 1.014 
+t dim: 1.000 
+Copy the single channel image slice for channel 1
+Executing single channel CMLE deconvolution command:
+		140612-Cells07_5_R3D_chan cmle psf -> 140612-Cells07_5_R3D_cmle_chan -it 200 -q 0.0000001 -sn 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 -bg 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -bgMode auto -bgRadius 0.7 -pad auto -mode fast -reduceMode all -blMode auto -brMode auto -varPsf off -tclReturn
+Warning: lateral undersamping detected: 1.4 times w.r.t Nyquist.
+Fast Classic MLE: starting...
+SNR:  47.0 (Legacy mode)
+Using solid brick mode.
+	Max iterations: 200
+	Quality change threshold: 1.0000e-07
+Equalize flux: in-focus plane located at z = 20
+Processing on CPU.
+Iteration 1
+Iteration 2: quality 4.761
+Iteration 3: quality 6.419
+Iteration 4: quality 7.495
+Iteration 5: quality 8.230
+Iteration 6: quality 8.455
+Iteration 7: quality 8.560
+Iteration 8: quality 8.648
+Iteration 9: quality 8.751
+Iteration 10: quality 8.860
+Iteration 11: quality 8.968
+Iteration 12: quality 9.060
+Iteration 13: quality 9.140
+Iteration 14: quality 9.211
+Iteration 15: quality 9.274
+Iteration 16: quality 9.330
+Iteration 17: quality 9.382
+Iteration 18: quality 9.429
+Iteration 19: quality 9.472
+Iteration 20: quality 9.512
+Iteration 21: quality 9.548
+Iteration 22: quality 9.583
+Iteration 23: quality 9.615
+Iteration 24: quality 9.645
+Iteration 25: quality 9.673
+Iteration 26: quality 9.699
+Iteration 27: quality 9.724
+Iteration 28: quality 9.747
+Iteration 29: quality 9.768
+Iteration 30: quality 9.786
+Iteration 31: quality 9.799
+Iteration 32: quality 9.806
+Iteration 33: quality 9.822
+Iteration 34: quality 9.836
+Iteration 35: quality 9.851
+Iteration 36: quality 9.861
+Iteration 37: quality 9.878
+Iteration 38: quality 9.892
+Iteration 39: quality 9.898
+Iteration 40: quality 9.904
+Iteration 41: quality 9.911
+Iteration 42: quality 9.920
+Iteration 43: quality 9.931
+Iteration 44: quality 9.942
+Iteration 45: quality 9.954
+Iteration 46: quality 9.965
+Iteration 47: quality 9.975
+Iteration 48: quality 9.986
+Iteration 49: quality 9.996
+Iteration 50: quality 10.005
+Iteration 51: quality 10.015
+Iteration 52: quality 10.024
+Iteration 53: quality 10.032
+Iteration 54: quality 10.041
+Iteration 55: quality 10.049
+Iteration 56: quality 10.057
+Iteration 57: quality 10.064
+Iteration 58: quality 10.071
+Iteration 59: quality 10.078
+Iteration 60: quality 10.083
+Iteration 61: quality 10.0858
+Iteration 62: quality 10.0893
+Iteration 63: quality 10.096
+Iteration 64: quality 10.103
+Iteration 65: quality 10.109
+Iteration 66: quality 10.115
+Iteration 67: quality 10.1187
+Iteration 68: quality 10.1213
+Iteration 69: quality 10.1241
+Iteration 70: quality 10.1276
+Iteration 71: quality 10.1317
+Iteration 72: quality 10.1365
+Iteration 73: quality 10.142
+Iteration 74: quality 10.147
+Iteration 75: quality 10.153
+Iteration 76: quality 10.158
+Iteration 77: quality 10.163
+Iteration 78: quality 10.1681
+Iteration 79: quality 10.1730
+Iteration 80: quality 10.1777
+Iteration 81: quality 10.1824
+Iteration 82: quality 10.1869
+Iteration 83: quality 10.1912
+Iteration 84: quality 10.1952
+Iteration 85: quality 10.1983
+Iteration 86: quality 10.2011
+Iteration 87: quality 10.2031
+Iteration 88: quality 10.2072
+Iteration 89: quality 10.2115
+Iteration 90: quality 10.2145
+Iteration 91: quality 10.2164
+Iteration 92: quality 10.2183
+Iteration 93: quality 10.2206
+Iteration 94: quality 10.2234
+Iteration 95: quality 10.2265
+Iteration 96: quality 10.2301
+Iteration 97: quality 10.2338
+Iteration 98: quality 10.2374
+Iteration 99: quality 10.2410
+Iteration 100: quality 10.2445
+Iteration 101: quality 10.2478
+Iteration 102: quality 10.2511
+Iteration 103: quality 10.2538
+Iteration 104: quality 10.2561
+Iteration 105: quality 10.2585
+Iteration 106: quality 10.2610
+Iteration 107: quality 10.2633
+Iteration 108: quality 10.2657
+Iteration 109: quality 10.2679
+Iteration 110: quality 10.2702
+Iteration 111: quality 10.2722
+Iteration 112: quality 10.2743
+Iteration 113: quality 10.2756
+Iteration 114: quality 10.2779
+Iteration 115: quality 10.2808
+Iteration 116: quality 10.2832
+Iteration 117: quality 10.2848
+Iteration 118: quality 10.2857
+Iteration 119: quality 10.2867
+Iteration 120: quality 10.2881
+Iteration 121: quality 10.2897
+Iteration 122: quality 10.2916
+Iteration 123: quality 10.2938
+Iteration 124: quality 10.2962
+Iteration 125: quality 10.2985
+Iteration 126: quality 10.3007
+Iteration 127: quality 10.3030
+Iteration 128: quality 10.3052
+Iteration 129: quality 10.3074
+Iteration 130: quality 10.3095
+Iteration 131: quality 10.3116
+Iteration 132: quality 10.3137
+Iteration 133: quality 10.3158
+Iteration 134: quality 10.3178
+Iteration 135: quality 10.3198
+Iteration 136: quality 10.3218
+Iteration 137: quality 10.3238
+Iteration 138: quality 10.3257
+Iteration 139: quality 10.3277
+Iteration 140: quality 10.3295
+Iteration 141: quality 10.3314
+Iteration 142: quality 10.3334
+Iteration 143: quality 10.3354
+Iteration 144: quality 10.3375
+Iteration 145: quality 10.3394
+Iteration 146: quality 10.3405
+Iteration 147: quality 10.3407
+Iteration 148: quality 10.3413
+Iteration 149: quality 10.3420
+Iteration 150: quality 10.3469
+Iteration 151: quality 10.3476
+Iteration 152: quality 10.3482
+Iteration 153: quality 10.3487
+Iteration 154: quality 10.3494
+Iteration 155: quality 10.3502
+Iteration 156: quality 10.3511
+Iteration 157: quality 10.3521
+Iteration 158: quality 10.3533
+Iteration 159: quality 10.3545
+Iteration 160: quality 10.3557
+Iteration 161: quality 10.3569
+Iteration 162: quality 10.3580
+Iteration 163: quality 10.3592
+Iteration 164: quality 10.3604
+Iteration 165: quality 10.3615
+Iteration 166: quality 10.3627
+Iteration 167: quality 10.3638
+Iteration 168: quality 10.3649
+Iteration 169: quality 10.3660
+Iteration 170: quality 10.3671
+Iteration 171: quality 10.3682
+Iteration 172: quality 10.3693
+Iteration 173: quality 10.3704
+Iteration 174: quality 10.3715
+Iteration 175: quality 10.3726
+Iteration 176: quality 10.3736
+Iteration 177: quality 10.3747
+Iteration 178: quality 10.3757
+Iteration 179: quality 10.3767
+Iteration 180: quality 10.3778
+Iteration 181: quality 10.3788
+Iteration 182: quality 10.3798
+Iteration 183: quality 10.3809
+Iteration 184: quality 10.3820
+Iteration 185: quality 10.3831
+Iteration 186: quality 10.3843
+Iteration 187: quality 10.3855
+Iteration 188: quality 10.3868
+Iteration 189: quality 10.3881
+Iteration 190: quality 10.3894
+Iteration 191: quality 10.3908
+Iteration 192: quality 10.3922
+Iteration 193: quality 10.3936
+Iteration 194: quality 10.3950
+Iteration 195: quality 10.3964
+Iteration 196: quality 10.3977
+Iteration 197: quality 10.3991
+Iteration 198: quality 10.4004
+Iteration 199: quality 10.4017
+Iteration 200: quality 10.4017
+Maximum no. iterations reached: iterations stopped. Final quality factor: 10.4
+	Elapsed time: 18.00 sec
+Background removed: 114.939
+Scaling of output not necessary
+Join single channel deconvolution result slice to destination
+Restoration output task cmle:1: chanCnt 1 frameCnt 1 criterions idiv diff,ch0,t0 3.720401e-01 bg,ch0,t0 114.9389 Z,blCorr,ch0,t0 1.120 T,blCorr,ch0,t0 1.000 scale,ch0,t0 1.0000 bricks 1 subBricks 1 dynamic 0
+Scaling of deconvolution result for task cmle:1: 1.0
+
+		Bleaching correction for task cmle:1:
+z dim: 1.120 
+t dim: 1.000 
+Copy the single channel image slice for channel 2
+Executing single channel CMLE deconvolution command:
+		140612-Cells07_5_R3D_chan cmle psf -> 140612-Cells07_5_R3D_cmle_chan -it 200 -q 0.0000001 -sn 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 -bg 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -bgMode auto -bgRadius 0.7 -pad auto -mode fast -reduceMode all -blMode auto -brMode auto -varPsf off -tclReturn
+Fast Classic MLE: starting...
+SNR:  33.0 (Legacy mode)
+Using solid brick mode.
+	Max iterations: 200
+	Quality change threshold: 1.0000e-07
+Equalize flux: in-focus plane located at z = 27
+Processing on CPU.
+Iteration 1
+Iteration 2: quality 1.921
+Iteration 3: quality 2.453
+Iteration 4: quality 3.641
+Iteration 5: quality 4.641
+Iteration 6: quality 12.088
+Iteration 7: quality 16.774
+Iteration 8: quality 17.642
+Iteration 9: quality 18.277
+Iteration 10: quality 18.890
+Iteration 11: quality 19.723
+Iteration 12: quality 20.748
+Iteration 13: quality 21.938
+Iteration 14: quality 23.201
+Iteration 15: quality 24.425
+Iteration 16: quality 25.613
+Iteration 17: quality 26.768
+Iteration 18: quality 27.889
+Iteration 19: quality 28.977
+Iteration 20: quality 30.033
+Iteration 21: quality 31.056
+Iteration 22: quality 32.048
+Iteration 23: quality 33.007
+Iteration 24: quality 33.937
+Iteration 25: quality 34.831
+Iteration 26: quality 35.704
+Iteration 27: quality 36.525
+Iteration 28: quality 37.333
+Iteration 29: quality 37.997
+Iteration 30: quality 38.584
+Iteration 31: quality 38.802
+Iteration 32: quality 39.382
+Iteration 33: quality 39.944
+Iteration 34: quality 40.536
+Iteration 35: quality 40.913
+Iteration 36: quality 41.317
+Iteration 37: quality 41.534
+Iteration 38: quality 41.787
+Iteration 39: quality 42.111
+Iteration 40: quality 42.504
+Iteration 41: quality 42.961
+Iteration 42: quality 43.475
+Iteration 43: quality 44.008
+Iteration 44: quality 44.524
+Iteration 45: quality 45.023
+Iteration 46: quality 45.508
+Iteration 47: quality 45.976
+Iteration 48: quality 46.433
+Iteration 49: quality 46.870
+Iteration 50: quality 47.306
+Iteration 51: quality 47.723
+Iteration 52: quality 48.150
+Iteration 53: quality 48.307
+Iteration 54: quality 48.739
+Iteration 55: quality 48.866
+Iteration 56: quality 48.988
+Iteration 57: quality 49.136
+Iteration 58: quality 49.313
+Iteration 59: quality 49.515
+Iteration 60: quality 49.746
+Iteration 61: quality 49.998
+Iteration 62: quality 50.258
+Iteration 63: quality 50.528
+Iteration 64: quality 50.805
+Iteration 65: quality 51.076
+Iteration 66: quality 51.343
+Iteration 67: quality 51.604
+Iteration 68: quality 51.860
+Iteration 69: quality 52.112
+Iteration 70: quality 52.359
+Iteration 71: quality 52.602
+Iteration 72: quality 52.840
+Iteration 73: quality 53.074
+Iteration 74: quality 53.304
+Iteration 75: quality 53.530
+Iteration 76: quality 53.752
+Iteration 77: quality 53.970
+Iteration 78: quality 54.185
+Iteration 79: quality 54.396
+Iteration 80: quality 54.604
+Iteration 81: quality 54.818
+Iteration 82: quality 55.038
+Iteration 83: quality 55.263
+Iteration 84: quality 55.495
+Iteration 85: quality 55.725
+Iteration 86: quality 55.960
+Iteration 87: quality 56.171
+Iteration 88: quality 56.392
+Iteration 90: quality 56.492
+Iteration 91: quality 56.564
+Iteration 92: quality 56.631
+Iteration 93: quality 56.697
+Iteration 94: quality 56.774
+Iteration 95: quality 56.859
+Iteration 96: quality 56.954
+Iteration 97: quality 57.057
+Iteration 98: quality 57.164
+Iteration 99: quality 57.275
+Iteration 100: quality 57.390
+Iteration 101: quality 57.508
+Iteration 102: quality 57.632
+Iteration 103: quality 57.754
+Iteration 104: quality 57.875
+Iteration 105: quality 57.995
+Iteration 106: quality 58.113
+Iteration 107: quality 58.230
+Iteration 108: quality 58.346
+Iteration 109: quality 58.461
+Iteration 110: quality 58.574
+Iteration 111: quality 58.687
+Iteration 112: quality 58.797
+Iteration 113: quality 58.907
+Iteration 114: quality 59.016
+Iteration 115: quality 59.123
+Iteration 116: quality 59.230
+Iteration 117: quality 59.335
+Iteration 118: quality 59.439
+Iteration 119: quality 59.542
+Iteration 120: quality 59.645
+Iteration 121: quality 59.746
+Iteration 122: quality 59.851
+Iteration 123: quality 59.959
+Iteration 124: quality 60.069
+Iteration 125: quality 60.181
+Iteration 126: quality 60.296
+Iteration 127: quality 60.413
+Iteration 128: quality 60.532
+Iteration 129: quality 60.653
+Iteration 130: quality 60.776
+Iteration 131: quality 60.901
+Iteration 132: quality 61.024
+Iteration 133: quality 61.145
+Iteration 134: quality 61.265
+Iteration 135: quality 61.382
+Iteration 136: quality 61.500
+Iteration 137: quality 61.617
+Iteration 138: quality 61.736
+Iteration 139: quality 61.849
+Iteration 140: quality 61.973
+Iteration 141: quality 62.073
+Iteration 142: quality 62.187
+Iteration 143: quality 62.250
+Iteration 144: quality 62.348
+Iteration 145: quality 62.402
+Iteration 146: quality 62.453
+Iteration 147: quality 62.497
+Iteration 148: quality 62.541
+Iteration 149: quality 62.591
+Iteration 150: quality 62.645
+Iteration 151: quality 62.705
+Iteration 152: quality 62.767
+Iteration 153: quality 62.831
+Iteration 154: quality 62.897
+Iteration 155: quality 62.966
+Iteration 156: quality 63.036
+Iteration 157: quality 63.108
+Iteration 158: quality 63.182
+Iteration 159: quality 63.259
+Iteration 160: quality 63.336
+Iteration 161: quality 63.414
+Iteration 162: quality 63.490
+Iteration 163: quality 63.566
+Iteration 164: quality 63.641
+Iteration 165: quality 63.715
+Iteration 166: quality 63.788
+Iteration 167: quality 63.861
+Iteration 168: quality 63.933
+Iteration 169: quality 64.005
+Iteration 170: quality 64.076
+Iteration 171: quality 64.146
+Iteration 172: quality 64.215
+Iteration 173: quality 64.286
+Iteration 174: quality 64.359
+Iteration 175: quality 64.433
+Iteration 176: quality 64.509
+Iteration 177: quality 64.585
+Iteration 178: quality 64.664
+Iteration 179: quality 64.742
+Iteration 180: quality 64.822
+Iteration 181: quality 64.900
+Iteration 182: quality 64.982
+Iteration 183: quality 65.056
+Iteration 184: quality 65.143
+Iteration 185: quality 65.205
+Iteration 186: quality 65.292
+Iteration 187: quality 65.3171
+Iteration 188: quality 65.406
+Iteration 189: quality 65.4343
+Iteration 190: quality 65.484
+Iteration 191: quality 65.5113
+Iteration 192: quality 65.5423
+Iteration 193: quality 65.577
+Iteration 194: quality 65.615
+Iteration 195: quality 65.656
+Iteration 196: quality 65.699
+Iteration 197: quality 65.743
+Iteration 198: quality 65.789
+Iteration 199: quality 65.837
+Iteration 200: quality 65.837
+Maximum no. iterations reached: iterations stopped. Final quality factor: 65.84
+	Elapsed time: 18.54 sec
+Background removed: 122.212
+Scaling of output not necessary
+Join single channel deconvolution result slice to destination
+Restoration output task cmle:2: chanCnt 1 frameCnt 1 criterions idiv diff,ch0,t0 2.871420e-01 bg,ch0,t0 122.2122 Z,blCorr,ch0,t0 1.142 T,blCorr,ch0,t0 1.000 scale,ch0,t0 1.0000 bricks 1 subBricks 1 dynamic 0
+Scaling of deconvolution result for task cmle:2: 1.0
+
+		Bleaching correction for task cmle:2:
+z dim: 1.142 
+t dim: 1.000 
+Doing sub task stabilize:post...
+Skipping stabilization.
+Doing sub task coloc:0...
+Colocalization report: channels {1 2} frameCnt {1} {frame {0} threshR {17.74176981114664} threshG {31.99190050759624} Pearson {0.13328234} m1 {0.81392346} m2 {0.36887492} i1 {0.77558193} i2 {0.19521095}}
+Doing sub task hist:0...
+Doing sub task previewGen:0 previewGen:1 previewGen:2 previewGen:3 previewGen:4 previewGen:5 previewGen:6 previewGen:7 previewGen:8 previewGen:9 previewGen:10 previewGen:11...
+Doing sub task imgSave...
+Scaling mode while saving: -cmode scale
+Saving image using command: 140612-Cells07_5_R3D_cmle save {/export/hrm_data/hrm-test-01/dst/140612-Cells07_5_R3D_600eef69969be_hrm.ics} -type ics2  -cmode scale
+Successfully saved result to: {/export/hrm_data/hrm-test-01/dst/140612-Cells07_5_R3D_600eef69969be_hrm.ics}
+Template /export/hrm_data/hrm-test-01/src/.hrm_600eef69969be.hgsb successfully processed
+Tcl_AppInit App init time 70.31
+566
+578
+596

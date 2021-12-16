@@ -1,0 +1,38 @@
+<b><u>COLOCALIZATION RESULTS</u></b><br /><br /><b><a href='http://www.svi.nl/ColocalizationCoefficientsInBrief'
+        target='_blank'>Colocalization analysis</a></b> is used to characterize the degree of overlap between any two
+channels of an image.<br />By using colocalization analysis one can study the presence of two labeled targets in the
+same region of the imaged sample.<br /><br />
+<div id="colocResults">
+    <div id="colocTabs"><br /><br /></div><!-- colocTabs -->
+    <div id="colocRun">
+        <div id="separator"></div><!-- separator -->
+        <div id="colocHist">Hook chan 1 - chan 2</div><!-- colocHist -->
+        <div id="colocCoefficients">
+            <table>
+                <tr>
+                    <td class="title" colspan="15">Channel 1 ~vs~ Channel 2</td>
+                </tr>
+                <tr>
+                    <td class="header" colspan="1">Frame</td>
+                    <td class="header" colspan="1">Thresh. Ch.1</td>
+                    <td class="header" colspan="1">Thresh. Ch.2</td>
+                    <td class="header" colspan="1">Pearson</td>
+                    <td class="header" colspan="1">m1</td>
+                    <td class="header" colspan="1">m2</td>
+                    <td class="header" colspan="1">i1</td>
+                    <td class="header" colspan="1">i2</td>
+                </tr>
+                <tr>
+                    <td class="header" colspan="1">0</td>
+                    <td class="thresh" colspan="1">17.7418</td>
+                    <td class="thresh" colspan="1">31.9919</td>
+                    <td class="coefficient" colspan="1">0.133</td>
+                    <td class="coefficient" colspan="1">0.814</td>
+                    <td class="coefficient" colspan="1">0.369</td>
+                    <td class="coefficient" colspan="1">0.776</td>
+                    <td class="coefficient" colspan="1">0.195</td>
+                </tr>
+            </table>
+        </div><!-- colocCoefficients -->
+    </div><!-- colocRun -->
+</div><!-- colocResults -->
