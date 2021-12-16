@@ -135,6 +135,7 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
     RuntimeError
         Raised in case re-establishing the OMERO connection fails.
     """
+    log.trace(f"Adding a map annotation to {obj_type}:{obj_id}")
     target_obj = conn.getObject(obj_type, obj_id)
     if target_obj is None:
         log.warning(f"Unable to identify target object {obj_id} in OMERO!")
@@ -142,6 +143,7 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
 
     for section in annotation:
         namespace = f"Huygens Remote Manager - {section}"
+        log.trace(f"Using namespace [{namespace}] for annotation.")
         map_ann = omero.gateway.MapAnnotationWrapper(conn)
         map_ann.setValue(annotation[section].items())
         map_ann.setNs(namespace)

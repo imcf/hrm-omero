@@ -40,6 +40,7 @@ class OmeroId:
         ValueError
             Raised in case a malformed `id_str` was given.
         """
+        log.trace(f"Parsing ID string: [{id_str}]")
         if id_str == "ROOT":
             self.group = -1
             self.obj_type = "BaseTree"
