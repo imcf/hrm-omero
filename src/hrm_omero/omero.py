@@ -155,15 +155,15 @@ def add_annotation_keyvalue(conn, omero_id, annotation):
 
 
 @connect_and_set_group
-def new_project(conn, id_str, proj_name):  # pragma: no cover
+def new_project(conn, omero_id, proj_name):  # pragma: no cover
     """Create a new Project in OMERO.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The ID of an OMERO object, e.g. `G:4:Experimenter:23`
+    omero_id : hrm_omero.misc.OmeroId
+        The ID of an OMERO object denoting an Experimenter.
     proj_name : str
         The name of the project to be created.
     """
@@ -171,15 +171,15 @@ def new_project(conn, id_str, proj_name):  # pragma: no cover
 
 
 @connect_and_set_group
-def new_dataset(conn, id_str, ds_name):  # pragma: no cover
+def new_dataset(conn, omero_id, ds_name):  # pragma: no cover
     """Create a new Project in OMERO.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The ID of an OMERO object, e.g. `G:4:Project:123`
+    omero_id : hrm_omero.misc.OmeroId
+        The ID of an OMERO object denoting a Project or an Experimenter.
     ds_name : str
         The name of the dataset to be created.
     """
