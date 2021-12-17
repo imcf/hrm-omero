@@ -24,13 +24,24 @@ def test_init_valid_object_types(caplog):
     assert "Converted special ID 'ROOT' to" in caplog.text
 
 
-def test_init_invalid_group_types(caplog):
+def test_init_invalid_group_types():
     """Test the constructor with invalid group types."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exc_info:
         OmeroId("X:1:Image:1")
-    with pytest.raises(ValueError):
+    assert "Invalid group qualifier" in str(exc_info.value)
+
+    with pytest.raises(ValueError) as exc_info:
         OmeroId("G:X:Image:1")
-    with pytest.raises(ValueError):
+    assert "invalid literal for int" in str(exc_info.value)
+
+    with pytest.raises(ValueError) as exc_info:
         OmeroId("G:1:X:1")
-    with pytest.raises(ValueError):
+    assert "Invalid object type" in str(exc_info.value)
+
+    with pytest.raises(ValueError) as exc_info:
         OmeroId("G:1:Image:X")
+    assert "invalid literal for int" in str(exc_info.value)
+
+    with pytest.raises(ValueError) as exc_info:
+        OmeroId("G:1:Image:-1")
+    assert "Invalid object ID" in str(exc_info.value)
