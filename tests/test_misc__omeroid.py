@@ -24,8 +24,8 @@ def test_init_valid_object_types(caplog):
     assert "Converted special ID 'ROOT' to" in caplog.text
 
 
-def test_init_invalid_group_types():
-    """Test the constructor with invalid group types."""
+def test_init_invalid_id_strings():
+    """Test the constructor with invalid ID strings."""
     with pytest.raises(ValueError) as exc_info:
         OmeroId("X:1:Image:1")
     assert "Invalid group qualifier" in str(exc_info.value)
