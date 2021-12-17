@@ -111,17 +111,15 @@ def extract_image_id(fname):
 
 
 @connect_and_set_group
-def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
+def add_annotation_keyvalue(conn, omero_id, annotation):
     """Add a key-value "map" annotation to an OMERO object.
 
     Parameters
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    obj_type : str
-        A valid OMERO object type, e.g. `Image` or `Dataset`.
-    obj_id : str or int
-        An OMERO object id, e.g. `1573559`.
+    omero_id : hrm_omero.misc.OmeroId
+        The ID of the OMERO object that should receive the annotation.
     annotation : dict(dict)
         The map annotation as returned by `hrm_omero.hrm.parse_summary()`.
 
@@ -135,10 +133,10 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
     RuntimeError
         Raised in case re-establishing the OMERO connection fails.
     """
-    log.trace(f"Adding a map annotation to {obj_type}:{obj_id}")
-    target_obj = conn.getObject(obj_type, obj_id)
+    log.trace(f"Adding a map annotation to {omero_id}")
+    target_obj = conn.getObject(omero_id.obj_type, omero_id.obj_id)
     if target_obj is None:
-        log.warning(f"Unable to identify target object {obj_id} in OMERO!")
+        log.warning(f"Unable to identify target object {omero_id} in OMERO!")
         return False
 
     for section in annotation:
@@ -151,7 +149,7 @@ def add_annotation_keyvalue(conn, obj_type, obj_id, annotation):
         target_obj.linkAnnotation(map_ann)
         log.debug(f"Added key-value annotation using namespace [{namespace}].")
 
-    log.success(f"Successfully added annotation to {obj_type}:{obj_id}.")
+    log.success(f"Added annotation to {omero_id}.")
 
     return True
 
