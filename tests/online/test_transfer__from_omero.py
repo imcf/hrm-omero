@@ -133,6 +133,6 @@ def test_download_nonexisting(omero_conn, tmp_path):
 
     Expected behavior is to return False.
     """
-    id_str = "G:1:Image:-1"
+    id_str = "G:999999:Image:999999"
     ret = from_omero(omero_conn, id_str, tmp_path)
     assert ret is False

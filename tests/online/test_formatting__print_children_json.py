@@ -15,7 +15,7 @@ def test_invalid_omero_id(omero_conn, caplog):
 
     Expected behavior is to return False and to push a corresponding message to the log.
     """
-    omero_id = OmeroId("G:-100:Dataset:-100")
+    omero_id = OmeroId("G:999999:Dataset:999999")
     ret = print_children_json(omero_conn, omero_id)
     assert ret is False
     assert "ERROR generating OMERO tree / node!" in caplog.text

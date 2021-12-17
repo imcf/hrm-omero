@@ -14,7 +14,7 @@ def test_invalid_target(omero_conn, caplog):
 
     Expected behavior is to return False and log a warning.
     """
-    id_str = "G:-1:Image:-1"
+    id_str = "G:999999:Dataset:999999"
     print(id_str)
     ret = add_annotation_keyvalue(omero_conn, id_str, None)
     assert ret is False
