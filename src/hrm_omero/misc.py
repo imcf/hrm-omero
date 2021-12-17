@@ -62,6 +62,8 @@ class OmeroId:
                 "ExperimenterGroup",
             ]:
                 raise ValueError(f"Invalid object type '{obj_type}'.")
+            if int(obj_id) < 1:
+                raise ValueError(f"Invalid object ID '{obj_id}'.")
         except (ValueError, TypeError) as err:
             # pylint: disable-msg=raise-missing-from
             msg = f"Malformed id_str '{id_str}', expecting `G:[gid]:[type]:[oid]`."
