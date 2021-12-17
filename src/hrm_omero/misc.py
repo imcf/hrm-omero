@@ -53,7 +53,7 @@ class OmeroId:
             int(group_id)  # raises a TypeError if cast to int fails
             int(obj_id)  # raises a TypeError if cast to int fails
             if group_type != "G":
-                raise ValueError
+                raise ValueError(f"Invalid group qualifier '{group_type}'.")
             if obj_type not in [
                 "Image",
                 "Dataset",
@@ -61,10 +61,11 @@ class OmeroId:
                 "Experimenter",
                 "ExperimenterGroup",
             ]:
-                raise ValueError
-        except (ValueError, TypeError):
+                raise ValueError(f"Invalid object type '{obj_type}'.")
+        except (ValueError, TypeError) as err:
             # pylint: disable-msg=raise-missing-from
-            raise ValueError("Malformed `id_str`, expecting `G:[gid]:[type]:[oid]`!")
+            msg = f"Malformed id_str '{id_str}', expecting `G:[gid]:[type]:[oid]`."
+            raise ValueError(msg, err)
 
         log.debug(f"Validated ID string: group={group_id}, {obj_type}={obj_id}")
         self.group = group_id
