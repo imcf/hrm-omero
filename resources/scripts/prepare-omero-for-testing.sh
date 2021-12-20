@@ -118,6 +118,10 @@ UIDCOUNT=0
 SEEDS=${1:-$(mktemp --suffix=.inc.sh)}
 YAML=${2:-$(mktemp --suffix=.yml)}
 
+GNAME_1="SYS Test HRM-OMERO 1"
+GNAME_2="SYS Test HRM-OMERO 2"
+TESTIMAGE="$(dirname "$0")/../../resources/images/3ch-dapi-pha-atub.ics"
+
 echo "Using seeds file '$SEEDS' for reading and storing IDs etc."
 if ! [ -f "$SEEDS" ]; then
     echo "# preparation script values for testing HRM-OMERO" >"$SEEDS"
@@ -133,8 +137,8 @@ omero logout
 omero login --server "$SERVER" --user "$OMERO_USER" --password "$OMERO_PASSWORD"
 
 echo "Creating two test groups..."
-omero_group_add "SYS Test HRM-OMERO 1"
-omero_group_add "SYS Test HRM-OMERO 2"
+omero_group_add "$GNAME_1"
+omero_group_add "$GNAME_2"
 
 echo "Creating two users, adding them to the first group..."
 omero_user_add "hrm-test-01" "Test-01" "HRM-OMERO" "$GID_1"
@@ -143,6 +147,8 @@ omero_user_add "hrm-test-02" "Test-02" "HRM-OMERO" "$GID_1"
 echo "Adding the users to the second group..."
 omero group adduser --id "$GID_2" --user-id "$UID_1" --quiet
 omero group adduser --id "$GID_2" --user-id "$UID_2" --quiet
+
+echo " ----------- processing steps for first OMERO user ----------- "
 
 echo "Reconnecting using the newly created user..."
 omero logout
@@ -156,7 +162,6 @@ echo "U1__PID_1: $project" | tee -a "$YAML"
 echo "U1__PID_1__DSID_1: $dataset" | tee -a "$YAML"
 
 echo "Importing a test image there..."
-TESTIMAGE="$(dirname "$0")/../../resources/images/3ch-dapi-pha-atub.ics"
 image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U1__IID_1: $image" | tee -a "$YAML"
 
@@ -168,6 +173,8 @@ echo "U1__PID_1__DSID_2: $dataset" | tee -a "$YAML"
 echo "Creating a dataset without a project (top-level)..."
 dataset=$(omero obj new Dataset name='NoProj--Dset01' --quiet)
 echo "U1__DSID_1: $dataset" | tee -a "$YAML"
+
+echo " ----------- processing steps for second OMERO user ----------- "
 
 echo "Reconnecting using the second user..."
 omero logout
