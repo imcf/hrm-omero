@@ -196,5 +196,20 @@ echo "U2__DSID_1: $dataset" | tee -a "$YAML"
 dataset=$(omero obj new Dataset name='U2-NoProj--Dset02' --quiet)
 echo "U2__DSID_2: $dataset" | tee -a "$YAML"
 
+echo "Switching group for the second user..."
+omero logout
+omero login -u "hrm-test-02" -w "$U2_PW" --server "$SERVER" --group "$GNAME_2" --quiet
+
+echo "Creating a project-dataset-tree..."
+project=$(omero obj new Project name='U2-G2-Proj01' --quiet)
+dataset=$(omero obj new Dataset name='U2-G2-Proj01--Dset01' --quiet)
+omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
+echo "U2__G2_PID_1: $project" | tee -a "$YAML"
+echo "U2__G2_PID_1__DSID_1: $dataset" | tee -a "$YAML"
+
+echo "Importing a test image there..."
+image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
+echo "U2__G2_IID_1: $image" | tee -a "$YAML"
+
 echo " ----------- done - see YAML summary from [$YAML] below ----------- "
 cat "$YAML"
