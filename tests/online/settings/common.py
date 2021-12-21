@@ -102,6 +102,7 @@ ROOT_TREE = (
 )
 
 GID = _fmt("{{GID_1}}")
+GID_2 = _fmt("{{GID_2}}")
 
 
 retrieveChildren = [
@@ -168,6 +169,15 @@ download_image = [
     {
         "image_id": _fmt("{{U1__IID_1}}"),
         "gid": GID,
+        "filename": "3ch-dapi-pha-atub.ics",
+        "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
+    }
+]
+
+download_image_other_group = [
+    {
+        "image_id": _fmt("{{U2__G2_IID_1}}"),
+        "gid": GID_2,
         "filename": "3ch-dapi-pha-atub.ics",
         "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
     }
