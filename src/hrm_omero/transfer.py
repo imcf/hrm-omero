@@ -11,7 +11,7 @@ from PIL import Image
 
 from . import hrm
 from .omero import extract_image_id, add_annotation_keyvalue
-from .misc import printlog
+from .misc import printlog, parse_id_str
 
 
 def from_omero(conn, id_str, dest):
@@ -41,14 +41,15 @@ def from_omero(conn, id_str, dest):
     -------
     bool
         True in case the download was successful, False otherwise.
+
+    Raises
+    ------
+    ValueError
+        Raised in case an object that is not of type `Image` was requested.
     """
-    _, gid, obj_type, image_id = id_str.split(":")
+    _, obj_type, obj_id = parse_id_str(id_str)
+    log.trace(f"Trying to download {obj_type}:{obj_id} to [{dest}]...")
 
-    if not image_id:
-        printlog("ERROR", f"Malformed ID '{id_str}'. Expecting `G:[gid]:[type]:[iid]`")
-        return False
-
-    log.trace(f"Trying to download {obj_type}:{image_id} to [{dest}]...")
     # Provided that the tree displays only groups that the current user has access to,
     # cross-group query (introduced in OMERO 4.4) is a generic way to get the image.
     if not gid:
@@ -71,14 +72,14 @@ def from_omero(conn, id_str, dest):
     # use image objects and getFileset() methods to determine original files,
     # see the following OME forum thread for some more details:
     # https://www.openmicroscopy.org/community/viewtopic.php?f=6&t=7563
-    image_obj = conn.getObject("Image", image_id)
-    if not image_obj:
-        printlog("ERROR", f"ERROR: can't find image with ID {image_id}!")
+    target_obj = conn.getObject(obj_type, obj_id)
+    if not target_obj:
+        printlog("ERROR", f"ERROR: can't find image with ID {obj_id}!")
         return False
 
-    fset = image_obj.getFileset()
-    if not fset:
-        printlog("ERROR", f"ERROR: no original file(s) for image {image_id} found!")
+    fset = target_obj.getFileset()
+    if not fset:  # pragma: no cover
+        printlog("ERROR", f"ERROR: no original file(s) for image {obj_id} found!")
         return False
 
     # FIXME: for images (or image file formats) that consist of multiple files in a
@@ -114,7 +115,7 @@ def from_omero(conn, id_str, dest):
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:
-    fetch_thumbnail(conn, image_id, downloads[0][1])
+    fetch_thumbnail(conn, obj_id, downloads[0][1])
     return True
 
 
