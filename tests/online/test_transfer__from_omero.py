@@ -136,3 +136,27 @@ def test_download_nonexisting(omero_conn, tmp_path):
     id_str = "G:999999:Image:999999"
     ret = from_omero(omero_conn, id_str, tmp_path)
     assert ret is False
+
+
+@pytest.mark.online
+def test_download_image_other_group(omero_conn, tmp_path, sha1, settings):
+    """Test downloading a known image that does NOT belong to the default group.
+
+    Expected behavior is to store the image with its original filename.
+    """
+    print(f"target path for downloading: {tmp_path}", file=sys.stderr)
+
+    for test in settings.download_image_other_group:
+        gid = test["gid"]
+        image_id = test["image_id"]
+        target_file = tmp_path / test["filename"]
+        obj_id = f"G:{gid}:{image_id}"
+        print(f"obj_id: [{obj_id}]")
+
+        ret = from_omero(omero_conn, obj_id, tmp_path)
+        assert ret is True
+
+        files = os.listdir(tmp_path)
+        assert test["filename"] in files
+
+        assert test["sha1sum"] == sha1(target_file)
