@@ -50,14 +50,8 @@ def from_omero(conn, id_str, dest):
     _, obj_type, obj_id = parse_id_str(id_str)
     log.trace(f"Trying to download {obj_type}:{obj_id} to [{dest}]...")
 
-    # Provided that the tree displays only groups that the current user has access to,
-    # cross-group query (introduced in OMERO 4.4) is a generic way to get the image.
-    if not gid:
-        gid = "-1"
-    log.trace(f"Setting OMERO group for this session to '{gid}'.")
-    # conn.SERVICE_OPTS.setOmeroGroup(gid)
-    # the new way for switching the group was suggested in HRM upstream ticket #539:
-    conn.setGroupForSession(gid)
+    # conn.setGroupForSession(-1)
+    conn.SERVICE_OPTS.setOmeroGroup(-1)  # still working with OMERO-5.6.3
     if obj_type != "Image":
         raise ValueError("Currently only the download of 'Image' objects is supported!")
 
