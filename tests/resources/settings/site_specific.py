@@ -1,5 +1,9 @@
 """Site-specific settings for the online tests."""
 
+from pathlib import Path
+
+import yaml
+
 
 HOSTNAME = "local-omero"  # the OMERO server address
 PORT = None  # the port to connect to the OMERO server (default= 4064)
@@ -10,14 +14,6 @@ PASSWORD = "H011aaaaW41dFee"  # the corresponding password for the OMERO user
 # PASSWORD = "Alt3rKl4baut3r",  # the corresponding password for the OMERO user
 
 
-IDS_TO_REPLACE = [
-    ("UID_1", "2"),
-    ("UID_2", "3"),
-    ("GID_1", "3"),
-    ("GID_2", "4"),
-    ("U1__PID_1", "Project:1"),
-    ("U1__PID_1__DSID_1", "Dataset:1"),
-    ("U1__PID_1__DSID_2", "Dataset:2"),
-    ("U1__DSID_1", "Dataset:3"),
-    ("U1__IID_1", "Image:1"),
-]
+yaml_file = Path(__file__).parent.absolute() / "site_specific.yml"
+with open(yaml_file, "r", encoding="utf-8") as stream:
+    MATCH_REPLACE = yaml.safe_load(stream)

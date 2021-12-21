@@ -1,0 +1,17 @@
+GID_1: 3
+GID_2: 4
+UID_1: 2
+UID_2: 3
+U1__PID_1: Project:1
+U1__PID_1__DSID_1: Dataset:1
+U1__IID_1: Image:1
+U1__PID_1__DSID_2: Dataset:2
+U1__DSID_1: Dataset:3
+U2__PID_1: Project:2
+U2__PID_1__DSID_1: Dataset:4
+U2__PID_1__DSID_2: Dataset:5
+U2__DSID_1: Dataset:6
+U2__DSID_2: Dataset:7
+U2__G2_PID_1: Project:3
+U2__G2_PID_1__DSID_1: Dataset:8
+U2__G2_IID_1: Image:2

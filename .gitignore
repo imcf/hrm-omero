@@ -15,6 +15,7 @@ __pycache__/
 
 # connection details for testing
 /tests/online/settings/site_specific*.py
+/tests/online/settings/site_specific*.yml
 
 # local configuration for manual testing:
 /hrm.conf

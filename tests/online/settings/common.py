@@ -6,8 +6,8 @@ import pytest
 def _fmt(raw_string):
     """Helper function to replace the UID / GID / ... placeholders."""
     result = raw_string
-    for pair in IDS_TO_REPLACE:
-        result = result.replace("{{" + pair[0] + "}}", pair[1])
+    for match, replace in MATCH_REPLACE.items():
+        result = result.replace("{{" + match + "}}", str(replace))
     return result
 
 
@@ -16,7 +16,7 @@ try:
         HOSTNAME,
         PORT,
         USERNAME,
-        IDS_TO_REPLACE,
+        MATCH_REPLACE,
         PASSWORD,
     )
 except ImportError:
