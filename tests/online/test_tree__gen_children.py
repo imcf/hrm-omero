@@ -15,7 +15,7 @@ def test_experimenter_group(omero_conn, caplog, settings):
 
     The function is expected to print a warning to the logs and return an empty list.
     """
-    omero_id = OmeroId(f"G:{settings.GID}:ExperimenterGroup:{settings.GID}")
+    omero_id = OmeroId(f"G:{settings.GID_1}:ExperimenterGroup:{settings.GID_1}")
     ret = gen_children(omero_conn, omero_id)
     assert ret == []
     assert "trees should be generated via `gen_group_tree()`" in caplog.text

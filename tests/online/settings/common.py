@@ -101,7 +101,7 @@ ROOT_TREE = (
     """
 )
 
-GID = _fmt("{{GID_1}}")
+GID_1 = _fmt("{{GID_1}}")
 GID_2 = _fmt("{{GID_2}}")
 
 
@@ -168,7 +168,7 @@ gen_group_tree = [
 download_image = [
     {
         "image_id": _fmt("{{U1__IID_1}}"),
-        "gid": GID,
+        "gid": GID_1,
         "filename": "3ch-dapi-pha-atub.ics",
         "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
     }
