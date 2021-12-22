@@ -166,3 +166,23 @@ def test_download_image_other_group(omero_conn, tmp_path, sha1, settings):
 
     for test in settings.download_image_other_group:
         _download_image(omero_conn, test, tmp_path, sha1)
+
+
+@pytest.mark.online
+def test_download_images_various_groups(omero_conn, tmp_path, sha1, settings):
+    """Test downloading multiple images from different groups.
+
+    This tests whether group switching for multiple subsequent downloads works
+    as expected by first fetching one or more images from the user's default
+    group, then from another group and finally again from the default group.
+    """
+    print(f"target path for downloading: {tmp_path}", file=sys.stderr)
+
+    dl_settings = (
+        settings.download_image
+        + settings.download_image_other_group
+        + settings.download_image
+    )
+
+    for i, test in enumerate(dl_settings):
+        _download_image(omero_conn, test, tmp_path / str(i), sha1)
