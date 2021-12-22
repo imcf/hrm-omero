@@ -12,6 +12,35 @@ import pytest
 from hrm_omero.transfer import from_omero
 
 
+def _download_image(conn, dl_settings, tmp_path, sha1):
+    """Wrapper to trigger the download of an image and test the result(s).
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        An OMERO connection object.
+    dl_settings : dict
+        A dict with the specifications of the image to be downloaded and checked.
+    tmp_path : pathlib.PosixPath
+        The pytest `tmp_path` fixture.
+    sha1 : function
+        A function calculating the SHA-1 sum of a file.
+    """
+    gid = dl_settings["gid"]
+    image_id = dl_settings["image_id"]
+    target_file = tmp_path / dl_settings["filename"]
+    obj_id = f"G:{gid}:{image_id}"
+    print(f"obj_id: [{obj_id}]")
+
+    ret = from_omero(conn, obj_id, tmp_path)
+    assert ret is True
+
+    files = os.listdir(tmp_path)
+    assert dl_settings["filename"] in files
+
+    assert dl_settings["sha1sum"] == sha1(target_file)
+
+
 @pytest.mark.online
 def test_download_image(omero_conn, tmp_path, sha1, settings):
     """Test downloading a known image from OMERO and check its properties.
@@ -21,19 +50,7 @@ def test_download_image(omero_conn, tmp_path, sha1, settings):
     print(f"target path for downloading: {tmp_path}", file=sys.stderr)
 
     for test in settings.download_image:
-        gid = test["gid"]
-        image_id = test["image_id"]
-        target_file = tmp_path / test["filename"]
-        obj_id = f"G:{gid}:{image_id}"
-        print(f"obj_id: [{obj_id}]")
-
-        ret = from_omero(omero_conn, obj_id, tmp_path)
-        assert ret is True
-
-        files = os.listdir(tmp_path)
-        assert test["filename"] in files
-
-        assert test["sha1sum"] == sha1(target_file)
+        _download_image(omero_conn, test, tmp_path, sha1)
 
 
 @pytest.mark.online
@@ -147,16 +164,4 @@ def test_download_image_other_group(omero_conn, tmp_path, sha1, settings):
     print(f"target path for downloading: {tmp_path}", file=sys.stderr)
 
     for test in settings.download_image_other_group:
-        gid = test["gid"]
-        image_id = test["image_id"]
-        target_file = tmp_path / test["filename"]
-        obj_id = f"G:{gid}:{image_id}"
-        print(f"obj_id: [{obj_id}]")
-
-        ret = from_omero(omero_conn, obj_id, tmp_path)
-        assert ret is True
-
-        files = os.listdir(tmp_path)
-        assert test["filename"] in files
-
-        assert test["sha1sum"] == sha1(target_file)
+        _download_image(omero_conn, test, tmp_path, sha1)
