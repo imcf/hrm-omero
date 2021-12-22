@@ -22,12 +22,13 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
     dl_settings : dict
         A dict with the specifications of the image to be downloaded and checked.
     tmp_path : pathlib.PosixPath
-        The pytest `tmp_path` fixture.
+        A temporary path object to store the downloaded file(s).
     sha1 : function
         A function calculating the SHA-1 sum of a file.
     """
     gid = dl_settings["gid"]
     image_id = dl_settings["image_id"]
+    tmp_path.mkdir(exist_ok=True)  # make sure the target path exists
     target_file = tmp_path / dl_settings["filename"]
     obj_id = f"G:{gid}:{image_id}"
     print(f"obj_id: [{obj_id}]")
