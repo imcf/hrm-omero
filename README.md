@@ -29,26 +29,34 @@ HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
 # create a Python 3.6 virtual environment:
 python3 -m venv $HRM_OMERO_VENV
+
+# upgrade pip, install wheel:
+$HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
 ```
 
 #### Ubuntu 20.04
 
 ```bash
-# FIXME: check build-time requirements and update here!
+apt install -y python3.8-venv
 
 # define the target path for the virtual environment:
 HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
 # create a Python 3.6 virtual environment:
-python -m venv $HRM_OMERO_VENV
+python3 -m venv $HRM_OMERO_VENV
+
+# upgrade pip, install wheel:
+$HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
+
+# install the pre-built Ice wheel from the OME project:
+$ICE_WHEEL="zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl"
+wget "https://github.com/ome/zeroc-ice-ubuntu2004/releases/download/0.2.0/$ICE_WHEEL"
+$HRM_OMERO_VENV/bin/pip install $ICE_WHEEL
 ```
 
 ### Installing the HRM-OMERO package
 
 ```bash
-# upgrade pip, install wheel:
-$HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
-
 # install the connector - please note that it takes quite a while (~15min) as it needs
 # to build (compile) the ZeroC Ice bindings:
 $HRM_OMERO_VENV/bin/pip install hrm-omero
