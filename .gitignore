@@ -19,3 +19,6 @@ __pycache__/
 
 # local configuration for manual testing:
 /hrm.conf
+
+# test-datasets downloaded from zenodo
+resources/images/zenodo/
