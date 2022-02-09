@@ -8,6 +8,7 @@ fi
 # NOTE: heavy downloads can be provided in the *CACHE* directory set here:
 # (e.g. OMERO.server.zip, Ice, ...)
 CACHE="/tmp/omero-install-cache"
+mkdir -v "$CACHE"
 
 ### OMERO apt dependencies ###
 
