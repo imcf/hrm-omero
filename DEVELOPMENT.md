@@ -54,15 +54,18 @@ It is recommended to test against an isolated OMERO instance to avoid messing up
 production data. The script in `resources/omero-recipes/setup-ubuntu-20-04.sh` can be
 used to install OMERO quickly on Ubuntu 20.04. A reasonable approach would be this:
 
-- Create a VM with a basic Ubuntu 20.04 installation.
-- Copy the OMERO-setup-script into the VM.
-- Run the setup script *from within* the VM.
+- Create a VM / container with a basic Ubuntu 20.04 installation.
+- Copy the OMERO-setup-script into the VM / container.
+- Run the setup script *from within* the VM / container.
 
-After that you can use the preparation script
-`resources/scripts/prepare-omero-for-testing.sh` to create the required groups, users,
-projects, ... in that OMERO instance. Please note that the preparation script is meant
-to be run **from the HRM-OMERO development environment** (i.e. not from within your
-shiny new OMERO-VM)!
+Once OMERO is running, you can use the preparation script to create the required groups,
+users, projects, ... in that OMERO instance. Please note that the preparation script is
+meant to be run **from the HRM-OMERO development environment** (i.e. not from within
+your shiny new OMERO-VM)!
+
+```bash
+bash resources/scripts/prepare-omero-for-testing.sh
+```
 
 ## Generating Documentation
 
