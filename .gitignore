@@ -22,3 +22,6 @@ __pycache__/
 
 # test-datasets downloaded from zenodo
 resources/images/zenodo/
+
+# cache files for installing OMERO
+/omero-install-cache/
