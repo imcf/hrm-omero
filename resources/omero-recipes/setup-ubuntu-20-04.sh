@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Root privileges required!"
+    exit 1
+fi
+
 # NOTE: heavy downloads can be provided in the *CACHE* directory set here:
 # (e.g. OMERO.server.zip, Ice, ...)
 CACHE="/tmp/omero-install-cache"
