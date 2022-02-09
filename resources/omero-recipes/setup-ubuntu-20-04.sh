@@ -148,6 +148,7 @@ EOF
 #
 ### OMERO system account setup ###
 
+# shellcheck disable=SC2016
 su - omero-server --command='
 omero config set omero.data.dir "$OMERO_DATA_DIR"
 omero config set omero.db.name "$OMERO_DB_NAME"
