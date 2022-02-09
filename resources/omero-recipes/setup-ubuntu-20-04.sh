@@ -103,8 +103,8 @@ psql -P pager=off -h localhost -U "$OMERO_DB_USER" -l
 
 ### Python virtual environment setup ###
 #
-python3 -mvenv $VENV_SERVER
-$VENV_SERVER/bin/pip install --upgrade pip wheel
+python3 -mvenv "$VENV_SERVER"
+"$VENV_SERVER"/bin/pip install --upgrade pip wheel
 #
 ### Python virtual environment setup ###
 
@@ -115,10 +115,10 @@ ICE_WHEEL="$CACHE/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl"
 if ! [ -f "$ICE_WHEEL" ]; then
     wget -q $ICE_WHEEL_URI -O $ICE_WHEEL
 fi
-$VENV_SERVER/bin/pip install $ICE_WHEEL
+"$VENV_SERVER"/bin/pip install $ICE_WHEEL
 
 # Install server dependencies
-$VENV_SERVER/bin/pip install omero-server[default]
+"$VENV_SERVER"/bin/pip install omero-server[default]
 #
 ### Python dependencies installation ###
 
