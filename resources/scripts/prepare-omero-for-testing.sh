@@ -120,7 +120,8 @@ YAML=${2:-$(mktemp --suffix=.yml)}
 
 GNAME_1="SYS Test HRM-OMERO 1"
 GNAME_2="SYS Test HRM-OMERO 2"
-TESTIMAGE="$(dirname "$0")/../../resources/images/3ch-dapi-pha-atub.ics"
+IMAGE_DIR="$(dirname "$0")/../../resources/images"
+TESTIMAGE="$IMAGE_DIR/3ch-dapi-pha-atub.ics"
 
 echo "Using seeds file '$SEEDS' for reading and storing IDs etc."
 if ! [ -f "$SEEDS" ]; then
@@ -212,6 +213,22 @@ echo "$NAME_D: $dataset" | tee -a "$YAML"
 echo "Importing a test image there..."
 image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U2__G2_IID_1: $image" | tee -a "$YAML"
+
+NAME_D="${NAME_P}__DSID_VSI"
+echo "Creating a dataset for VSI test-images: [$NAME_P]--[$NAME_D]"
+dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
+omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
+echo "$NAME_D: $dataset" | tee -a "$YAML"
+
+echo "Importing test images in [$NAME_P]--[$NAME_D]:"
+while IFS= read -r -d '' CURIMAGE; do
+    let COUNT++
+    echo $CURIMAGE
+    # basename $CURIMAGE
+    image=$(omero import -d "$dataset" "$CURIMAGE" --quiet)
+    echo "${NAME_D}__IID_${COUNT}: $image" | tee -a "$YAML"
+done < <(find "$IMAGE_DIR" -iname '*.vsi' -print0)
+echo "Found $COUNT test images."
 
 echo " ----------- done - see YAML summary from [$YAML] below ----------- "
 cat "$YAML"
