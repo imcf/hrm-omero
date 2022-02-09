@@ -40,12 +40,13 @@ apt-get -y install \
 
 ### OMERO apt dependencies ###
 
-ICE_ZIP_URI="https://github.com/ome/zeroc-ice-ubuntu2004/releases/download/0.2.0/ice-3.6.5-0.2.0-ubuntu2004-amd64.tar.gz"
-ICE_ZIP=$CACHE/ice-3.6.5-0.2.0-ubuntu2004-amd64.tar.gz
-if ! [ -f "$ICE_ZIP" ]; then
-    wget -q $ICE_ZIP_URI -O $ICE_ZIP
+ICE_ZIP="ice-3.6.5-0.2.0-ubuntu2004-amd64.tar.gz"
+ICE_ZIP_URI="https://github.com/ome/zeroc-ice-ubuntu2004/releases/download/0.2.0/$ICE_ZIP"
+ICE_ZIP_FILE="$CACHE/$ICE_ZIP"
+if ! [ -f "$ICE_ZIP_FILE" ]; then
+    wget -q $ICE_ZIP_URI -O $ICE_ZIP_FILE
 fi
-tar xf $ICE_ZIP
+tar xf $ICE_ZIP_FILE
 mv ice-3.6.5-0.2.0 ice-3.6.5
 mv ice-3.6.5 /opt
 echo /opt/ice-3.6.5/lib64 >/etc/ld.so.conf.d/ice-x86_64.conf
