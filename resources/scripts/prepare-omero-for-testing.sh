@@ -223,13 +223,15 @@ omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "$NAME_D: $dataset" | tee -a "$YAML"
 
 echo "Importing test images in [$NAME_P]--[$NAME_D]:"
+PATTERN='*.vsi'
 while IFS= read -r -d '' CURIMAGE; do
     let COUNT++
-    echo $CURIMAGE
+    echo "Importing file: $CURIMAGE"
     # basename $CURIMAGE
     image=$(omero import -d "$dataset" "$CURIMAGE" --quiet)
     echo "${NAME_D}__IID_${COUNT}: $image" | tee -a "$YAML"
-done < <(find "$IMAGE_DIR" -iname '*.vsi' -print0)
+    echo "${NAME_D}__IID_${COUNT}_FNAME: \"$CURIMAGE\"" | tee -a "$YAML"
+done < <(find "$IMAGE_DIR" -iname "$PATTERN" -print0)
 echo "Found $COUNT test images."
 
 echo " ----------- done - see YAML summary from [$YAML] below ----------- "
