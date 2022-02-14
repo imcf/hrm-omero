@@ -216,8 +216,8 @@ echo -e "\n\nImporting a test image there..."
 image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U2__G2_IID_1: $image" | tee -a "$YAML"
 
-NAME_D="${NAME_P}__DSID_VSI"
-echo "Creating a dataset for VSI test-images: [$NAME_P]--[$NAME_D]"
+NAME_D="${NAME_P}__DSID_MF"
+echo -e "\n\n\nCreating a dataset for multi-file test-images: [$NAME_P]--[$NAME_D]"
 dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
 omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "$NAME_D: $dataset" | tee -a "$YAML"
