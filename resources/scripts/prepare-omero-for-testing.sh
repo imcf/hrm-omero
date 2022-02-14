@@ -133,6 +133,8 @@ prepare_omero_admin_connection
 
 . "$SEEDS" # re-read the GIDs, UIDs, passwords
 
+echo "IMAGE_DIR: \"$IMAGE_DIR\"" | tee -a "$YAML" # store the image directory
+
 # log in with an account that can create users and groups:
 omero logout
 omero login --server "$SERVER" --user "$OMERO_USER" --password "$OMERO_PASSWORD"
