@@ -63,8 +63,24 @@ users, projects, ... in that OMERO instance. Please note that the preparation sc
 meant to be run **from the HRM-OMERO development environment** (i.e. not from within
 your shiny new OMERO-VM)!
 
+Please **note** that values for the OMERO server address, passwords for the omero `root`
+user and the additional users created during the preparation can be *pre-seeded* by
+providing a corresponding file like this:
+
 ```bash
-bash resources/scripts/prepare-omero-for-testing.sh
+### put this e.g. in "resources/scripts/omero-values.inc.sh"
+SERVER=local-omero # make sure it resolves through /etc/hosts
+OMERO_USER=root
+OMERO_PASSWORD="your_test-omero_root_pw"
+U1_PW="AonachEagach"
+U2_PW="LochLeven"
+```
+
+Then simply run the preparation script like this:
+
+```bash
+cd resources/scripts/
+bash prepare-omero-for-testing.sh omero-values.inc.sh
 ```
 
 ## Generating Documentation
