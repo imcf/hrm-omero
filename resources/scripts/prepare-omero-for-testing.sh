@@ -253,7 +253,11 @@ omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "$NAME_P: $project" | tee -a "$YAML"
 echo "$NAME_D: $dataset" | tee -a "$YAML"
 
-echo "Scanning for multi-file test datasets..."
+echo -e "\n\nImporting a test image there..."
+image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
+echo "U2__G2_IID_1: $image" | tee -a "$YAML"
+
+echo -e "\n\nScanning for multi-file test datasets..."
 while IFS= read -r -d '' MD5SUMS; do
     let COUNT++
     ID_P="$project"
