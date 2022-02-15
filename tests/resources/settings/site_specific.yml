@@ -1,3 +1,4 @@
+IMAGE_DIR: "resources/scripts/../../resources/images"
 GID_1: 3
 GID_2: 4
 UID_1: 2
@@ -15,3 +16,6 @@ U2__DSID_2: Dataset:7
 U2__G2_PID_1: Project:3
 U2__G2_PID_1__DSID_1: Dataset:8
 U2__G2_IID_1: Image:2
+U2__G2_PID_1__MFDS__vsi-multifile: Dataset:9
+U2__G2_PID_1__MFDS__vsi-multifile__IID: Image:3,4
+U2__G2_PID_1__MFDS__vsi-multifile__SHA1SUMS: "resources/scripts/../../resources/images/multi/zenodo/vsi-multifile/sha1sums"
