@@ -93,6 +93,40 @@ function prepare_omero_admin_connection() {
     fi
 }
 
+function import_from_md5sums() {
+    # PARAMETERS:
+    #     - MD5SUMS
+    #     - ID_P
+    #     - NAME_P
+    #     - DS_PREFIX
+    # helper function to import an image specified in an 'md5sums' file
+    # NOTE: in case the file contains multiple lines ONLY the FIRST one will be
+    # processed, assuming it is a single dataset consisting of multiple files
+    # (OMERO will pick up the related files during import automatically)
+    MD5SUMS="$1"
+    ID_P="$2"
+    NAME_P="$3"
+    DS_PREFIX="$4"
+
+    echo -e "\n\n---\nImporting from 'md5sums' file: $MD5SUMS"
+
+    DS_PATH="$(dirname "$MD5SUMS")"
+    DS_DIRNAME=$(basename "$DS_PATH")
+    NAME_D="${NAME_P}__${DS_PREFIX}__${DS_DIRNAME}"
+    # MD5 hash is 32 digits followed by 2 spaces, file name starts at pos 35:
+    IMPORT_FILE="${DS_PATH}/data/$(head -n 1 "$MD5SUMS" | cut -c 35-)"
+
+    echo -e "\nCreating dataset: [$NAME_P]--[$NAME_D]"
+    dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
+    omero obj new ProjectDatasetLink parent="$ID_P" child="$dataset" --quiet
+    echo "$NAME_D: $dataset" | tee -a "$YAML"
+
+    echo "Importing file: $IMPORT_FILE"
+    image=$(omero import -d "$dataset" "$IMPORT_FILE" --quiet)
+    echo "${NAME_D}__IID: $image" | tee -a "$YAML"
+    echo "${NAME_D}__FNAME: \"$IMPORT_FILE\"" | tee -a "$YAML"
+}
+
 ###############################################################################
 
 cat - <<EOF
@@ -121,7 +155,7 @@ YAML=${2:-$(mktemp --suffix=.yml)}
 GNAME_1="SYS Test HRM-OMERO 1"
 GNAME_2="SYS Test HRM-OMERO 2"
 IMAGE_DIR="$(dirname "$0")/../../resources/images"
-TESTIMAGE="$IMAGE_DIR/3ch-dapi-pha-atub.ics"
+TESTIMAGE="$IMAGE_DIR/single/3ch-dapi-pha-atub.ics"
 
 echo "Using seeds file '$SEEDS' for reading and storing IDs etc."
 if ! [ -f "$SEEDS" ]; then
@@ -212,27 +246,14 @@ omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
 echo "$NAME_P: $project" | tee -a "$YAML"
 echo "$NAME_D: $dataset" | tee -a "$YAML"
 
-echo -e "\n\nImporting a test image there..."
-image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
-echo "U2__G2_IID_1: $image" | tee -a "$YAML"
-
-NAME_D="${NAME_P}__DSID_MF"
-echo -e "\n\n\nCreating a dataset for multi-file test-images: [$NAME_P]--[$NAME_D]"
-dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
-omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
-echo "$NAME_D: $dataset" | tee -a "$YAML"
-
-echo "Importing test images in [$NAME_P]--[$NAME_D]:"
-PATTERN='*.vsi'
-while IFS= read -r -d '' CURIMAGE; do
+echo "Scanning for multi-file test datasets..."
+while IFS= read -r -d '' MD5SUMS; do
     let COUNT++
-    echo "Importing file: $CURIMAGE"
-    # basename $CURIMAGE
-    image=$(omero import -d "$dataset" "$CURIMAGE" --quiet)
-    echo "${NAME_D}__IID_${COUNT}: $image" | tee -a "$YAML"
-    echo "${NAME_D}__IID_${COUNT}_FNAME: \"$CURIMAGE\"" | tee -a "$YAML"
-done < <(find "$IMAGE_DIR" -iname "$PATTERN" -print0)
-echo "Found $COUNT test images."
+    ID_P="$project"
+    DS_PREFIX="MFDS" # "multi-file dataset"
+    import_from_md5sums "$MD5SUMS" "$ID_P" "$NAME_P" "$DS_PREFIX"
+done < <(find "${IMAGE_DIR}/multi" -name "md5sums" -print0)
+echo "Processed images from $COUNT 'md5sums' files."
 
 echo " ----------- done - see YAML summary from [$YAML] below ----------- "
 cat "$YAML"

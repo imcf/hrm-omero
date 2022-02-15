@@ -21,7 +21,7 @@ __pycache__/
 /hrm.conf
 
 # test-datasets downloaded from zenodo
-resources/images/zenodo/
+resources/images/multi/zenodo/
 
 # cache files for installing OMERO
 /omero-install-cache/
