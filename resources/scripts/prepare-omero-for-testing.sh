@@ -94,15 +94,22 @@ function prepare_omero_admin_connection() {
 }
 
 function import_from_md5sums() {
-    # PARAMETERS:
-    #     - MD5SUMS
-    #     - ID_P
-    #     - NAME_P
-    #     - DS_PREFIX
-    # helper function to import an image specified in an 'md5sums' file
+    # Helper to import an image specified in an 'md5sums' file.
+    #
     # NOTE: in case the file contains multiple lines ONLY the FIRST one will be
     # processed, assuming it is a single dataset consisting of multiple files
-    # (OMERO will pick up the related files during import automatically)
+    # (OMERO will pick up the related files during import automatically).
+    #
+    # Parameters
+    # ----------
+    # MD5SUMS : str
+    #     Path to an 'md5sums' file with details about the files to be imported.
+    # ID_P : int
+    #     The ID of the OMERO project where data should be imported into.
+    # NAME_P : str
+    #     The name of the OMERO project where data should be imported into.
+    # DS_PREFIX : str
+    #     The prefix for the name of the dataset to be created for the import.
     MD5SUMS="$1"
     ID_P="$2"
     NAME_P="$3"
