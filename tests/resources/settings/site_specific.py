@@ -14,6 +14,7 @@ PASSWORD = "H011aaaaW41dFee"  # the corresponding password for the OMERO user
 # PASSWORD = "Alt3rKl4baut3r",  # the corresponding password for the OMERO user
 
 
+# load the YAML file called 'site_specific' located in the same directory:
 yaml_file = Path(__file__).parent.absolute() / "site_specific.yml"
 with open(yaml_file, "r", encoding="utf-8") as stream:
-    MATCH_REPLACE = yaml.safe_load(stream)
+    SITE_SPECIFIC = yaml.safe_load(stream)
