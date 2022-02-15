@@ -93,8 +93,8 @@ function prepare_omero_admin_connection() {
     fi
 }
 
-function import_from_md5sums() {
-    # Helper to import an image specified in an 'md5sums' file.
+function import_from_sha1sums() {
+    # Helper to import an image specified in an 'sha1sums' file.
     #
     # NOTE: in case the file contains multiple lines ONLY the FIRST one will be
     # processed, assuming it is a single dataset consisting of multiple files
@@ -102,26 +102,26 @@ function import_from_md5sums() {
     #
     # Parameters
     # ----------
-    # MD5SUMS : str
-    #     Path to an 'md5sums' file with details about the files to be imported.
+    # SHA1SUMS : str
+    #     Path to an 'sha1sums' file with details about the files to be imported.
     # ID_P : int
     #     The ID of the OMERO project where data should be imported into.
     # NAME_P : str
     #     The name of the OMERO project where data should be imported into.
     # DS_PREFIX : str
     #     The prefix for the name of the dataset to be created for the import.
-    MD5SUMS="$1"
+    SHA1SUMS="$1"
     ID_P="$2"
     NAME_P="$3"
     DS_PREFIX="$4"
 
-    echo -e "\n\n---\nImporting from 'md5sums' file: $MD5SUMS"
+    echo -e "\n\n---\nImporting from 'sha1sums' file: $SHA1SUMS"
 
-    DS_PATH="$(dirname "$MD5SUMS")"
+    DS_PATH="$(dirname "$SHA1SUMS")"
     DS_DIRNAME=$(basename "$DS_PATH")
     NAME_D="${NAME_P}__${DS_PREFIX}__${DS_DIRNAME}"
-    # MD5 hash is 32 digits followed by 2 spaces, file name starts at pos 35:
-    IMPORT_FILE="${DS_PATH}/data/$(head -n 1 "$MD5SUMS" | cut -c 35-)"
+    # SHA1 hash is 40 digits followed by 2 spaces, file name starts at pos 43:
+    IMPORT_FILE="${DS_PATH}/data/$(head -n 1 "$SHA1SUMS" | cut -c 43-)"
 
     echo -e "\nCreating dataset: [$NAME_P]--[$NAME_D]"
     dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
@@ -131,7 +131,7 @@ function import_from_md5sums() {
     echo "Importing file: $IMPORT_FILE"
     image=$(omero import -d "$dataset" "$IMPORT_FILE" --quiet)
     echo "${NAME_D}__IID: $image" | tee -a "$YAML"
-    echo "${NAME_D}__FNAME: \"$IMPORT_FILE\"" | tee -a "$YAML"
+    echo "${NAME_D}__SHA1SUMS: \"$SHA1SUMS\"" | tee -a "$YAML"
 }
 
 ###############################################################################
@@ -258,13 +258,13 @@ image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U2__G2_IID_1: $image" | tee -a "$YAML"
 
 echo -e "\n\nScanning for multi-file test datasets..."
-while IFS= read -r -d '' MD5SUMS; do
+while IFS= read -r -d '' SHA1SUMS; do
     let COUNT++
     ID_P="$project"
     DS_PREFIX="MFDS" # "multi-file dataset"
-    import_from_md5sums "$MD5SUMS" "$ID_P" "$NAME_P" "$DS_PREFIX"
-done < <(find "${IMAGE_DIR}/multi" -name "md5sums" -print0)
-echo "Processed images from $COUNT 'md5sums' files."
+    import_from_sha1sums "$SHA1SUMS" "$ID_P" "$NAME_P" "$DS_PREFIX"
+done < <(find "${IMAGE_DIR}/multi" -name "sha1sums" -print0)
+echo "Processed images from $COUNT 'sha1sums' files."
 
 echo " ----------- done - see YAML summary from [$YAML] below ----------- "
 cat "$YAML"
