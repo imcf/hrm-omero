@@ -126,12 +126,10 @@ function import_from_sha1sums() {
     echo -e "\nCreating dataset: [$NAME_P]--[$NAME_D]"
     dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
     omero obj new ProjectDatasetLink parent="$ID_P" child="$dataset" --quiet
-    echo "$NAME_D: $dataset" | tee -a "$YAML"
-
     echo "Importing file: $IMPORT_FILE"
     image=$(omero import -d "$dataset" "$IMPORT_FILE" --quiet)
-    echo "${NAME_D}__IID: $image" | tee -a "$YAML"
-    echo "${NAME_D}__SHA1SUMS: \"$SHA1SUMS\"" | tee -a "$YAML"
+    echo "  - {DSID: $dataset, IID: \"$image\", SHA1SUMS: \"$SHA1SUMS\"}" |
+        tee -a "$YAML"
 }
 
 ###############################################################################
@@ -258,6 +256,7 @@ image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U2__G2_IID_1: $image" | tee -a "$YAML"
 
 echo -e "\n\nScanning for multi-file test datasets..."
+echo "MULTI_FILE_DATASETS:" | tee -a "$YAML"
 while IFS= read -r -d '' SHA1SUMS; do
     let COUNT++
     ID_P="$project"
