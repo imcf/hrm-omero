@@ -20,7 +20,15 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
     conn : omero.gateway.BlitzGateway
         An OMERO connection object.
     dl_settings : dict
-        A dict with the specifications of the image to be downloaded and checked.
+        A dict with the details of the image to be downloaded and checked, e.g.
+        ```
+        {
+            "gid": 8,
+            "image_id": "Image:16",
+            "filename": "2ch-mi-xd.ics",
+            "sha1sum": "48ee0def0bbaf96a306604d38dccdd",
+        }
+        ```
     tmp_path : pathlib.PosixPath
         A temporary path object to store the downloaded file(s).
     sha1 : function
