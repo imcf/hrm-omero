@@ -80,7 +80,9 @@ Then simply run the preparation script like this:
 
 ```bash
 cd resources/scripts/
-bash prepare-omero-for-testing.sh omero-values.inc.sh
+bash prepare-omero-for-testing.sh \
+    omero-values.inc.sh \
+    ../../tests/resources/settings/site_specific.yml
 ```
 
 ## Generating Documentation
