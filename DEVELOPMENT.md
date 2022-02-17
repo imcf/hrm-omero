@@ -65,24 +65,15 @@ your shiny new OMERO-VM)!
 
 Please **note** that values for the OMERO server address, passwords for the omero `root`
 user and the additional users created during the preparation can be *pre-seeded* by
-providing a corresponding file like this:
+providing an input file, see `resources/scripts/omero-seeds.inc.sh` for an example.
+
+Assuming you copied the seeds file to `my-omero-seeds.inc.sh`, you can simply run the
+preparation script like this:
 
 ```bash
-### put this e.g. in "resources/scripts/omero-values.inc.sh"
-SERVER=local-omero # make sure it resolves through /etc/hosts
-OMERO_USER=root
-OMERO_PASSWORD="your_test-omero_root_pw"
-U1_PW="AonachEagach"
-U2_PW="LochLeven"
-```
-
-Then simply run the preparation script like this:
-
-```bash
-cd resources/scripts/
-bash prepare-omero-for-testing.sh \
-    omero-values.inc.sh \
-    ../../tests/resources/settings/site_specific.yml
+bash resources/scripts/prepare-omero-for-testing.sh \
+    resources/scripts/my-omero-seeds.inc.sh \
+    tests/resources/settings/site_specific.yml
 ```
 
 ## Generating Documentation
