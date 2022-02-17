@@ -21,4 +21,4 @@ U2__G2_PID_1: Project:3
 U2__G2_PID_1__DSID_1: Dataset:8
 U2__G2_IID_1: Image:2
 MULTI_FILE_DATASETS:
-  - {DSID: Dataset:9, IID: "Image:3,4", SHA1SUMS: "resources/scripts/../../resources/images/multi/zenodo/vsi-multifile/sha1sums"}
+  - {GID: 4, DSID: Dataset:9, IID: "Image:3,4", SHA1SUMS: "resources/scripts/../../resources/images/multi/zenodo/vsi-multifile/sha1sums"}

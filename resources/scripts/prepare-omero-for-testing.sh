@@ -117,6 +117,8 @@ function import_from_sha1sums() {
     # ----------
     # SHA1SUMS : str
     #     Path to an 'sha1sums' file with details about the files to be imported.
+    # ID_G : int
+    #     The ID of the OMERO group that the data will belong to.
     # ID_P : int
     #     The ID of the OMERO project where data should be imported into.
     # NAME_P : str
@@ -124,11 +126,15 @@ function import_from_sha1sums() {
     # DS_PREFIX : str
     #     The prefix for the name of the dataset to be created for the import.
     SHA1SUMS="$1"
-    ID_P="$2"
-    NAME_P="$3"
-    DS_PREFIX="$4"
+    ID_G="$2"
+    ID_P="$3"
+    NAME_P="$4"
+    DS_PREFIX="$5"
 
-    echo -e "\n\n---\nImporting from 'sha1sums' file: $SHA1SUMS"
+    echo -e "\n\n---\nImporting from 'sha1sums' file [$SHA1SUMS]:"
+    echo "  Group: $ID_G"
+    echo "  Project: $ID_P ($NAME_P)"
+    echo "  Datset Prefix: $DS_PREFIX"
 
     DS_PATH="$(dirname "$SHA1SUMS")"
     DS_DIRNAME=$(basename "$DS_PATH")
@@ -141,7 +147,7 @@ function import_from_sha1sums() {
     omero obj new ProjectDatasetLink parent="$ID_P" child="$dataset" --quiet
     echo "Importing file: $IMPORT_FILE"
     image=$(omero import -d "$dataset" "$IMPORT_FILE" --quiet)
-    echo "  - {DSID: $dataset, IID: \"$image\", SHA1SUMS: \"$SHA1SUMS\"}" |
+    echo "  - {GID: $ID_G, DSID: $dataset, IID: \"$image\", SHA1SUMS: \"$SHA1SUMS\"}" |
         tee -a "$YAML"
 }
 
@@ -274,7 +280,7 @@ while IFS= read -r -d '' SHA1SUMS; do
     let COUNT++
     ID_P="$project"
     DS_PREFIX="MFDS" # "multi-file dataset"
-    import_from_sha1sums "$SHA1SUMS" "$ID_P" "$NAME_P" "$DS_PREFIX"
+    import_from_sha1sums "$SHA1SUMS" "$GID_2" "$project" "$NAME_P" "$DS_PREFIX"
 done < <(find "${IMAGE_DIR}/multi" -name "sha1sums" -print0)
 echo "Processed images from $COUNT 'sha1sums' files."
 
