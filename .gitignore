@@ -21,7 +21,10 @@ __pycache__/
 /hrm.conf
 
 # test-datasets downloaded from zenodo
-resources/images/multi/zenodo/
+/resources/images/multi/zenodo/
+
+# local seeds file for preparing an omero instance
+/resources/scripts/my-omero-seeds*
 
 # cache files for installing OMERO
 /omero-install-cache/
