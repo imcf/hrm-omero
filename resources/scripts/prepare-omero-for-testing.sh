@@ -176,6 +176,9 @@ UIDCOUNT=0
 SEEDS=${1:-$(mktemp --suffix=.inc.sh)}
 YAML=${2:-$(mktemp --suffix=.yml)}
 
+# clear the YAML file first:
+: >"$YAML"
+
 GNAME_1="SYS Test HRM-OMERO 1"
 GNAME_2="SYS Test HRM-OMERO 2"
 IMAGE_DIR="$(dirname "$0")/../../resources/images"
