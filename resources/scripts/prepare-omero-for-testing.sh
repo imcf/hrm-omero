@@ -278,7 +278,7 @@ image=$(omero import -d "$dataset" "$TESTIMAGE" --quiet)
 echo "U2__G2_IID_1: $image" | tee -a "$YAML"
 
 echo -e "\n\nScanning for multi-file test datasets..."
-echo "MULTI_FILE_DATASETS:" | tee -a "$YAML"
+echo "MULTI_FILE_DATASETS:" >>"$YAML"
 while IFS= read -r -d '' SHA1SUMS; do
     let COUNT++
     ID_P="$project"
