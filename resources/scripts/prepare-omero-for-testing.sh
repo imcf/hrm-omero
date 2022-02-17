@@ -12,13 +12,14 @@ function random_password() {
 }
 
 function omero_group_add() {
+    GNAME="$1"
     GIDCOUNT=$((GIDCOUNT + 1))
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
     if grep -qs "^GID_${GIDCOUNT}=" "$SEEDS"; then
         echo "Using pre-defined group ID!"
         return
     fi
-    ID_STR=$(omero group add --type read-annotate "$1" --quiet 2>&1)
+    ID_STR=$(omero group add --type read-annotate "$GNAME" --quiet 2>&1)
     RETVAL=$?
     if [ "$RETVAL" -gt 0 ]; then
         if [ "$RETVAL" -eq 3 ]; then
@@ -31,11 +32,16 @@ function omero_group_add() {
     ID=$(echo "$ID_STR" | extract_omero_id)
     echo "GID_${GIDCOUNT}=$ID" | tee -a "$SEEDS"
     echo "GID_${GIDCOUNT}: $ID" >>"$YAML"
+    echo "GID_${GIDCOUNT}_NAME: \"$GNAME\"" >>"$YAML"
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
 }
 
 function omero_user_add() {
     UIDCOUNT=$((UIDCOUNT + 1))
+    USERNAME="$1"
+    FIRSTNAME="$2"
+    LASTNAME="$3"
+    GID="$4"
     . "$SEEDS" # (re-) read the GIDs, UIDs, passwords
     if grep -qs "^UID_${UIDCOUNT}=" "$SEEDS"; then
         echo "Using pre-defined user ID!"
@@ -48,7 +54,13 @@ function omero_user_add() {
     else
         USER_PW=$(random_password)
     fi
-    ID_STR=$(omero user add "$1" "$2" "$3" --userpassword "$USER_PW" --group-id "$4" --quiet 2>&1)
+    ID_STR=$(omero user add \
+        "$USERNAME" \
+        "$FIRSTNAME" \
+        "$LASTNAME" \
+        --userpassword "$USER_PW" \
+        --group-id "$GID" \
+        --quiet 2>&1)
     RETVAL=$?
     if [ "$RETVAL" -gt 0 ]; then
         if [ "$RETVAL" -eq 3 ]; then
@@ -64,6 +76,7 @@ function omero_user_add() {
     echo "### OMERO username: $1" | tee -a "$SEEDS"
     echo "UID_${UIDCOUNT}=$ID" | tee -a "$SEEDS"
     echo "UID_${UIDCOUNT}: $ID" >>"$YAML"
+    echo "UID_${UIDCOUNT}_NAME: $USERNAME" >>"$YAML"
     if [ -z "$USER_PW" ]; then
         PFX="# "
     fi

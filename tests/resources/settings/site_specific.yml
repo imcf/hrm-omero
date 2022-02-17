@@ -1,8 +1,12 @@
 IMAGE_DIR: "resources/scripts/../../resources/images"
 GID_1: 3
+GID_1_NAME: "SYS Test HRM-OMERO 1"
 GID_2: 4
+GID_2_NAME: "SYS Test HRM-OMERO 2"
 UID_1: 2
+UID_1_NAME: hrm-test-01
 UID_2: 3
+UID_2_NAME: hrm-test-02
 U1__PID_1: Project:1
 U1__PID_1__DSID_1: Dataset:1
 U1__IID_1: Image:1
