@@ -204,3 +204,24 @@ def test_download_images_various_groups(omero_conn, tmp_path, sha1, settings):
 
     for i, test in enumerate(dl_settings):
         _download_image(omero_conn, test, tmp_path / str(i), sha1)
+
+
+@pytest.mark.online
+def test_download_multifile_datasets(omero_conn, tmp_path, sha1, settings):
+    """Download datasets consisting of multiple files in a given structure."""
+    print(f"target path for downloading: {tmp_path}", file=sys.stderr)
+    for dataset in settings.SITE_SPECIFIC["MULTI_FILE_DATASETS"]:
+        check_pairs = []
+        with open(dataset["SHA1SUMS"], "r", encoding="utf-8") as sha1sums:
+            for line in sha1sums:
+                sha1_expected = line[:40]
+                filename = line[42:].rstrip("\n")
+                check_pairs.append((sha1_expected, filename))
+
+        dl_settings = {
+            "gid": dataset["GID"],
+            "image_id": dataset["IID"],
+            "sha1sums": check_pairs,
+        }
+        print(f"dl_settings: {dl_settings}")
+        _download_image(omero_conn, dl_settings, tmp_path, sha1)

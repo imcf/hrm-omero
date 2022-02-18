@@ -76,31 +76,36 @@ def from_omero(conn, id_str, dest):
         printlog("ERROR", f"ERROR: no original file(s) for image {obj_id} found!")
         return False
 
-    # FIXME: for images (or image file formats) that consist of multiple files in a
-    # certain folder structure, we have to take into account the paths associated to
-    # each fileset file, e.g. like this:
-    # for orig_file in fset.listFiles():
-    #     name = orig_file.getName()
-    #     path = orig_file.getPath()
-    #     print(path, name)
-
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
     # data) as an alternative has been discarded for the moment - see upstream HRM
     # ticket #398 (http://hrm.svi.nl:8080/redmine/issues/398)
     downloads = []
-    # assemble a list of items to download, check if any files already exist:
+    # assemble a list of items to download
     for fset_file in fset.listFiles():
-        tgt = os.path.join(dest, fset_file.getName())
-        if os.path.exists(tgt):
-            printlog("ERROR", f"ERROR: target file '{tgt}' already existing!")
-            return False
+        # for foo in dir(fset_file):
+        #     log.error(foo)
+        file_name = fset_file.getName()
+        file_path = fset_file.getPath()
+        downloads.append((fset_file.getId(), os.path.join(file_path, file_name)))
 
-        file_id = fset_file.getId()
-        downloads.append((file_id, tgt))
+    # determine the common prefix, e.g. `hrm-test-02_3/2022-02/17/14-34-16.480/`
+    all_files = [x[1] for x in downloads]
+    strip = os.path.commonprefix(all_files).rindex("/") + 1
+
+    # strip the common prefix, check if any of the files already exist:
+    for i, pair in enumerate(downloads):
+        rel_path = pair[1][strip:]
+        log.trace(f"relative path: {rel_path}")
+        abs_path = os.path.join(dest, rel_path)
+        downloads[i] = (pair[0], abs_path)
+        if os.path.exists(abs_path):
+            printlog("ERROR", f"ERROR: file '{abs_path}' already existing!")
+            return False
 
     # now initiate the downloads for all original files:
     for (file_id, tgt) in downloads:
         try:
+            os.makedirs(os.path.dirname(tgt), exist_ok=True)
             conn.c.download(OriginalFileI(file_id), tgt)
         except:  # pylint: disable-msg=bare-except
             printlog("ERROR", f"ERROR: downloading {file_id} to '{tgt}' failed!")
