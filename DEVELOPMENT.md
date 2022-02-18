@@ -108,7 +108,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
       `Adding a file sink for logging failed: Level '' does not exist` is issued
       from `hrm_omero.cli:logger_add_file_sink` if nothing is present
 - [ ] try to catch "assert failed" errors when uploading data to OMERO, this usually
-  indicates that the file / fileset was refused by Bio-Formats
+      indicates that the file / fileset was refused by Bio-Formats
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
