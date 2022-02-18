@@ -89,16 +89,16 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 - [x] use "key-value pairs" for the HRM job parameter summaries
 - [x] trees for different groups
-  - [x] (REJECTED) requesting groups through a commandline option
+  - [x] (REJECTED) ~~requesting groups through a commandline option~~
 - [x] logging
   - [x] proper logging ([loguru][d3])
   - [x] separate logfile for the connector
   - [x] adjust log verbosity through a parameter
   - [x] adjust log verbosity through the configuration file
 - [x] allow debug logging of the "omero import" call
-  - [x] (REJECTED) requested through a command line argument
+  - [x] (REJECTED) ~~requested through a command line argument~~
   - [x] through the configuration file
-- [x] (REJECTED) offer download of OME-TIFFs
+- [x] (REJECTED) ~~offer download of OME-TIFFs~~
 - [x] don't use a command line parameter for the OMERO password
 - [ ] add command line action to create new projects and datasets in OMERO
 - [x] lift assumption that datasets are always members of a project in OMERO
