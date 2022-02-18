@@ -109,6 +109,8 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
       from `hrm_omero.cli:logger_add_file_sink` if nothing is present
 - [ ] try to catch "assert failed" errors when uploading data to OMERO, this usually
       indicates that the file / fileset was refused by Bio-Formats
+- [x] retain structure of complex multi-file datasets like Olympus `.vsi` that
+      expects files to be in specific sub-directories etc.
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
