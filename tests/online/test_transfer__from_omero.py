@@ -50,7 +50,7 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
     ret = from_omero(conn, obj_id, tmp_path)
     assert ret is True
 
-    files = os.listdir(tmp_path)
+    files = [str(f.relative_to(tmp_path)) for f in tmp_path.glob("**/*")]
     for (expected_sha1, filename) in sha1sums:
         assert filename in files
         assert expected_sha1 == sha1(tmp_path / filename)
