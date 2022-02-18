@@ -13,7 +13,7 @@ from hrm_omero.transfer import from_omero
 
 
 def _download_image(conn, dl_settings, tmp_path, sha1):
-    """Wrapper to trigger the download of an image and test the result(s).
+    """Trigger the download of an image object and test the result(s).
 
     Parameters
     ----------
@@ -25,8 +25,10 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
         {
             "gid": 8,
             "image_id": "Image:16",
-            "filename": "2ch-mi-xd.ics",
-            "sha1sum": "48ee0def0bbaf96a306604d38dccdd",
+            "sha1sums": [
+                ("48ee0def0bbaf96a306604d38dccdd", "2ch-mi-xd.ics"),
+                ("f96a306aaaa0def0bbaccdd604d38d", "2ch-mi-xd.ids"),
+            ],
         }
         ```
     tmp_path : pathlib.PosixPath
@@ -36,8 +38,12 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
     """
     gid = dl_settings["gid"]
     image_id = dl_settings["image_id"]
+    if "," in image_id:
+        image_id = image_id.split(",")[0]
+        print(f"Using only first ID for requesting the download: {image_id}")
+    sha1sums = dl_settings["sha1sums"]
     tmp_path.mkdir(exist_ok=True)  # make sure the target path exists
-    target_file = tmp_path / dl_settings["filename"]
+
     obj_id = f"G:{gid}:{image_id}"
     print(f"obj_id: [{obj_id}]")
 
@@ -45,9 +51,10 @@ def _download_image(conn, dl_settings, tmp_path, sha1):
     assert ret is True
 
     files = os.listdir(tmp_path)
-    assert dl_settings["filename"] in files
-
-    assert dl_settings["sha1sum"] == sha1(target_file)
+    for (expected_sha1, filename) in sha1sums:
+        assert filename in files
+        assert expected_sha1 == sha1(tmp_path / filename)
+        print(f"{filename}: {expected_sha1}")
 
 
 @pytest.mark.online
@@ -76,16 +83,18 @@ def test_download_image_filename(omero_conn, tmp_path, sha1, settings):
 
     gid = test["gid"]
     image_id = test["image_id"]
-    target_file = tmp_path / test["filename"]
+    sha1sum = test["sha1sums"][0][0]
+    fname = test["sha1sums"][0][1]
+    target_file = tmp_path / fname
     obj_id = f"G:{gid}:{image_id}"
 
     ret = from_omero(omero_conn, obj_id, tmp_path / "some-other-filename")
     assert ret is True
 
     files = os.listdir(tmp_path)
-    assert test["filename"] in files
+    assert fname in files
 
-    assert test["sha1sum"] == sha1(target_file)
+    assert sha1sum == sha1(target_file)
 
 
 @pytest.mark.online
@@ -100,7 +109,8 @@ def test_download_file_exists(omero_conn, tmp_path, settings, capsys):
 
     gid = test["gid"]
     image_id = test["image_id"]
-    target_file = tmp_path / test["filename"]
+    fname = test["sha1sums"][0][1]
+    target_file = tmp_path / fname
 
     obj_id = f"G:{gid}:{image_id}"
 

@@ -23,7 +23,8 @@ def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
     Expected behavior is to download the image and the corresponding thumbnail.
     """
     download_image = settings.download_image[0]
-    dl_fname = download_image["filename"]
+    dl_fname = download_image["sha1sums"][0][1]
+    dl_sha1sum = download_image["sha1sums"][0][0]
 
     args = cli_args(
         action=ACTION,
@@ -47,7 +48,7 @@ def test_download_image(capsys, tmp_path, settings, sha1, hrm_conf, cli_args):
         assert os.path.exists(check_file)
         assert os.stat(check_file).st_size > 0
 
-    assert sha1(image_file) == download_image["sha1sum"]
+    assert sha1(image_file) == dl_sha1sum
 
     captured = capsys.readouterr()
     assert "downloaded as" in captured.out

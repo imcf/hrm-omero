@@ -169,8 +169,9 @@ download_image = [
     {
         "image_id": _fmt("{{U1__IID_1}}"),
         "gid": GID_1,
-        "filename": "3ch-dapi-pha-atub.ics",
-        "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
+        "sha1sums": [
+            ("48ee0def0bbaf94e629114df6a306604d38dccdd", "3ch-dapi-pha-atub.ics"),
+        ],
     }
 ]
 
@@ -178,8 +179,9 @@ download_image_other_group = [
     {
         "image_id": _fmt("{{U2__G2_IID_1}}"),
         "gid": GID_2,
-        "filename": "3ch-dapi-pha-atub.ics",
-        "sha1sum": "48ee0def0bbaf94e629114df6a306604d38dccdd",
+        "sha1sums": [
+            ("48ee0def0bbaf94e629114df6a306604d38dccdd", "3ch-dapi-pha-atub.ics"),
+        ],
     }
 ]
 
