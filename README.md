@@ -86,7 +86,7 @@ OMERO_USERDIR="/var/cache/omero"
 
 ## Debugging
 
-The connector will try to place log messages in a file in the location specified as
+The connector will try to place log messages in a file in the *directory* specified as
 `$HRM_LOG` in the HRM configuration file **unless** a configuration option named
 `$OMERO_CONNECTOR_LOGFILE_DISABLED` is present and non-empty. In a standard setup this
 will result in the log file being `/var/log/hrm/omero-connector.log`.
