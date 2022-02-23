@@ -88,7 +88,6 @@ OMERO_HOSTNAME="omero.example.xy"
 # OMERO_PORT="4064"
 OMERO_CONNECTOR_LOGLEVEL="DEBUG"
 # OMERO_CONNECTOR_LOGFILE_DISABLED="true"
-OMERO_USERDIR="/var/cache/omero"
 ```
 
 ## Debugging
