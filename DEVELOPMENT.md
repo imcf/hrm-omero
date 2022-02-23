@@ -104,7 +104,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [x] lift assumption that datasets are always members of a project in OMERO
 - [x] create target directory for thumbnails in case it doesn't exist
 - [ ] create documentation on the `OMERO_USERDIR` configuration
-- [ ] make log verbosity setting optional in the configuration file, otherwise
+- [x] make log verbosity setting optional in the configuration file, otherwise
       `Adding a file sink for logging failed: Level '' does not exist` is issued
       from `hrm_omero.cli:logger_add_file_sink` if nothing is present
 - [ ] try to catch "assert failed" errors when uploading data to OMERO, this usually

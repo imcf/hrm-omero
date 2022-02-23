@@ -242,7 +242,7 @@ def logger_add_file_sink(hrm_config, target=""):
         log_base = hrm_config.get("HRM_LOG", "/var/log/hrm")
         target = f"{log_base}/omero-connector.log"
 
-    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL", "")
+    log_level = hrm_config.get("OMERO_CONNECTOR_LOGLEVEL", "INFO")
     try:
         log.add(target, level=log_level)
         log.trace(f"Added file sink for logging: {target}.")
