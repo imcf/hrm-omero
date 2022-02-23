@@ -48,7 +48,7 @@ def parse_config(filename):
     """
     log.debug(f"Trying to parse HRM configuration file [{filename}]...")
     config = dict()
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         body = file.read()
 
     lexer = shlex.shlex(body)
