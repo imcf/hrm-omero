@@ -90,6 +90,36 @@ OMERO_CONNECTOR_LOGLEVEL="DEBUG"
 # OMERO_CONNECTOR_LOGFILE_DISABLED="true"
 ```
 
+On top of that it is necessary to explicitly set two environment variables for the
+Apache process. By default (at least on recent Ubuntu and CentOS / RHEL versions) the
+system user running Apache is not allowed to write to its `$HOME` directory for security
+reasons. Therefore it is required to specify where the OMERO Python bindings and also
+Java may store cache files and preferences. This can be done by running the following
+command:
+
+```bash
+systemctl edit apache2.service  # Debian / Ubuntu
+systemctl edit httpd.service  # CentOS / RHEL / AlmaLinux
+```
+
+There, add the following section, adjusting the path if desired:
+
+```systemd
+[Service]
+Environment=OMERO_USERDIR=/var/cache/omero
+Environment=JAVA_OPTS="-Djava.util.prefs.userRoot=/var/cache/omero/javaUserRoot"
+```
+
+Now make sure the specified directory exists and is writable by the Apache system user:
+```bash
+mkdir -v /var/cache/omero
+chown www-data:www-data /var/cache/omero  # Debian / Ubuntu
+chown apache:apache /var/cache/omero  # CentOS / RHEL / AlmaLinux
+```
+
+Finally, restart *Apache* by running the respective `systemctl` command from above while
+replacing `edit` for `restart`.
+
 ## Debugging
 
 The connector will try to place log messages in a file in the *directory* specified as
