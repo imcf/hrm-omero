@@ -17,8 +17,8 @@ __pycache__/
 /tests/online/settings/site_specific*.py
 /tests/online/settings/site_specific*.yml
 
-# local configuration for manual testing:
-/hrm.conf
+# local stuff, manual testing etc:
+/sandbox/
 
 # test-datasets downloaded from zenodo
 /resources/images/multi/zenodo/
