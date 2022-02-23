@@ -11,6 +11,11 @@ the HRM web interface.
 
 ### Installing requirements
 
+**NOTE**: strictly speaking, Java is only required for uploading data from the HRM to
+OMERO, so in case for whatever reason you are planning to use the connector in a
+unidirectional way only you might skip installing the Java packages below. Keep in mind
+this scenario won't be tested by us though.
+
 #### CentOS / RHEL 7 and 8
 
 ```bash
