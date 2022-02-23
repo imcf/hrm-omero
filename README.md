@@ -37,7 +37,9 @@ $HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
 #### Ubuntu 20.04
 
 ```bash
-apt install -y python3.8-venv
+apt install -y \
+    python3.8-venv \
+    openjdk-11-jre-headless
 
 # define the target path for the virtual environment:
 HRM_OMERO_VENV="/opt/venvs/hrm-omero"
