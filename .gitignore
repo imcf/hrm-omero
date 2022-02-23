@@ -27,4 +27,4 @@ __pycache__/
 /resources/scripts/my-omero-seeds*
 
 # cache files for installing OMERO
-/omero-install-cache/
+/omero-install-cache
