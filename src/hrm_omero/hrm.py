@@ -242,6 +242,9 @@ def parse_summary(fname):
     except IOError as err:
         log.error(f"Unable to open parameter summary file [{fname}]: {err}")
         return None
+    except Exception as err:  # pragma: no cover  # pylint: disable-msg=broad-except
+        log.error(f"Parsing summary file [{fname}] failed: {err}")
+        return None
 
     sections = {}  # job parameter summaries have multiple sections split by headers
     rows = []
