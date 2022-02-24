@@ -305,6 +305,10 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
         tempdir.cleanup()
 
     target_id = f"G:{gid}:Image:{imported_id}"
-    add_annotation_keyvalue(conn, target_id, hrm.parse_summary(image_file))
+    try:
+        summary = hrm.parse_summary(image_file)
+        add_annotation_keyvalue(conn, target_id, summary)
+    except Exception as err:  # pragma: no cover # pylint: disable-msg=broad-except
+        log.error(f"Creating a parameter summary from [{image_file}] failed: {err}")
 
     return True
