@@ -239,6 +239,7 @@ def parse_summary(fname):
     try:
         with open(fname, "r", encoding="utf-8") as soupfile:
             soup = BeautifulSoup(soupfile, features="html.parser")
+            log.trace(f"BeautifulSoup successfully parsed [{fname}].")
     except IOError as err:
         log.error(f"Unable to open parameter summary file [{fname}]: {err}")
         return None
@@ -249,6 +250,7 @@ def parse_summary(fname):
     sections = {}  # job parameter summaries have multiple sections split by headers
     rows = []
     for table in soup.findAll("table"):
+        log.trace("Parsing table header...")
         try:
             rows = table.findAll("tr")
             header = rows[0].findAll("td", class_="header")[0].text
