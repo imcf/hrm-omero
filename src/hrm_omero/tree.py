@@ -69,7 +69,6 @@ def gen_children(conn, omero_id):
     oid = omero_id.obj_id
     log.debug(f"generating children for: gid={gid} | obj_type={obj_type} | oid={oid}")
 
-    children = []
     conn.SERVICE_OPTS.setOmeroGroup(gid)
     obj = conn.getObject(obj_type, oid)
     # we need different child-wrappers, depending on the object type:
@@ -94,6 +93,7 @@ def gen_children(conn, omero_id):
         children_wrapper = obj.listChildren()
 
     # now process children:
+    children = []
     for child in children_wrapper:
         children.append(gen_obj_dict(child, "G:" + gid + ":"))
 
