@@ -12,14 +12,14 @@ def test_with_example_file():
     """Test the config parser with the example HRM config file from 'resources'."""
     infile = "resources/hrm.conf"
     config = hrm.parse_config(infile)
-    assert config["OMERO_HOSTNAME"] == "omero.mynetwork.xy"
+    assert config["OMERO_HOSTNAME"] == "omero.example.xy"
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_SHORT)
 def test_valid_short(mock_file):
     """Test the config parser with a valid short configuration."""
     config = hrm.parse_config(mock_file)
-    assert config["OMERO_HOSTNAME"] == "omero.mynetwork.xy"
+    assert config["OMERO_HOSTNAME"] == "omero.example.xy"
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=CONF_LONG)

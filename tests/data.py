@@ -14,7 +14,7 @@ RE_HELP = r"usage: [a-z_-]+ \[-h\] \[-v\] \[--version\] \[-c CONFIG\] \[--dry-ru
 
 CONF_SHORT = """
 # OMERO_HOSTNAME="omero"
-OMERO_HOSTNAME="omero.mynetwork.xy"
+OMERO_HOSTNAME="omero.example.xy"
 # OMERO_HOSTNAME="localhost"
 OMERO_PORT="4064"
 """
