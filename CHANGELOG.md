@@ -45,6 +45,10 @@
   instead of simply being a comment string.
 * Formats like e.g. Olympus `.vsi` requiring their files to be placed in a specific
   directory structure are now properly supported.
+* Tree levels (users, projects, ...) are now sorted alphabetically instead of the
+  (seemingly) random order as they are returned by OMERO with the exception of the
+  current user always being listed first on the group level, followed by their
+  colleagues.
 * *Datasets* in OMERO that are not associated to a *Project* will no longer be ignored
   but rather be shown on the same level than the user's projects, just as OMERO.web and
   OMERO.insight are doing it.

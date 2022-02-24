@@ -96,6 +96,7 @@ def gen_children(conn, omero_id):
     children = []
     for child in children_wrapper:
         children.append(gen_obj_dict(child, "G:" + gid + ":"))
+    children = sorted(children, key=lambda d: d["label"].lower())
 
     # set the on-demand flag unless the children are the last level:
     if not obj_type == "Dataset":
@@ -122,7 +123,8 @@ def gen_base_tree(conn):
     tree = []
     for group in conn.getGroupsMemberOf():
         tree.append(gen_group_tree(conn, group))
-    return tree
+    tree_sorted = sorted(tree, key=lambda d: d["label"].lower())
+    return tree_sorted
 
 
 def gen_group_tree(conn, group=None):
@@ -171,9 +173,12 @@ def gen_group_tree(conn, group=None):
     user_dict = gen_obj_dict(user, "G:" + gid + ":")
     user_dict["load_on_demand"] = True
     group_dict["children"].append(user_dict)
+    all_user_dicts = []
     # then add the trees for other group members
     for user in conn.listColleagues():
         user_dict = gen_obj_dict(user, "G:" + gid + ":")
         user_dict["load_on_demand"] = True
-        group_dict["children"].append(user_dict)
+        all_user_dicts.append(user_dict)
+
+    group_dict["children"] += sorted(all_user_dicts, key=lambda d: d["label"].lower())
     return group_dict

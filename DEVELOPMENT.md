@@ -87,7 +87,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 ## ToDo list
 
-- [ ] sort tree levels (users, projects, ...) alphabetically, by default they are
+- [x] sort tree levels (users, projects, ...) alphabetically, by default they are
       returned in the same order as OMERO is iterating them
 - [x] use "key-value pairs" for the HRM job parameter summaries
 - [x] trees for different groups
