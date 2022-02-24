@@ -246,8 +246,12 @@ def parse_summary(fname):
     sections = {}  # job parameter summaries have multiple sections split by headers
     rows = []
     for table in soup.findAll("table"):
-        rows = table.findAll("tr")
-        header = rows[0].findAll("td", class_="header")[0].text
+        try:
+            rows = table.findAll("tr")
+            header = rows[0].findAll("td", class_="header")[0].text
+        except Exception:  # pylint: disable-msg=broad-except
+            log.debug("Skipping table entry that doesn't have a header.")
+            continue
         log.trace(f"Parsed table header: {header}")
         if header in sections:
             raise KeyError(f"Error parsing parameters, duplicate header: {header}")
