@@ -6,6 +6,7 @@ from hrm_omero import hrm
 
 from .data import (
     FNAME_VALID,
+    FNAME_VALID_WARNING,
     FNAME_VALID_IMAGE,
     FNAME_INVALID_HEADERS,
     FNAME_INVALID_PARAMS,
@@ -19,6 +20,20 @@ def test_with_valid_file():
     assert "X pixel size (μm)" in summary["Image Parameters"]
     # check the N/A value for channel 0:
     assert summary["Image Parameters"]["Numerical aperture [ch:0]"] == "2.345"
+
+
+def test_with_valid_warning_file(caplog):
+    """Test parser with a valid file having a 'WARNING' section.
+
+    Such files contain an extra table that does not have a header and are
+    simply skipped by the parser while printing a debug level log message.
+    """
+    summary = hrm.parse_summary(FNAME_VALID_WARNING)
+    assert "Skipping table entry that doesn't have a header." in caplog.text
+    # check if we're having an entry containing the converted "μm" unit:
+    assert "X pixel size (μm)" in summary["Image Parameters"]
+    # check the N/A value for channel 0:
+    assert summary["Image Parameters"]["Numerical aperture [ch:0]"] == "1.200"
 
 
 def test_with_valid_image(caplog):

@@ -39,6 +39,7 @@ CONF_COMMENT = 'TRIPLE="reloaded"  # whatever that means'
 
 BASE_DIR = os.path.join("tests", "resources", "parameter-summaries")
 FNAME_VALID = os.path.join(BASE_DIR, "valid-summary.txt")
+FNAME_VALID_WARNING = os.path.join(BASE_DIR, "valid-summary-with-warning.txt")
 FNAME_VALID_IMAGE = os.path.join(BASE_DIR, "dummy_0123456789abc_hrm.png")
 FNAME_INVALID_HEADERS = os.path.join(BASE_DIR, "invalid-summary-duplicate-headers.txt")
 FNAME_INVALID_PARAMS = os.path.join(BASE_DIR, "invalid-summary-duplicate-params.txt")
