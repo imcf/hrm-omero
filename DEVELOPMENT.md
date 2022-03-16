@@ -24,6 +24,32 @@ pip install \
     hrm-omero==0.4.0.dev1
 ```
 
+## Updating local `dev` wheels
+
+One common scenario is to work on the source tree using your local Desktop and manually
+testing interaction with the HRM's web interface in a container by (repeatedly) creating
+wheel packages through poetry and pip-installing them inside the container.
+
+However, when installing a wheel with the same version (e.g. `0.4.0-dev7`) multiple
+times subsequently, pip's `--force` option has to be used. Unfortunately this will also
+try to re-build the `Ice` wheel from scratch which is quite a time-consuming process. To
+avoid this, you can simply use the locally cached `Ice` wheel and supply it along the
+command to "force-reinstall" the `hrm-omero` wheel, e.g. like this:
+
+```bash
+# find the previously built and cached Ice wheel:
+ICE_WHEEL=$(find .cache/pip/wheels/ | grep -i ice)
+# move it out of the cache to preserve it and have a shorter path:
+mv -v "$ICE_WHEEL" .
+
+# use 'pip' to install the new hrm-omero wheel while using the previous Ice:
+/opt/venvs/hrm-omero/bin/pip install \
+    --upgrade \
+    --force \
+    hrm_omero-0.4.0.dev7-py3-none-any.whl \
+    zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+```
+
 ## Testing
 
 Testing is done through [pytest][d4] and can be triggered by running this command:
