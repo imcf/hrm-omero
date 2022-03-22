@@ -151,8 +151,6 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [x] make log verbosity setting optional in the configuration file, otherwise
       `Adding a file sink for logging failed: Level '' does not exist` is issued
       from `hrm_omero.cli:logger_add_file_sink` if nothing is present
-- [ ] try to catch "assert failed" errors when uploading data to OMERO, this usually
-      indicates that the file / fileset was refused by Bio-Formats
 - [x] retain structure of complex multi-file datasets like Olympus `.vsi` that
       expects files to be in specific sub-directories etc.
 - [x] add group-write permissions to files and directories created by the connector
@@ -161,6 +159,8 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 
 - [ ] add command line action to create new projects and datasets in OMERO
 - [ ] speed up tree-loading by avoiding the necessary repeated calls to the connector
+- [ ] catch "assert failed" errors when uploading data to OMERO, this usually
+      indicates that the file / fileset was refused by Bio-Formats
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
