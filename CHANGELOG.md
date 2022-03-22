@@ -35,7 +35,7 @@
 * The CLI has a new optional parameter `--dry-run` that prevents any action from being
   performed, instead the name of the function and the corresponding parameters that
   would be called are printed to stdout.
-* Unit tests using [pytest][c2] and [pytest-cov][c3] (incomplete).
+* Unit tests using [pytest][c2] and [pytest-cov][c3].
 
 ### Changes
 
