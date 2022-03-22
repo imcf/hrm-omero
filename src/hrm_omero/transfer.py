@@ -11,7 +11,7 @@ from PIL import Image
 
 from . import hrm
 from .omero import extract_image_id, add_annotation_keyvalue
-from .misc import printlog, parse_id_str
+from .misc import printlog, parse_id_str, changemodes
 
 
 def from_omero(conn, id_str, dest):
@@ -93,9 +93,11 @@ def from_omero(conn, id_str, dest):
     strip = os.path.commonprefix(all_files).rindex("/") + 1
 
     # strip the common prefix, check if any of the files already exist:
+    top_level = []
     for i, pair in enumerate(downloads):
         rel_path = pair[1][strip:]
         log.trace(f"relative path: {rel_path}")
+        top_level.append(rel_path.split("/")[0])
         abs_path = os.path.join(dest, rel_path)
         downloads[i] = (pair[0], abs_path)
         if os.path.exists(abs_path):
@@ -105,13 +107,17 @@ def from_omero(conn, id_str, dest):
     # now initiate the downloads for all original files:
     for (file_id, tgt) in downloads:
         try:
+            log.trace(f"Downloading original file [{file_id}] to [{tgt}]...")
             os.makedirs(os.path.dirname(tgt), exist_ok=True)
             conn.c.download(OriginalFileI(file_id), tgt)
         except:  # pylint: disable-msg=bare-except
             printlog("ERROR", f"ERROR: downloading {file_id} to '{tgt}' failed!")
             return False
-
         printlog("SUCCESS", f"ID {file_id} downloaded as '{os.path.basename(tgt)}'")
+
+    for item in top_level:
+        changemodes(os.path.join(dest, item))
+
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:

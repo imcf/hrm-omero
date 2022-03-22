@@ -138,9 +138,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
       indicates that the file / fileset was refused by Bio-Formats
 - [x] retain structure of complex multi-file datasets like Olympus `.vsi` that
       expects files to be in specific sub-directories etc.
-- [ ] look into permissions of directories created during transfers from OMERO, either
-      a `chmod` should be applied or the setup instructions need to be adapted so those
-      directories get created with correct permissions
+- [ ] add group-write permissions to files and directories created by the connector
 
 ## Planned features
 

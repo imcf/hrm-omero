@@ -1,5 +1,7 @@
 """Miscellaneous functions used across the package."""
 
+import os
+
 from loguru import logger as log
 
 
@@ -100,3 +102,25 @@ def parse_id_str(id_str):  # pragma: no cover
     log.warning(f"DEPRECATED call to {__name__}!")
     omero_id = OmeroId(id_str)
     return omero_id.group, omero_id.obj_type, omero_id.obj_id
+
+
+def changemodes(path, dmode=0o775, fmode=0o664):
+    """Recursive `chmod` function in the spirit of `os.makedirs()`.
+
+    Parameters
+    ----------
+    path : _type_
+        _description_
+    dmode : _type_, optional
+        _description_, by default 0o775
+    fmode : _type_, optional
+        _description_, by default 0o664
+    """
+    os.chmod(path, mode=dmode)
+    for dirpath, dirnames, filenames in os.walk(path):
+        for dname in dirnames:
+            log.trace(f"Adjusting permissions on [{dname}] to [{dmode:o}]...")
+            os.chmod(os.path.join(dirpath, dname), mode=dmode)
+        for fname in filenames:
+            log.trace(f"Adjusting permissions on [{fname}] to [{fmode:o}]...")
+            os.chmod(os.path.join(dirpath, fname), mode=fmode)
