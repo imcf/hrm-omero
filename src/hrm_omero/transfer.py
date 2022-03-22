@@ -115,8 +115,7 @@ def from_omero(conn, id_str, dest):
             return False
         printlog("SUCCESS", f"ID {file_id} downloaded as '{os.path.basename(tgt)}'")
 
-    for item in top_level:
-        changemodes(os.path.join(dest, item))
+    changemodes(dest, top_level)
 
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for

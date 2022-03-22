@@ -104,23 +104,34 @@ def parse_id_str(id_str):  # pragma: no cover
     return omero_id.group, omero_id.obj_type, omero_id.obj_id
 
 
-def changemodes(path, dmode=0o775, fmode=0o664):
+def changemodes(basepath, elements, dmode=0o775, fmode=0o664):
     """Recursive `chmod` function in the spirit of `os.makedirs()`.
 
     Parameters
     ----------
-    path : _type_
-        _description_
-    dmode : _type_, optional
-        _description_, by default 0o775
-    fmode : _type_, optional
-        _description_, by default 0o664
+    basepath : str
+        The base path where to look for the given elements.
+    elements : list(str)
+        A list of file and directory names relative to `basepath`.
+    dmode : int, optional
+        The mode to use for directories, by default `0o775`
+    fmode : int, optional
+        The mode to use for files, by default `0o664`
     """
-    os.chmod(path, mode=dmode)
-    for dirpath, dirnames, filenames in os.walk(path):
-        for dname in dirnames:
-            log.trace(f"Adjusting permissions on [{dname}] to [{dmode:o}]...")
-            os.chmod(os.path.join(dirpath, dname), mode=dmode)
-        for fname in filenames:
-            log.trace(f"Adjusting permissions on [{fname}] to [{fmode:o}]...")
-            os.chmod(os.path.join(dirpath, fname), mode=fmode)
+    for item in elements:
+        path = os.path.join(basepath, item)
+
+        if os.path.isdir(path):
+            log.trace(f"Adjusting permissions on [{path}] to [{dmode:o}]...")
+            os.chmod(path, mode=dmode)
+        else:
+            log.trace(f"Adjusting permissions on [{path}] to [{fmode:o}]...")
+            os.chmod(path, mode=fmode)
+
+        for dirpath, dirnames, filenames in os.walk(path):
+            for dname in dirnames:
+                log.trace(f"Adjusting permissions on [{dname}] to [{dmode:o}]...")
+                os.chmod(os.path.join(dirpath, dname), mode=dmode)
+            for fname in filenames:
+                log.trace(f"Adjusting permissions on [{fname}] to [{fmode:o}]...")
+                os.chmod(os.path.join(dirpath, fname), mode=fmode)
