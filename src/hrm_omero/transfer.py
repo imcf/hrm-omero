@@ -110,8 +110,8 @@ def from_omero(conn, id_str, dest):
             log.trace(f"Downloading original file [{file_id}] to [{tgt}]...")
             os.makedirs(os.path.dirname(tgt), exist_ok=True)
             conn.c.download(OriginalFileI(file_id), tgt)
-        except:  # pylint: disable-msg=bare-except
-            printlog("ERROR", f"ERROR: downloading {file_id} to '{tgt}' failed!")
+        except Exception as err:  # pylint: disable-msg=broad-except
+            printlog("ERROR", f"ERROR: downloading {file_id} to '{tgt}' failed: {err}")
             return False
         printlog("SUCCESS", f"ID {file_id} downloaded as '{os.path.basename(tgt)}'")
 
