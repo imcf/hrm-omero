@@ -158,6 +158,7 @@ def fetch_thumbnail(conn, image_id, dest):
     thumbnail = Image.open(BytesIO(image_data))
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
+        # TODO: consider using `misc.changemodes()`
         # for an unkown reason using mode=(S_IRWXU | S_IRWXG) on the `mkdir()` call
         # doesn't seem to work, so we have to add group-write in a second step:
         target_dir.chmod(target_dir.stat().st_mode | stat.S_IWGRP)
