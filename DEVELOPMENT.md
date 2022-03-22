@@ -46,8 +46,8 @@ mv -v "$ICE_WHEEL" .
 /opt/venvs/hrm-omero/bin/pip install \
     --upgrade \
     --force \
-    hrm_omero-0.4.0.dev7-py3-none-any.whl \
-    zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+    zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl \
+    hrm_omero-0.4.0.dev7-py3-none-any.whl
 ```
 
 ## Testing
