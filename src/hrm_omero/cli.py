@@ -95,21 +95,6 @@ def arguments_parser():
         help="print requested action and parameters without actually performing it",
     )
 
-    # deprecated arguments group
-    dep_args = argparser.add_argument_group(
-        "DEPRECATED arguments",
-        "See the documentation for instructions on how to adapt your call!",
-    )
-    dep_args.add_argument(
-        "-w",
-        "--password",
-        required=False,
-        help=(
-            "OMERO password  ******** DEPRECATED ********"
-            "Use the environment variable 'OMERO_PASSWORD' instead!"
-        ),
-    )
-
     # required arguments group
     req_args = argparser.add_argument_group(
         "required arguments", "NOTE: MUST be given before any subcommand!"
@@ -289,12 +274,6 @@ def run_task(args):
     # beyond this seems a bit pointless here as an admin could also modify the code that
     # is actually calling the connector to get hold of user credentials.
     passwd = os.environ.get("OMERO_PASSWORD")
-    # while being deprecated an explicitly specified password still has priority:
-    if args.password:  # pragma: no cover
-        passwd = args.password
-        log.warning("Using the '--password' parameter is deprecated!")
-    else:
-        log.debug("Using password from environment.")
     if not passwd:
         printlog("ERROR", "ERROR: no password given to connect to OMERO!")
         return False

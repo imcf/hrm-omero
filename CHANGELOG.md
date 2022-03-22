@@ -6,6 +6,9 @@
 
 ### Changes in 1.0.0
 
+* The previously deprecated option of providing the password through a command line
+  argument has been removed.
+
 ### Fixes in 1.0.0
 
 
