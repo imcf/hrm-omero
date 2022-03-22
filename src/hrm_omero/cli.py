@@ -41,19 +41,6 @@ def bool_to_exitstatus(value):
     return value
 
 
-def parse_arguments(args):  # pragma: no cover
-    """Parse the commandline arguments.
-
-    DEPRECATED function, use `arguments_parser()` instead!
-    """
-    log.warning("'parse_arguments()' is deprecated and will be removed!")
-    argparser = arguments_parser()
-    try:
-        return argparser.parse_args(args)
-    except IOError as err:
-        argparser.error(str(err))
-
-
 def arguments_parser():
     """Set up the commandline arguments parser.
 
