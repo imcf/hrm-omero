@@ -1,8 +1,17 @@
 # Changelog
 
+## 1.0.0
+
+### New in 1.0.0
+
+### Changes in 1.0.0
+
+### Fixes in 1.0.0
+
+
 ## 0.4.0
 
-### New
+### New in 0.4.0
 
 * An environment variable `OMERO_PASSWORD` can (and should!) now be used to supply the
   sensitive part of the user credentials that are necessary to connect to OMERO. This
@@ -37,7 +46,7 @@
   would be called are printed to stdout.
 * Unit tests using [pytest][c2] and [pytest-cov][c3].
 
-### Changes
+### Changes in 0.4.0
 
 * Uploading images to OMERO into another group than the user's default one is now
   properly supported.
@@ -65,7 +74,7 @@
 * Unit string literal `µm` is no longer converted to `um` in parameter summaries.
 * New dependencies: [Pillow][c1]
 
-### Fixes
+### Fixes in 0.4.0
 
 * Thumbnail download has been adapted to recent code changes in OMERO.
 
