@@ -128,7 +128,6 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
   - [x] through the configuration file
 - [x] (REJECTED) ~~offer download of OME-TIFFs~~
 - [x] don't use a command line parameter for the OMERO password
-- [ ] add command line action to create new projects and datasets in OMERO
 - [x] lift assumption that datasets are always members of a project in OMERO
 - [x] create target directory for thumbnails in case it doesn't exist
 - [x] create documentation on the `OMERO_USERDIR` configuration
@@ -142,6 +141,11 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [ ] look into permissions of directories created during transfers from OMERO, either
       a `chmod` should be applied or the setup instructions need to be adapted so those
       directories get created with correct permissions
+
+## Planned features
+
+- [ ] add command line action to create new projects and datasets in OMERO
+- [ ] speed up tree-loading by avoiding the necessary repeated calls to the connector
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
