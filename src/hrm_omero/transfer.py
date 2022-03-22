@@ -10,11 +10,13 @@ from loguru import logger as log
 from PIL import Image
 
 from . import hrm
+from .decorators import connect_and_set_group
 from .omero import extract_image_id, add_annotation_keyvalue
-from .misc import printlog, parse_id_str, changemodes
+from .misc import printlog, changemodes
 
 
-def from_omero(conn, id_str, dest):
+@connect_and_set_group
+def from_omero(conn, omero_id, dest):
     """Download the corresponding original file(s) from an image ID.
 
     This only works for image IDs that were created with OMERO 5.0 or later as previous
@@ -32,8 +34,8 @@ def from_omero(conn, id_str, dest):
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The ID of the OMERO image (e.g. `G:23:Image:42`).
+    omero_id : hrm_omero.misc.OmeroId
+        The ID of the OMERO image to be downloaded.
     dest : str
         The destination path.
 
@@ -47,12 +49,11 @@ def from_omero(conn, id_str, dest):
     ValueError
         Raised in case an object that is not of type `Image` was requested.
     """
-    _, obj_type, obj_id = parse_id_str(id_str)
-    log.trace(f"Trying to download {obj_type}:{obj_id} to [{dest}]...")
+    log.trace(f"Downloading {omero_id.obj_type}:{omero_id.obj_id} to [{dest}]...")
 
     # conn.setGroupForSession(-1)
     conn.SERVICE_OPTS.setOmeroGroup(-1)  # still working with OMERO-5.6.3
-    if obj_type != "Image":
+    if omero_id.obj_type != "Image":
         raise ValueError("Currently only the download of 'Image' objects is supported!")
 
     # check if dest is a directory, rewrite it otherwise:
@@ -66,14 +67,14 @@ def from_omero(conn, id_str, dest):
     # use image objects and getFileset() methods to determine original files,
     # see the following OME forum thread for some more details:
     # https://www.openmicroscopy.org/community/viewtopic.php?f=6&t=7563
-    target_obj = conn.getObject(obj_type, obj_id)
+    target_obj = conn.getObject(omero_id.obj_type, omero_id.obj_id)
     if not target_obj:
-        printlog("ERROR", f"ERROR: can't find image with ID {obj_id}!")
+        printlog("ERROR", f"ERROR: can't find image with ID [{omero_id.obj_id}]!")
         return False
 
     fset = target_obj.getFileset()
     if not fset:  # pragma: no cover
-        printlog("ERROR", f"ERROR: no original file(s) for image {obj_id} found!")
+        printlog("ERROR", f"ERROR: no original file(s) for [{omero_id.obj_id}] found!")
         return False
 
     # NOTE: the idea of offering to download the OME-TIFF from OMERO (i.e. the converted
@@ -120,7 +121,7 @@ def from_omero(conn, id_str, dest):
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:
-    fetch_thumbnail(conn, obj_id, downloads[0][1])
+    fetch_thumbnail(conn, omero_id.obj_id, downloads[0][1])
     return True
 
 

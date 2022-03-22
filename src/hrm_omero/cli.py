@@ -279,7 +279,7 @@ def run_task(args):
         log.trace("OMEROtoHRM")
         perform_action = transfer.from_omero
         kwargs = {
-            "id_str": args.imageid,
+            "omero_id": OmeroId(args.imageid),
             "dest": args.dest,
         }
 
