@@ -113,17 +113,17 @@ retrieveChildren = [
                 [
                     {
                         "children": [],
-                        "class": "Project",
-                        "id": "G:{{GID_1}}:{{U1__PID_1}}",
-                        "label": "Proj01",
+                        "class": "Dataset",
+                        "id": "G:3:Dataset:3",
+                        "label": "NoProj--Dset01",
                         "load_on_demand": true,
                         "owner": "hrm-test-01"
                     },
                     {
                         "children": [],
-                        "class": "Dataset",
-                        "id": "G:{{GID_1}}:{{U1__DSID_1}}",
-                        "label": "NoProj--Dset01",
+                        "class": "Project",
+                        "id": "G:3:Project:1",
+                        "label": "Proj01",
                         "load_on_demand": true,
                         "owner": "hrm-test-01"
                     }
