@@ -9,6 +9,7 @@ import sys
 
 import pytest
 from hrm_omero.transfer import fetch_thumbnail
+from hrm_omero.misc import OmeroId
 
 
 @pytest.mark.online
@@ -21,13 +22,11 @@ def test_thumbnail_dir_unwritable(omero_conn, tmp_path, settings, capsys):
 
     test = settings.download_image[0]
 
-    image_id = test["image_id"]
+    image_id = OmeroId(f"G:{test['gid']}:{test['image_id']}")
     dest = tmp_path / "hrm_previews"
     os.mkdir(dest)
     stat = os.stat(dest)
     os.chmod(dest, 0o000)
-
-    image_id = image_id.replace("Image:", "")
 
     ret = fetch_thumbnail(omero_conn, image_id, dest)
     assert ret is False

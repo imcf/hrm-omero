@@ -121,11 +121,11 @@ def from_omero(conn, omero_id, dest):
     # NOTE: for filesets with a single file or e.g. ICS/IDS pairs it makes
     # sense to use the target name of the first file to construct the name for
     # the thumbnail, but it is unclear whether this is a universal approach:
-    fetch_thumbnail(conn, omero_id.obj_id, downloads[0][1])
+    fetch_thumbnail(conn, omero_id, downloads[0][1])
     return True
 
 
-def fetch_thumbnail(conn, image_id, dest):
+def fetch_thumbnail(conn, omero_id, dest):
     """Download the thumbnail of a given image from OMERO.
 
     OMERO provides thumbnails for stored images, this function downloads the thumbnail
@@ -135,8 +135,8 @@ def fetch_thumbnail(conn, image_id, dest):
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    image_id : str
-        An OMERO object ID of an image (e.g. '102').
+    omero_id : str
+        The ID of the OMERO image to fetch the thumbnail for.
     dest : str
         The destination filename.
 
@@ -145,14 +145,14 @@ def fetch_thumbnail(conn, image_id, dest):
     bool
         True in case the download was successful, False otherwise.
     """
-    log.info(f"Trying to fetch thumbnail for OMERO image [{image_id}]...")
+    log.info(f"Trying to fetch thumbnail for OMERO image [{omero_id.obj_id}]...")
     log.trace(f"Requested target location: [{dest}].")
 
     base_dir, fname = os.path.split(dest)
     target_dir = Path(base_dir) / "hrm_previews"
     target = Path(target_dir) / f"{fname}.preview_xy.jpg"
 
-    image_obj = conn.getObject("Image", image_id)
+    image_obj = conn.getObject("Image", omero_id.obj_id)
     image_data = image_obj.getThumbnail()
     log.trace(f"len(image_data)={len(image_data)}")
     thumbnail = Image.open(BytesIO(image_data))
