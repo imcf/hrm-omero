@@ -173,7 +173,8 @@ def fetch_thumbnail(conn, omero_id, dest):
     return True
 
 
-def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
+@connect_and_set_group
+def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False):
     """Upload an image into a specific dataset in OMERO.
 
     In case we know from the suffix that a given  format is not supported by OMERO, the
@@ -189,8 +190,8 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    id_str : str
-        The ID of the target dataset in OMERO (e.g. `G:7:Dataset:23`).
+    omero_id : hrm_omero.misc.OmeroId
+        The ID of the target dataset in OMERO.
     image_file : str
         The local image file including the full path.
     omero_logfile : str, optional
@@ -212,7 +213,7 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
     TypeError
         Raised in case `image_file` is in a format that is not supported by OMERO.
     ValueError
-        Raised in case `id_str` has an invalid format.
+        Raised in case `omero_id` is not pointing to a dataset.
     """
 
     # TODO: revisit this, as e.g. BDV .h5 files are supported for now!
@@ -221,14 +222,10 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
         printlog("ERROR", msg)
         raise TypeError(msg)
 
-    _, gid, obj_type, dset_id = id_str.split(":")
-    if obj_type != "Dataset":
+    if omero_id.obj_type != "Dataset":
         msg = "Currently only the upload to 'Dataset' objects is supported!"
         printlog("ERROR", msg)
         raise ValueError(msg)
-
-    # set the group for this import session:
-    conn.setGroupForSession(gid)
 
     # we have to create the annotations *before* we actually upload the image
     # data itself and link them to the image during the upload - the other way
@@ -267,7 +264,7 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
         import_args.extend(["--debug", "ALL"])
         import_args.extend(["--errs", omero_logfile])
 
-    import_args.extend(["-d", dset_id])
+    import_args.extend(["-d", omero_id.obj_id])
 
     # capture stdout and request YAML format to parse the output later on:
     tempdir = tempfile.TemporaryDirectory(prefix="hrm-omero__")
@@ -304,14 +301,14 @@ def to_omero(conn, id_str, image_file, omero_logfile="", _fetch_zip_only=False):
         )
         return False
     except Exception as err:  # pylint: disable-msg=broad-except
-        printlog("ERROR", f"ERROR: uploading '{image_file}' to {id_str} failed!")
+        printlog("ERROR", f"ERROR: uploading '{image_file}' to {omero_id} failed!")
         printlog("ERROR", f"OMERO error message: >>>{err}<<<")
         printlog("WARNING", f"import_args: {import_args}")
         return False
     finally:
         tempdir.cleanup()
 
-    target_id = f"G:{gid}:Image:{imported_id}"
+    target_id = f"G:{omero_id.group}:Image:{imported_id}"
     try:
         summary = hrm.parse_summary(image_file)
         add_annotation_keyvalue(conn, target_id, summary)

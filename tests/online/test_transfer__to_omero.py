@@ -9,6 +9,7 @@ import os
 import pytest
 from hrm_omero.omero import find_recently_imported
 from hrm_omero.transfer import to_omero
+from hrm_omero.misc import OmeroId
 
 
 @pytest.mark.online
@@ -111,7 +112,9 @@ def test_invalid_target(omero_conn, settings, capfd):
     import_image = settings.import_image[0]
     fname = import_image["filename"]
     sha1sum = import_image["sha1sum"]
-    target_id = "G:-1:Dataset:-1"
+    target_id = OmeroId("G:1:Dataset:1")
+    target_id.group = "-1"
+    target_id.obj_id = "-1"
 
     print(f"Trying to import [{fname}] into [{target_id}] (sha1: {sha1sum})")
     ret = to_omero(omero_conn, target_id, fname)

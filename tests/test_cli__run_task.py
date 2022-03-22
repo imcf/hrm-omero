@@ -118,7 +118,7 @@ def test_dry_run_to_omero(capsys, monkeypatch, cli_args):
     print(captured.out)
     assert "dry-run, only showing action and parameters" in captured.out
     assert "function: to_omero" in captured.out
-    assert "id_str: [G:7:Dataset:23]" in captured.out
+    assert "omero_id: [G:7:Dataset:23]" in captured.out
     assert "image_file: [/tmp/foo]" in captured.out
     assert ret is True
 

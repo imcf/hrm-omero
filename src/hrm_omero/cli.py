@@ -287,7 +287,7 @@ def run_task(args):
         log.trace("HRMtoOMERO")
         perform_action = transfer.to_omero
         kwargs = {
-            "id_str": args.dset,
+            "omero_id": OmeroId(args.dset),
             "image_file": args.file,
             "omero_logfile": omero_logfile,
         }
