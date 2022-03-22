@@ -59,7 +59,15 @@ poetry run pytest
 ```
 
 By default only *local* tests will be performed, all tests that require the connection
-to an actual OMERO instance are disabled. To activate them you need to pass the
+to an actual OMERO instance are disabled. See the next section for instructions on
+testing with an OMERO server.
+
+## Testing against an OMERO instance
+
+Please see the following sub-sections on how to set up and prepare an OMERO installation
+that can serve for running the full suite of `hrm-omero` tests.
+
+To activate the *online* tests interacting with an OMERO instance you need to pass the
 `--online` flag to the pytest call and a corresponding file `site_specific.py` needs to
 be present in `tests/online/settings/` that contains the settings on how to connect to
 your OMERO, plus the mapping of object and user IDs. See `tests/resources/settings/` for
@@ -74,7 +82,7 @@ NOTE: each online test does a connectivity check first, if the OMERO server spec
 the site-specific settings can't be reached they will be skipped (instead of generating
 tons of failed test results).
 
-### Prepare an OMERO instance for tests
+### Setting up OMERO
 
 It is recommended to test against an isolated OMERO instance to avoid messing up any
 production data. The script in `resources/omero-recipes/setup-ubuntu-20-04.sh` can be
@@ -83,6 +91,11 @@ used to install OMERO quickly on Ubuntu 20.04. A reasonable approach would be th
 - Create a VM / container with a basic Ubuntu 20.04 installation.
 - Copy the OMERO-setup-script into the VM / container.
 - Run the setup script *from within* the VM / container.
+
+⚠️ It is strongly recommended to *snapshot* your container / VM at this point, so you can
+easily go back to the initial ("fresh") OMERO state later on. ⚠️
+
+### Preparing OMERO for testing
 
 Once OMERO is running, you can use the preparation script to create the required groups,
 users, projects, ... in that OMERO instance. Please note that the preparation script is
@@ -97,6 +110,10 @@ Assuming you copied the seeds file to `my-omero-seeds.inc.sh`, you can simply ru
 preparation script like this:
 
 ```bash
+# get yourself a poetry shell that has access to the `omero` command:
+poetry shell
+
+# run the OMERO preparation script:
 bash resources/scripts/prepare-omero-for-testing.sh \
     resources/scripts/my-omero-seeds.inc.sh \
     tests/resources/settings/site_specific.yml
