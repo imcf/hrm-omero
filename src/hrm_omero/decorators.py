@@ -62,6 +62,6 @@ def connect_and_set_group(func):
         conn.setGroupForSession(omero_id.group)
         log.debug(f"Set OMERO session group to [{omero_id.group}].")
 
-        return func(conn, omero_id, *args, *kwargs)
+        return func(conn, omero_id, *args, **kwargs)
 
     return wrapper_connect_and_set_group
