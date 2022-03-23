@@ -52,7 +52,8 @@ def connect_and_set_group(func):
         conn.connect()
         if not conn._connected:  # pylint: disable-msg=protected-access
             raise RuntimeError("Failed to (re-)establish connection to OMERO!")
-        log.success("Successfully (re-)connected to OMERO!")
+        username = conn.getUser().getName()
+        log.success(f"Successfully (re-)connected to OMERO as [{username}].")
 
         # if the ID is passed as a string parse it into an OmeroId object:
         if isinstance(omero_id, str):

@@ -314,12 +314,6 @@ def run_task(args):
 
             return True
 
-        # FIXME: the conn.connect() call should be removed once all actions (or rather
-        # the related functions) have adopted the decorator for ensuring a connection:
-        if args.action != "checkCredentials":
-            conn.connect()
-            log.info(f"New OMERO connection [user={args.user}].")
-
         return perform_action(conn, **kwargs)
 
     except Exception as err:  # pylint: disable-msg=broad-except  # pragma: no cover
