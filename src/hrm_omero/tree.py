@@ -2,6 +2,8 @@
 
 from loguru import logger as log
 
+from .decorators import connect_and_set_group
+
 
 def gen_obj_dict(obj, id_pfx=""):
     """Create a dict from an OMERO object.
@@ -44,6 +46,7 @@ def gen_obj_dict(obj, id_pfx=""):
     return obj_dict
 
 
+@connect_and_set_group
 def gen_children(conn, omero_id):
     """Get the children for a given node.
 
@@ -64,25 +67,22 @@ def gen_children(conn, omero_id):
     if omero_id.obj_type == "BaseTree":
         return gen_base_tree(conn)
 
-    gid = omero_id.group
-    obj_type = omero_id.obj_type
-    oid = omero_id.obj_id
-    log.debug(f"generating children for: gid={gid} | obj_type={obj_type} | oid={oid}")
+    log.debug(f"generating children for [{omero_id}]")
 
-    conn.SERVICE_OPTS.setOmeroGroup(gid)
-    obj = conn.getObject(obj_type, oid)
+    # conn.SERVICE_OPTS.setOmeroGroup(gid)
+    obj = conn.getObject(omero_id.obj_type, omero_id.obj_id)
     # we need different child-wrappers, depending on the object type:
-    if obj_type == "Experimenter":
+    if omero_id.obj_type == "Experimenter":
         children_wrapper = []
-        for proj in conn.listProjects(oid):
+        for proj in conn.listProjects(omero_id.obj_id):
             children_wrapper.append(proj)
         # OMERO.web is showing "orphaned" datasets (i.e. that do NOT belong to a
         # certain project) at the top level, next to the projects - so we are going to
         # add them to the tree at the same hierarchy level:
-        for dataset in conn.listOrphans("Dataset", eid=oid):
+        for dataset in conn.listOrphans("Dataset", eid=omero_id.obj_id):
             children_wrapper.append(dataset)
 
-    elif obj_type == "ExperimenterGroup":
+    elif omero_id.obj_type == "ExperimenterGroup":
         log.warning(
             f"{__name__} has been called with omero_id='{str(omero_id)}', but "
             "'ExperimenterGroup' trees should be generated via `gen_group_tree()`!",
@@ -95,11 +95,11 @@ def gen_children(conn, omero_id):
     # now process children:
     children = []
     for child in children_wrapper:
-        children.append(gen_obj_dict(child, "G:" + gid + ":"))
+        children.append(gen_obj_dict(child, "G:" + omero_id.group + ":"))
     children = sorted(children, key=lambda d: d["label"].lower())
 
     # set the on-demand flag unless the children are the last level:
-    if not obj_type == "Dataset":
+    if not omero_id.obj_type == "Dataset":
         for child in children:
             child["load_on_demand"] = True
 
