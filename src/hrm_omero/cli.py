@@ -13,7 +13,7 @@ from . import formatting
 from . import hrm
 from . import omero as _omero
 from . import transfer
-from .misc import printlog, OmeroId
+from .misc import printlog
 
 
 def bool_to_exitstatus(value):
