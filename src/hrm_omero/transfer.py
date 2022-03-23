@@ -135,7 +135,7 @@ def fetch_thumbnail(conn, omero_id, dest):
     ----------
     conn : omero.gateway.BlitzGateway
         The OMERO connection object.
-    omero_id : str
+    omero_id : hrm_omero.misc.OmeroId
         The ID of the OMERO image to fetch the thumbnail for.
     dest : str
         The destination filename.
