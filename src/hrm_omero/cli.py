@@ -273,13 +273,13 @@ def run_task(args):
     elif args.action == "retrieveChildren":
         log.trace("retrieveChildren")
         perform_action = formatting.print_children_json
-        kwargs = {"omero_id": OmeroId(args.id)}
+        kwargs = {"omero_id": args.id}
 
     elif args.action == "OMEROtoHRM":
         log.trace("OMEROtoHRM")
         perform_action = transfer.from_omero
         kwargs = {
-            "omero_id": OmeroId(args.imageid),
+            "omero_id": args.imageid,
             "dest": args.dest,
         }
 
@@ -287,7 +287,7 @@ def run_task(args):
         log.trace("HRMtoOMERO")
         perform_action = transfer.to_omero
         kwargs = {
-            "omero_id": OmeroId(args.dset),
+            "omero_id": args.dset,
             "image_file": args.file,
             "omero_logfile": omero_logfile,
         }

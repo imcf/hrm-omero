@@ -63,7 +63,7 @@ def test_dry_run_retrieve_children(capsys, monkeypatch, cli_args):
     print(captured.out)
     assert "dry-run, only showing action and parameters" in captured.out
     assert "function: print_children_json" in captured.out
-    assert "omero_id: [G:-1:BaseTree:-1]" in captured.out
+    assert "omero_id: [ROOT]" in captured.out
     assert ret is True
 
 
