@@ -49,6 +49,15 @@ def connect_and_set_group(func):
         # the connection might be closed (e.g. after importing an image), so force
         # re-establish it (note that `conn._connected` might even report the wrong
         # state initially, or also after reconnecting!)
+        #
+        ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
+        #
+        # calling `conn.connect()` and `conn.setGroupForSession` subsequently (i.e.)
+        # multiple times during one session has unexpected side effects, e.g. when using
+        # the decorator for `transfer.fetch_thumbnail()` will make the call to
+        # `conn.getObject()` return `None`
+        #
+        ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
         conn.connect()
         if not conn._connected:  # pylint: disable-msg=protected-access
             raise RuntimeError("Failed to (re-)establish connection to OMERO!")

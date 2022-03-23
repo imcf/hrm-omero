@@ -145,6 +145,12 @@ def fetch_thumbnail(conn, omero_id, dest):
     bool
         True in case the download was successful, False otherwise.
     """
+    ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
+    #
+    # do NOT decorate this function using `@connect_and_set_group`, see the
+    # explanation in the decorator definition for more details
+    #
+    ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
     log.info(f"Trying to fetch thumbnail for OMERO image [{omero_id.obj_id}]...")
     log.trace(f"Requested target location: [{dest}].")
 
