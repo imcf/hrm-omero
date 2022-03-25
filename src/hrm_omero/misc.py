@@ -12,7 +12,17 @@ class OmeroId:
     The purpose of this class is to facilitate parsing and access of the
     ubiquitious target IDs denoting objects in OMERO. The constructor takes
     the common string of the form `G:[gid]:[type]:[iid]` as an input and sets
-    the properties `group`, `obj_type` and `obj_id` accordingly.
+    the properties `group`, `obj_type` and `obj_id` accordingly after validating
+    their contents for having reasonable values.
+
+    Attributes
+    ----------
+    group : str
+        The OMERO group ID as an int-like `str`.
+    obj_type : str
+        The OMERO object type, e.g. `Experimenter`, `Image`, ...
+    obj_id : str
+        The OMERO object ID as an int-like `str`.
     """
 
     def __init__(self, id_str):
