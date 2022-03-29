@@ -3,9 +3,10 @@
 from loguru import logger as log
 
 from .decorators import connect_and_set_group
+from .misc import OmeroId
 
 
-def gen_obj_dict(obj, id_pfx=""):
+def gen_obj_dict(obj, id_pfx="", conn=None):
     """Create a dict from an OMERO object.
 
     Parameters
@@ -41,8 +42,11 @@ def gen_obj_dict(obj, id_pfx=""):
         obj_dict["owner"] = None
     else:
         obj_dict["owner"] = obj.getOwnerOmeName()
-    obj_dict["id"] = id_pfx + f"{obj.OMERO_CLASS}:{obj.getId()}"
+    identifier = id_pfx + f"{obj.OMERO_CLASS}:{obj.getId()}"
+    obj_dict["id"] = identifier
     obj_dict["children"] = []
+    if conn and not obj.OMERO_CLASS == "Image":
+        obj_dict["children"] = gen_children(conn, OmeroId(identifier))
     return obj_dict
 
 
@@ -95,13 +99,8 @@ def gen_children(conn, omero_id):
     # now process children:
     children = []
     for child in children_wrapper:
-        children.append(gen_obj_dict(child, "G:" + omero_id.group + ":"))
+        children.append(gen_obj_dict(child, "G:" + omero_id.group + ":", conn))
     children = sorted(children, key=lambda d: d["label"].lower())
-
-    # set the on-demand flag unless the children are the last level:
-    if not omero_id.obj_type == "Dataset":
-        for child in children:
-            child["load_on_demand"] = True
 
     return children
 
@@ -170,14 +169,12 @@ def gen_group_tree(conn, group=None):
     group_dict = gen_obj_dict(group)
     # add the user's own tree first:
     user = conn.getUser()
-    user_dict = gen_obj_dict(user, "G:" + gid + ":")
-    user_dict["load_on_demand"] = True
+    user_dict = gen_obj_dict(user, "G:" + gid + ":", conn)
     group_dict["children"].append(user_dict)
     all_user_dicts = []
     # then add the trees for other group members
     for user in conn.listColleagues():
-        user_dict = gen_obj_dict(user, "G:" + gid + ":")
-        user_dict["load_on_demand"] = True
+        user_dict = gen_obj_dict(user, "G:" + gid + ":", conn)
         all_user_dicts.append(user_dict)
 
     group_dict["children"] += sorted(all_user_dicts, key=lambda d: d["label"].lower())
