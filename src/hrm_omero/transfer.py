@@ -183,8 +183,8 @@ def fetch_thumbnail(conn, omero_id, dest):
 def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False):
     """Upload an image into a specific dataset in OMERO.
 
-    In case we know from the suffix that a given  format is not supported by OMERO, the
-    upload will not be initiated at all (e.g. for SVI-HDF5, having the suffix '.h5').
+    In case the suffix of the given `image_file` indicates a format unsupported by
+    OMERO, no import will be attempted (e.g. for SVI-HDF5, having the suffix '.h5').
 
     The import itself is done by instantiating the CLI class, assembling the required
     arguments, and finally running `cli.invoke()`. This eventually triggers the

@@ -127,11 +127,6 @@ def add_annotation_keyvalue(conn, omero_id, annotation):
     -------
     bool
         True in case of success, False otherwise.
-
-    Raises
-    ------
-    RuntimeError
-        Raised in case re-establishing the OMERO connection fails.
     """
     log.trace(f"Adding a map annotation to {omero_id}")
     target_obj = conn.getObject(omero_id.obj_type, omero_id.obj_id)
