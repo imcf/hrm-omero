@@ -222,7 +222,8 @@ def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False
         Raised in case `omero_id` is not pointing to a dataset.
     """
 
-    # TODO: revisit this, as e.g. BDV .h5 files are supported for now!
+    # NOTE: BDV .h5 files are supported by OMERO, but it's not a use-case for the
+    # HRM-OMERO connector at the moment, so we're simply refusing them for now:
     if image_file.lower().endswith((".h5", ".hdf5")):
         msg = f"ERROR importing [{image_file}]: HDF5 format not supported by OMERO!"
         printlog("ERROR", msg)
