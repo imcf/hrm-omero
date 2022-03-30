@@ -179,8 +179,89 @@ def fetch_thumbnail(conn, omero_id, dest):
     return True
 
 
+def _run_omero_cli_import(conn, import_args, cap_stdout, _fetch_zip_only=False):
+    """Simple wrapper around the actual `cli.invoke()` call.
+
+    The main purpose of this wrapper is to stash the boilerplate code (setup, error
+    handling, message printing, ...) for the cli call into a separate location and have
+    the code calling this more readable.
+
+    Parameters
+    ----------
+    conn : omero.gateway.BlitzGateway
+        The OMERO connection object.
+    import_args : list
+        The import arguments to pass on to the `cli.invoke()` call.
+    cap_stdout : str
+        The path to a file for capturing the stdout of the import call. Note
+        that the file also needs to be present in the `import_args` list as
+        `["--file", cap_stdout]`.
+    _fetch_zip_only : bool, optional
+        Replaces all parameters to the import call by `--advanced-help`, which is
+        **intended for INTERNAL TESTING ONLY**. No actual import will be attempted!
+
+    Returns
+    -------
+    int
+        The ID of the imported image.
+    """
+    log.debug(f"import_args: {import_args}")
+    # currently there is no direct "Python way" to import data into OMERO, so we have to
+    # use the CLI wrapper for this...
+    # TODO: check the more recent code mentioned by the OME developers in the forum
+    # thread: https://forum.image.sc/t/automated-uploader-to-omero-in-python/38290
+    # https://gitlab.com/openmicroscopy/incubator/omero-python-importer/-/blob/master/import.py)
+    # and also see https://pypi.org/project/omero-upload/
+    from omero.cli import CLI
+
+    cli = CLI()
+    cli.loadplugins()
+    cli.set_client(conn.c)
+
+    if _fetch_zip_only:
+        # calling 'import --advanced-help' will trigger the download of OMERO.java.zip
+        # in case it is not yet present and will raise an omero.cli.NonZeroReturnCode
+        # error - we're simply returning -1 then as the only purpose of this parameter
+        # is to download and unzip the JAR files
+        printlog("WARNING", "As '_fetch_zip_only' is set NO IMPORT WILL BE ATTEMPTED!")
+        try:
+            cli.invoke(["import", "--advanced-help"], strict=True)
+        finally:
+            return -1  # pylint: disable-msg=lost-exception
+
+    try:
+        cli.invoke(import_args, strict=True)
+        imported_id = extract_image_id(cap_stdout)
+        log.success(f"Imported OMERO image ID: {imported_id}")
+    except PermissionError as err:
+        printlog("ERROR", err)
+        omero_userdir = os.environ.get("OMERO_USERDIR", "<not-set>")
+        printlog("ERROR", f"Current OMERO_USERDIR value: {omero_userdir}")
+        printlog(
+            "ERROR",
+            (
+                "Please make sure to read the documentation about the 'OMERO_USERDIR' "
+                "environment variable and also check if the file to be imported has "
+                "appropriate permissions!"
+            ),
+        )
+        raise err
+    except Exception as err:  # pylint: disable-msg=broad-except
+        printlog("ERROR", f"OMERO import failed with error message: >>>{err}<<<")
+        printlog("WARNING", f"import_args: {import_args}")
+        raise err
+    finally:
+        # the `cli.invoke()` call above leaves the connection in some limbo state where
+        # it is not actually connected any more but still returns `True` on
+        # `conn.isConnected()` and (unfortunately) also answers `conn.getUser()` etc, so
+        # we are force-reconnecting here to get it back into a sane state:
+        conn.connect()
+
+    return imported_id
+
+
 @connect_and_set_group
-def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False):
+def to_omero(conn, omero_id, image_file, omero_logfile=""):
     """Upload an image into a specific dataset in OMERO.
 
     In case the suffix of the given `image_file` indicates a format unsupported by
@@ -205,9 +286,6 @@ def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False
         If the parameter is non-empty the `--debug ALL` option will be added to the
         `omero` call with the output being placed in the specified file. If the
         parameter is omitted or empty, debug messages will be disabled.
-    _fetch_zip_only : bool, optional
-        Replaces all parameters to the import call by `--advanced-help`, which is
-        **intended for INTERNAL TESTING ONLY**. No actual import will be attempted!
 
     Returns
     -------
@@ -250,17 +328,6 @@ def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False
     ####         basename + suffix, mimetype=mime, ns=namespace, desc=None)
     ####     annotations.append(ann.getId())
 
-    # currently there is no direct "Python way" to import data into OMERO, so we have to
-    # use the CLI wrapper for this...
-    # TODO: check the more recent code mentioned by the OME developers in the forum
-    # thread: https://forum.image.sc/t/automated-uploader-to-omero-in-python/38290
-    # https://gitlab.com/openmicroscopy/incubator/omero-python-importer/-/blob/master/import.py)
-    # and also see https://pypi.org/project/omero-upload/
-    from omero.cli import CLI
-
-    cli = CLI()
-    cli.loadplugins()
-    cli.set_client(conn.c)
     import_args = ["import"]
 
     # disable upgrade checks (https://forum.image.sc/t/unable-to-use-cli-importer/26424)
@@ -274,46 +341,21 @@ def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False
     import_args.extend(["-d", omero_id.obj_id])
 
     # capture stdout and request YAML format to parse the output later on:
-    tempdir = tempfile.TemporaryDirectory(prefix="hrm-omero__")
-    cap_stdout = f"{tempdir.name}/omero-import-stdout"
-    log.debug(f"Capturing stdout of the 'omero' call into [{cap_stdout}]...")
-    import_args.extend(["--file", cap_stdout])
-    import_args.extend(["--output", "yaml"])
+    with tempfile.TemporaryDirectory(prefix="hrm-omero__") as tempdir:
+        cap_stdout = f"{tempdir}/omero-import-stdout"
+        log.debug(f"Capturing stdout of the 'omero' call into [{cap_stdout}]...")
+        import_args.extend(["--file", cap_stdout])
+        import_args.extend(["--output", "yaml"])
 
-    #### for ann_id in annotations:
-    ####     import_args.extend(['--annotation_link', str(ann_id)])
-    import_args.append(image_file)
-    if _fetch_zip_only:
-        # calling 'import --advanced-help' will trigger the download of OMERO.java.zip
-        # in case it is not yet present (the extract_image_id() call will then fail,
-        # resulting in the whole function returning "False")
-        printlog("WARNING", "As '_fetch_zip_only' is set NO IMPORT WILL BE ATTEMPTED!")
-        import_args = ["import", "--advanced-help"]
-    log.debug(f"import_args: {import_args}")
-    try:
-        cli.invoke(import_args, strict=True)
-        imported_id = extract_image_id(cap_stdout)
-        log.success(f"Imported OMERO image ID: {imported_id}")
-    except PermissionError as err:
-        printlog("ERROR", err)
-        omero_userdir = os.environ.get("OMERO_USERDIR", "<not-set>")
-        printlog("ERROR", f"Current OMERO_USERDIR value: {omero_userdir}")
-        printlog(
-            "ERROR",
-            (
-                "Please make sure to read the documentation about the 'OMERO_USERDIR' "
-                "environment variable and also check if the file to be imported has "
-                "appropriate permissions!"
-            ),
-        )
-        return False
-    except Exception as err:  # pylint: disable-msg=broad-except
-        printlog("ERROR", f"ERROR: uploading '{image_file}' to {omero_id} failed!")
-        printlog("ERROR", f"OMERO error message: >>>{err}<<<")
-        printlog("WARNING", f"import_args: {import_args}")
-        return False
-    finally:
-        tempdir.cleanup()
+        #### for ann_id in annotations:
+        ####     import_args.extend(['--annotation_link', str(ann_id)])
+        import_args.append(image_file)
+
+        try:
+            imported_id = _run_omero_cli_import(conn, import_args, cap_stdout)
+        except:  # pylint: disable-msg=bare-except
+            printlog("ERROR", f"ERROR: uploading '{image_file}' to {omero_id} failed!")
+            return False
 
     target_id = f"G:{omero_id.group}:Image:{imported_id}"
     try:

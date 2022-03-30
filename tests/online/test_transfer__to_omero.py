@@ -8,7 +8,7 @@ import os
 
 import pytest
 from hrm_omero.omero import find_recently_imported
-from hrm_omero.transfer import to_omero
+from hrm_omero.transfer import to_omero, _run_omero_cli_import
 from hrm_omero.misc import OmeroId
 
 
@@ -133,26 +133,23 @@ def test_invalid_target(omero_conn, settings, capfd):
 
 @pytest.mark.online
 @pytest.mark.usefixtures("req_cache")
-def test_omerouserdir_writable(omero_conn, settings, monkeypatch, tmp_path):
-    """Call `to_omero()` with env variable `OMERO_USERDIR` set.
+def test_omerouserdir_writable(omero_conn, monkeypatch, tmp_path):
+    """Call `_run_omero_cli_import()` with env variable `OMERO_USERDIR` set.
 
     With the environment variable set to a writable location the expected
     behavior is to download and extract "OMERO.java.zip" into a folder under
     `cache/jars/` inside that location.
 
-    The call to `transfer.to_omero()` has the `_fetch_zip_only` flag set so it
-    will return False and the only side-effect expected is the creation of the
-    described hierarchy with the files extracted from the ZIP.
+    The call to `_run_omero_cli_import()` has the `_fetch_zip_only` flag set so
+    it will return False and the only side-effect expected is the creation of
+    the described hierarchy with the files extracted from the ZIP.
     """
-    import_image = settings.import_image[0]
-    target_id = import_image["target_id"]
-
     monkeypatch.setenv("OMERO_USERDIR", tmp_path.as_posix())
     cache_path = tmp_path / "cache" / "jars"
     assert cache_path.exists() is False
 
-    ret = to_omero(omero_conn, target_id, "//", _fetch_zip_only=True)
-    assert ret is False
+    ret = _run_omero_cli_import(omero_conn, None, None, _fetch_zip_only=True)
+    assert ret is -1
 
     assert cache_path.exists() is True
 
