@@ -115,18 +115,18 @@ retrieveChildren = [
                     {
                         "children": [],
                         "class": "Dataset",
-                        "id": "G:3:Dataset:3",
+                        "id": "G:{{GID_1}}:{{U1__DSID_1}}",
                         "label": "NoProj--Dset01",
                         "load_on_demand": true,
-                        "owner": "hrm-test-01"
+                        "owner": "{{UID_1_NAME}}"
                     },
                     {
                         "children": [],
                         "class": "Project",
-                        "id": "G:3:Project:1",
+                        "id": "G:{{GID_1}}:{{U1__PID_1}}",
                         "label": "Proj01",
                         "load_on_demand": true,
-                        "owner": "hrm-test-01"
+                        "owner": "{{UID_1_NAME}}"
                     }
                 ]
             """
@@ -143,7 +143,7 @@ retrieveChildren = [
                         "id": "G:{{GID_1}}:{{U1__PID_1__DSID_1}}",
                         "label": "Proj01--Dset01",
                         "load_on_demand": true,
-                        "owner": "hrm-test-01"
+                        "owner": "{{UID_1_NAME}}"
                     },
                     {
                         "children": [],
@@ -151,7 +151,7 @@ retrieveChildren = [
                         "id": "G:{{GID_1}}:{{U1__PID_1__DSID_2}}",
                         "label": "upload-target",
                         "load_on_demand": true,
-                        "owner": "hrm-test-01"
+                        "owner": "{{UID_1_NAME}}"
                     }
                 ]
             """
