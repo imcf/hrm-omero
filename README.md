@@ -90,12 +90,34 @@ OMERO_CONNECTOR_LOGLEVEL="DEBUG"
 # OMERO_CONNECTOR_LOGFILE_DISABLED="true"
 ```
 
-On top of that it is necessary to explicitly set two environment variables for the
-Apache process. By default (at least on recent Ubuntu and CentOS / RHEL versions) the
-system user running Apache is not allowed to write to its `$HOME` directory for security
-reasons. Therefore it is required to specify where the OMERO Python bindings and also
-Java may store cache files and preferences. This can be done by running the following
-command:
+### Creating the OMERO cache location
+
+By default (at least on recent Ubuntu and CentOS / RHEL versions) the system user
+running Apache / PHP is not allowed to write to its `$HOME` directory for security
+reasons. Therefore it is necessary to specify where the OMERO Python bindings and also
+Java may store cache files and preferences.
+
+To create this directory and ensure it is writable by the Apache system user run the
+following commands (pick only the appropriate one for the `chown` call matching your
+distribution):
+
+```bash
+mkdir -v /var/cache/omero
+chown www-data:www-data /var/cache/omero  # Debian / Ubuntu
+chown apache:apache /var/cache/omero  # CentOS / RHEL / AlmaLinux
+```
+
+### Setting environment variables
+
+In addition it is required to explicitly set two environment variables for the connector
+process. The approach depends on the way PHP is configured on your installation, please
+follow the corresponding section below.
+
+#### PHP running as Apache module (`mod_php`)
+
+If your installation is running PHP as an Apache module you will need to create an
+override file for `systemd` that will set the environment as required, this can be done
+by running the `edit` command:
 
 ```bash
 systemctl edit apache2.service  # Debian / Ubuntu
@@ -110,15 +132,35 @@ Environment=OMERO_USERDIR=/var/cache/omero
 Environment=JAVA_OPTS="-Djava.util.prefs.userRoot=/var/cache/omero/javaUserRoot"
 ```
 
-Now make sure the specified directory exists and is writable by the Apache system user:
+Then restart *Apache* by running the respective `systemctl` command from above while
+replacing `edit` for `restart`.
+
+#### PHP running through `PHP-FPM`
+
+If your installation is running `PHP-FPM` instead (*FastCGI Process Manager*), you will
+need to update the corresponding PHP-FPM pool config file. On CentOS / RHEL / ... 8 this
+will be done through:
+
 ```bash
-mkdir -v /var/cache/omero
-chown www-data:www-data /var/cache/omero  # Debian / Ubuntu
-chown apache:apache /var/cache/omero  # CentOS / RHEL / AlmaLinux
+vim /etc/php-fpm.d/www.conf
 ```
 
-Finally, restart *Apache* by running the respective `systemctl` command from above while
-replacing `edit` for `restart`.
+In the file, find the section on setting *environment variable* and add this below:
+
+```
+env[OMERO_USERDIR] = /var/cache/omero
+env[JAVA_OPTS] = "-Djava.util.prefs.userRoot=/var/cache/omero/javaUserRoot"
+```
+
+Then restart `php-fpm.service` by running
+
+```bash
+systemctl restart php-fpm.service
+```
+
+Note that unlike what many tutorials on the web are saying it is **not necessary** to
+alter the `clear_env` setting in the configuration file. On the contrary, this is very
+much discouraged as it would expose a lot of potentially critical information to PHP.
 
 ## Debugging
 
