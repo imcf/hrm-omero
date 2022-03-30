@@ -320,6 +320,6 @@ def to_omero(conn, omero_id, image_file, omero_logfile="", _fetch_zip_only=False
         summary = hrm.parse_summary(image_file)
         add_annotation_keyvalue(conn, target_id, summary)
     except Exception as err:  # pragma: no cover # pylint: disable-msg=broad-except
-        log.error(f"Creating a parameter summary from [{image_file}] failed: {err}")
+        log.error(f"FAILED creating parameter summary from [{image_file}]: {err}")
 
     return True

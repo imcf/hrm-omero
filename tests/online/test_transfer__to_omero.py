@@ -43,7 +43,7 @@ def test_unsupported_target(omero_conn, settings):
         to_omero(omero_conn, target_id, fname)
 
 
-def _test_import_image(conn, import_image, capfd, expected_stdout, logfile=""):
+def _test_import_image(conn, import_image, capfd, caplog, expected_stdout, logfile=""):
     """Test importing local files into OMERO and check its properties in OMERO.
 
     Expected behavior is to import the file, and to print a bunch of specific messages
@@ -70,6 +70,8 @@ def _test_import_image(conn, import_image, capfd, expected_stdout, logfile=""):
     for pattern in expected_stdout:
         assert pattern in captured
 
+    assert "FAILED creating parameter summary" not in caplog.text
+
     ds_id = target_id.split(":")[-1]
     imported = find_recently_imported(conn, ds_id, os.path.basename(fname))
     assert imported is not None
@@ -80,19 +82,21 @@ def _test_import_image(conn, import_image, capfd, expected_stdout, logfile=""):
 
 
 @pytest.mark.online
-def test_import_image(omero_conn, settings, capfd):
+def test_import_image(omero_conn, settings, capfd, caplog):
     """Call `_test_import_image()` for each defined import test setting."""
     for import_image in settings.import_image:
-        _test_import_image(omero_conn, import_image, capfd, settings.import_messages)
+        _test_import_image(
+            omero_conn, import_image, capfd, caplog, settings.import_messages
+        )
 
 
 @pytest.mark.online
-def test_import_image_log(omero_conn, settings, capfd, tmp_path):
+def test_import_image_log(omero_conn, settings, capfd, caplog, tmp_path):
     """Call `_test_import_image()` for one import setting using a log file."""
     import_image = settings.import_image[0]
     logfile = str(tmp_path / "omero-import-debug-log")
     _test_import_image(
-        omero_conn, import_image, capfd, settings.import_messages, logfile
+        omero_conn, import_image, capfd, caplog, settings.import_messages, logfile
     )
 
 
