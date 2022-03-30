@@ -12,6 +12,7 @@ def _fmt(raw_string):
 
 
 try:
+    # pylint: disable-msg=unused-import
     from settings.site_specific import (
         HOSTNAME,
         PORT,
