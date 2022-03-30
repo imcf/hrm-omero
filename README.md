@@ -141,7 +141,7 @@ the default) it's also possible to set the verbosity level by adjusting the
 Valid settings are `"SUCCESS"`, `"INFO"`, `"DEBUG"` and `"TRACE"`. If the option is
 commented out in the configuration file, the level will be set to `WARNING`.
 
-## Example Usage
+## Example Command-Line Usage
 
 Store username and password in variables, export the OMERO_PASSWORD variable:
 
