@@ -161,6 +161,7 @@ poetry run pdoc --docformat numpy --output-directory docs/ src/hrm_omero/
 - [ ] speed up tree-loading by avoiding the necessary repeated calls to the connector
 - [ ] catch "assert failed" errors when uploading data to OMERO, this usually
       indicates that the file / fileset was refused by Bio-Formats
+- [ ] upload "companion" files (Huygens templates, logs, ...) to OMERO as annotations
 
 [d1]: https://python-poetry.org/
 [d2]: https://pdoc.dev/
