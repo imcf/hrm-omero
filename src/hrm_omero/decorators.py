@@ -49,28 +49,29 @@ def connect_and_set_group(func):
         # the connection might be closed (e.g. after importing an image), so force
         # re-establish it (note that `conn._connected` might even report the wrong
         # state initially, or also after reconnecting!)
-        #
-        ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
-        #
-        # calling `conn.connect()` and `conn.setGroupForSession` subsequently (i.e.)
-        # multiple times during one session has unexpected side effects, e.g. when using
-        # the decorator for `transfer.fetch_thumbnail()` will make the call to
-        # `conn.getObject()` return `None`
-        #
-        ##### WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING #####
-        conn.connect()
-        if not conn._connected:  # pylint: disable-msg=protected-access
-            raise RuntimeError("Failed to (re-)establish connection to OMERO!")
-        username = conn.getUser().getName()
-        log.success(f"Successfully (re-)connected to OMERO as [{username}].")
+        try:
+            log.trace("Checking connection to OMERO...")
+            username = conn.getUser().getName()
+        except AttributeError:
+            log.debug("No OMERO connection found, trying to establish it...")
+            conn.connect()
+            if not conn._connected:  # pylint: disable-msg=protected-access
+                msg = "Failed to (re-)establish connection to OMERO!"
+                log.error(msg)
+                raise RuntimeError(msg)  # pylint: disable-msg=raise-missing-from
+            # re-run the username command only now AFTER checking `conn._connected`:
+            username = conn.getUser().getName()
+            log.trace(f"Successfully (re-)connected to OMERO as [{username}].")
 
         # if the ID is passed as a string parse it into an OmeroId object:
         if isinstance(omero_id, str):
             omero_id = OmeroId(omero_id)
 
         # set the OMERO group for the current connection session:
-        conn.setGroupForSession(omero_id.group)
-        log.debug(f"Set OMERO session group to [{omero_id.group}].")
+        gid = conn.SERVICE_OPTS.getOmeroGroup()
+        if not gid or gid != omero_id.group:
+            log.debug(f"Switching OMERO group from [{gid}] to [{omero_id.group}].")
+            conn.SERVICE_OPTS.setOmeroGroup(omero_id.group)
 
         return func(conn, omero_id, *args, **kwargs)
 
