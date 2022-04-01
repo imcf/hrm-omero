@@ -238,6 +238,19 @@ echo "Creating a dataset without a project (top-level)..."
 dataset=$(omero obj new Dataset name='NoProj--Dset01' --quiet)
 echo "U1__DSID_1: $dataset" | tee -a "$YAML"
 
+echo "Switching group for the first user..."
+omero logout
+omero login -u "hrm-test-01" -w "$U1_PW" --server "$SERVER" --group "$GNAME_2" --quiet
+
+NAME_P="U1__G2_PID_1"
+NAME_D="${NAME_P}__DSID_1"
+echo "Creating a project-dataset-tree: [$NAME_P]--[$NAME_D]"
+project=$(omero obj new Project name="$NAME_P" --quiet)
+dataset=$(omero obj new Dataset name="$NAME_D" --quiet)
+omero obj new ProjectDatasetLink parent="$project" child="$dataset" --quiet
+echo "$NAME_P: $project" | tee -a "$YAML"
+echo "$NAME_D: $dataset" | tee -a "$YAML"
+
 echo " ----------- processing steps for second OMERO user ----------- "
 
 echo "Reconnecting using the second user..."
