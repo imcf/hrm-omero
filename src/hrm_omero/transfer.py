@@ -249,7 +249,7 @@ def _run_omero_cli_import(conn, import_args, cap_stdout, _fetch_zip_only=False):
         )
         raise err
     except Exception as err:  # pylint: disable-msg=broad-except
-        printlog("ERROR", f"OMERO import failed with error message: >>>{err}<<<")
+        printlog("ERROR", f"OMERO import failed [{type(err)}]:\n>>>\n{err}\n<<<")
         printlog("WARNING", f"import_args: {import_args}")
         raise err
     finally:
