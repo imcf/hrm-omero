@@ -206,6 +206,8 @@ def _run_omero_cli_import(conn, import_args, cap_stdout, _fetch_zip_only=False):
         The ID of the imported image.
     """
     log.debug(f"import_args: {import_args}")
+    copy_paste = " ".join(import_args)
+    log.debug(f"import_args (copy-paste version): [{copy_paste}]")
     # currently there is no direct "Python way" to import data into OMERO, so we have to
     # use the CLI wrapper for this...
     # TODO: check the more recent code mentioned by the OME developers in the forum
