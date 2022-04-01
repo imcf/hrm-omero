@@ -104,6 +104,7 @@ def extract_image_id(fname):
         image_id = parsed[0]["Image"][0]
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"Error parsing imported image ID from YAML output: {err}")
+        printlog("ERROR", parsed)
         return None
 
     log.success(f"Successfully parsed Image ID from YAML: {image_id}")
