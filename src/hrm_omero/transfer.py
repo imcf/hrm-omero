@@ -214,7 +214,7 @@ def _run_omero_cli_import(conn, import_args, cap_stdout, _fetch_zip_only=False):
     # thread: https://forum.image.sc/t/automated-uploader-to-omero-in-python/38290
     # https://gitlab.com/openmicroscopy/incubator/omero-python-importer/-/blob/master/import.py)
     # and also see https://pypi.org/project/omero-upload/
-    from omero.cli import CLI
+    from omero.cli import CLI, NonZeroReturnCode
 
     cli = CLI()
     cli.loadplugins()
@@ -247,6 +247,11 @@ def _run_omero_cli_import(conn, import_args, cap_stdout, _fetch_zip_only=False):
                 "appropriate permissions!"
             ),
         )
+        raise err
+    except NonZeroReturnCode as err:
+        printlog("ERROR", "OMERO import failed, CLI raised a NonZeroReturnCode!")
+        if str(err) == "assert failed":
+            printlog("ERROR", "Received an <assert failed> message from the CLI.")
         raise err
     except Exception as err:  # pylint: disable-msg=broad-except
         printlog("ERROR", f"OMERO import failed [{type(err)}]:\n>>>\n{err}\n<<<")
