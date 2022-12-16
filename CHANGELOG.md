@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## Planned for 1.0.0
 
 ### New in 1.0.0
 
@@ -10,7 +10,6 @@
   argument has been removed.
 
 ### Fixes in 1.0.0
-
 
 ## 0.4.0
 
