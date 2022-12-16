@@ -43,13 +43,13 @@ $HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
 
 ```bash
 apt install -y \
-    python3.8-venv \
+    python3-venv \
     openjdk-11-jre-headless
 
 # define the target path for the virtual environment:
 HRM_OMERO_VENV="/opt/venvs/hrm-omero"
 
-# create a Python 3.8 virtual environment:
+# create a Python virtual environment:
 python3 -m venv $HRM_OMERO_VENV
 
 # upgrade pip, install wheel:
