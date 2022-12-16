@@ -61,6 +61,28 @@ wget "https://github.com/ome/zeroc-ice-ubuntu2004/releases/download/0.2.0/$ICE_W
 $HRM_OMERO_VENV/bin/pip install $ICE_WHEEL
 ```
 
+#### Ubuntu 22.04
+
+```bash
+apt install -y \
+    python3-venv \
+    openjdk-11-jre-headless
+
+# define the target path for the virtual environment:
+HRM_OMERO_VENV="/opt/venvs/hrm-omero"
+
+# create a Python virtual environment:
+python3 -m venv $HRM_OMERO_VENV
+
+# upgrade pip, install wheel:
+$HRM_OMERO_VENV/bin/pip install --upgrade pip wheel
+
+# install the pre-built Ice wheel from the OME project:
+ICE_WHEEL="zeroc_ice-3.6.5-cp310-cp310-linux_x86_64.whl"
+wget "https://github.com/ome/zeroc-ice-py-github-ci/releases/download/0.2.0/$ICE_WHEEL"
+$HRM_OMERO_VENV/bin/pip install $ICE_WHEEL
+```
+
 ### Installing the HRM-OMERO package
 
 ```bash
